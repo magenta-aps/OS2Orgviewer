@@ -1,10 +1,10 @@
 <template>
-    <dl v-if="managers">
-        <template v-for="manager in managers">
-            <dt>{{ manager.manager_type.name }}</dt>
-            <dd>{{ manager.person.name }}</dd>
-        </template>
-    </dl>
+    <div v-if="managers">
+        <div v-for="manager in managers" :key="manager.uuid">        
+            <h3>{{ manager.manager_type.name }}</h3>
+            <p>{{ manager.person.name }}</p>
+        </div>
+    </div>
 </template>
 
 <script>

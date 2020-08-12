@@ -4,6 +4,7 @@
         <ul class="employee-list">
             <li v-for="employee in employees" :key="employee.uuid">
                 <employee :employee-data="employee" />
+                <addresses :person-uuid="employee.person.uuid" />
             </li>
         </ul>
     </div>
@@ -11,10 +12,12 @@
 
 <script>
 import Employee from './EmployeeItem.vue'
+import Addresses from '../addresses/Addresses.vue'
 
 export default {
     components: {
-        Employee
+        Employee,
+        Addresses
     },
     props: [
         'orgUuid'

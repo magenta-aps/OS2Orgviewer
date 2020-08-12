@@ -48,9 +48,9 @@ export default {
     .dossier-link:active,
     .dossier-link:focus {
         color: #000;
-        box-shadow: .5rem .75rem 0 hsla(0,0%,0%,.25);
+        box-shadow: .5rem .5rem 0 hsla(0,0%,0%,.2);
         z-index: 10;
-        transform: translate(-.5rem, -.75rem);
+        transform: translate(-.5rem, -.5rem);
     }
     .dossier-link-avatar {
         flex: 0 0 2rem;

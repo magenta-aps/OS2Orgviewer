@@ -1,10 +1,12 @@
 <template>
     <transition name="dossier-fade">
         <article v-if="node" class="dossier" :id="`node_${ node.uuid }`">
-            <div class="dossier-avatar">{{ makeAvatar(node.name) }}</div>
-            <h2>{{ node.name }}</h2>
-            <manager :org-uuid="node.uuid" />
-            <employee-list :org-uuid="node.uuid" />
+            <div>
+                <div class="dossier-avatar">{{ makeAvatar(node.name) }}</div>
+                <h2>{{ node.name }}</h2>
+                <manager :org-uuid="node.uuid" />
+                <employee-list :org-uuid="node.uuid" />
+            </div>
             <button type="button" class="dossier-close-btn" @click="closeDossier" title="Skjul udvidet information">Luk</button>
         </article>
     </transition>
@@ -48,18 +50,23 @@ export default {
         }
     },
     created: function() {
-        window.addEventListener('hashchange', this.hashCangeHandler)
+        window.addEventListener('popstate', this.hashCangeHandler)
     }
 }
 </script>
 
 <style>
     .dossier {
-        padding: 2rem;
         margin: 0;
         background-color: #fff;
+        display: flex;
+        flex-flow: column nowrap;
+    }
+    .dossier > div {
+        padding: 2rem;
         overflow-y: auto;
         overflow-x: hidden;
+        flex-grow: 1;
     }
     .dossier-fade-enter-active,
     .dossier-fade-leave-active {

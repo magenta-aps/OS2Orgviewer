@@ -93,7 +93,7 @@ export default {
 }
 .oc-node-body {
     background-color: #eee;
-    box-shadow: .5rem .5rem 0 hsla(0,0%,0%,.33);
+    box-shadow: .5rem .5rem 0 hsla(0,0%,0%,.2);
     padding: 0;
     margin: 1rem auto;
     width: 10rem;
