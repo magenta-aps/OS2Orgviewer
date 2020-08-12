@@ -1,18 +1,24 @@
 <template>
     <transition name="dossier-fade">
         <article v-if="node" class="dossier" :id="`node_${ node.uuid }`">
-            <img class="dossier-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTEhgwg4k9WfF0APgcz8sb3TQUKGocF_Jus2A&usqp=CAU" :alt="`Portræt af ${ node.name }`">
-            <dl class="dossier-dl">
-                <dt>Navn</dt>
-                <dd>{{ node.name }}</dd>
-            </dl>
+            <div class="dossier-avatar">{{ makeAvatar(node.name) }}</div>
+            <h2>{{ node.name }}</h2>
+            <manager :org-uuid="node.uuid" />
+            <employee-list :org-uuid="node.uuid" />
             <button type="button" class="dossier-close-btn" @click="closeDossier" title="Skjul udvidet information">Luk</button>
         </article>
     </transition>
 </template>
 
 <script>
+import Manager from '../people/Manager.vue'
+import EmployeeList from '../people/EmployeeList.vue'
+
 export default {
+    components: {
+        Manager,
+        EmployeeList
+    },
     data: function() {
         return {
             node: null
@@ -34,6 +40,9 @@ export default {
                 console.log(err)
             })
         },
+        makeAvatar: function(string) {
+            return string.substring(0,1)
+        },
         hashCangeHandler: function() {
             this.fetchOrg(window.location.hash.substring(6))
         }
@@ -49,11 +58,6 @@ export default {
         padding: 2rem;
         margin: 0;
         background-color: #fff;
-        z-index: 100;
-        position: absolute;
-        top: 0;
-        right: 0;
-        min-height: 100%;
         overflow-y: auto;
         overflow-x: hidden;
     }
@@ -68,20 +72,17 @@ export default {
         width: 0;
         */
     }
-    .dossier-img {
-        width: 100%;
-        height: auto;
-    }
-    .dossier-dl dt {
-        opacity: .75;
-        font-size: smaller;
-    }
-    .dossier-dl dd {
-        margin: 0 0 1rem;
-        padding: 0;
-    }
-    .dossier-email {
-        text-transform: lowercase;
+    .dossier-avatar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 6rem;
+        height: 6rem;
+        border-radius: 50%;
+        background-color: #faa;
+        color: #fff;
+        font-size: 3rem;
+        margin: 0 auto;
     }
     .dossier-close-btn {
         background-color: #6ad;

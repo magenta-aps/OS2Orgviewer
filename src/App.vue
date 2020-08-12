@@ -47,6 +47,16 @@ export default {
         color: #6ad;
     }
 
+    dt {
+        opacity: .75;
+        font-size: smaller;
+    }
+
+    dd {
+        margin: 0 0 1rem;
+        padding: 0;
+    }
+
     #app {
         font-family: Avenir, Helvetica, Arial, sans-serif;
         color: #2c3e50;
@@ -60,11 +70,30 @@ export default {
         height: 100%;
     }
 
+    @media screen and (max-width: 40rem) {
+
+        .dossier {
+            position: fixed;
+            z-index: 100;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            height: 100%;
+            width: 100%;
+            max-width: 30rem;
+        }
+    }
+
     @media screen and (min-width: 40rem) {
         
         #app {
-            display: grid;
-            grid-template-columns: auto 20rem;
+            display: flex;
+            flex-flow: row nowrap;
+            align-items: stretch;
+        }
+
+        .dossier {
+            flex: 0 0 20rem;
         }
     }
 

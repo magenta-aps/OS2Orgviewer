@@ -37,6 +37,7 @@ export default {
         padding: .5rem .75rem;
         overflow: hidden;
         background-color: #fff;
+        z-index: 3;
     }
     .dossier-link,
     .dossier-link:link,
@@ -51,11 +52,9 @@ export default {
         z-index: 10;
         transform: translate(-.5rem, -.75rem);
     }
-    .dossier-link-current {
-        border: solid 1px orange;   
-    }
     .dossier-link-avatar {
         flex: 0 0 2rem;
+        margin-right: .5rem;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -63,7 +62,6 @@ export default {
         height: 2rem;
         border-radius: 50%;
         background-color: #faa;
-        margin-right: .5rem;
         color: #fff;
     }
     .dossier-link-name {
