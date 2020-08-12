@@ -92,6 +92,10 @@ export default {
             align-items: stretch;
         }
 
+        #chart {
+            flex: 1 0 auto;
+        }
+
         .dossier {
             flex: 0 0 20rem;
         }
