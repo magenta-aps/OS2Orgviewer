@@ -2,13 +2,19 @@
     <div v-if="managers">
         <div v-for="manager in managers" :key="manager.uuid">        
             <h3>{{ manager.manager_type.name }}</h3>
-            <p>{{ manager.person.name }}</p>
+            <p style="margin: 0;">{{ manager.person.name }}</p>
+            <addresses :person-uuid="manager.person.uuid" />
         </div>
     </div>
 </template>
 
 <script>
+import Addresses from '../addresses/Addresses.vue'
+
 export default {
+    components: {
+        Addresses
+    },
     props: [
         'orgUuid'
     ],

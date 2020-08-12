@@ -1,6 +1,7 @@
 <template>
-    <a 
-        :href="`#node_${ nodeData.uuid }`"
+    <a
+        :id="`node_${ nodeData.uuid }`"
+        :href="`#details_${ nodeData.uuid }`"
         class="dossier-link" 
         :class="{'dossier-link-current': is_current_node}"
         title="Vis udvidet information">

@@ -1,13 +1,13 @@
 <template>
     <transition name="dossier-fade">
-        <article v-if="node" class="dossier" :id="`node_${ node.uuid }`">
+        <article v-if="node" class="dossier" :id="`details_${ node.uuid }`">
             <div>
                 <div class="dossier-avatar">{{ makeAvatar(node.name) }}</div>
                 <h2>{{ node.name }}</h2>
                 <manager :org-uuid="node.uuid" />
                 <employee-list :org-uuid="node.uuid" />
             </div>
-            <button type="button" class="dossier-close-btn" @click="closeDossier" title="Skjul udvidet information">Luk</button>
+            <a :href="`#note_${ node.uuid }`" class="dossier-close-btn" title="Skjul udvidet information">Luk</a>
         </article>
     </transition>
 </template>
@@ -46,11 +46,15 @@ export default {
             return string.substring(0,1)
         },
         hashCangeHandler: function() {
-            this.fetchOrg(window.location.hash.substring(6))
+            if (window.location.hash.substring(0,9) === '#details_') {
+                this.fetchOrg(window.location.hash.substring(9))
+            } else {
+                this.node = null
+            }
         }
     },
     created: function() {
-        window.addEventListener('popstate', this.hashCangeHandler)
+        window.addEventListener('hashchange', this.hashCangeHandler)
     }
 }
 </script>
@@ -91,7 +95,9 @@ export default {
         font-size: 3rem;
         margin: 0 auto;
     }
-    .dossier-close-btn {
+    a.dossier-close-btn:link,
+    a.dossier-close-btn:visited {
+        display: block;
         background-color: #6ad;
         color: #fff;
         border: none;
@@ -99,10 +105,12 @@ export default {
         text-align: center;
         width: 100%;
         height: 2rem;
+        padding: .5rem;
+        font-size: smaller;
     }
-    .dossier-close-btn:hover,
-    .dossier-close-btn:active,
-    .dossier-close-btn:focus {
+    a.dossier-close-btn:hover,
+    a.dossier-close-btn:active,
+    a.dossier-close-btn:focus {
         background-color: #cef;
     }
 

@@ -91,6 +91,7 @@ export default {
     .address-item {
         background-color: #eee;
         padding: 1rem 1rem .5rem;
+        margin: 0 0 1rem;
     }
 
 </style>
