@@ -40,7 +40,7 @@ export default {
     },
     methods: {
         fetchAdresses: function(person_uuid) {
-            fetch(`http://localhost:5001/service/e/${ person_uuid }/details/address`)
+            fetch(`${ process.env.VUE_APP_API_BASEURL }/service/e/${ person_uuid }/details/address`)
             .then((response) => {
                 return response.json()
             })

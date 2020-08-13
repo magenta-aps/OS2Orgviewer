@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        
+
         <section id="chart">
             <chart />
         </section>
@@ -66,7 +66,6 @@ export default {
 
     #chart,
     .dossier {
-        overflow: scroll;
         height: 100%;
     }
 

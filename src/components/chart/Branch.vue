@@ -22,7 +22,7 @@ export default {
     ],
     methods: {
         fetchOrgChildren: function(uuid) {
-            fetch(`http://localhost:5001/service/ou/${ uuid }/children`)
+            fetch(`${ process.env.VUE_APP_API_BASEURL }/service/ou/${ uuid }/children`)
             .then((response) => {
                 return response.json()
             })

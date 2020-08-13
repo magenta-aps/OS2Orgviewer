@@ -34,7 +34,7 @@ export default {
     },
     methods: {
         fetchEmployees: function(org_uuid) {
-            fetch(`http://localhost:5001/service/ou/${ org_uuid }/details/engagement`)
+            fetch(`${ process.env.VUE_APP_API_BASEURL }/service/ou/${ org_uuid }/details/engagement`)
             .then((response) => {
                 return response.json()
             })

@@ -30,7 +30,7 @@ export default {
     },
     methods: {
         fetchManager: function(org_uuid) {
-            fetch(`http://localhost:5001/service/ou/${ org_uuid }/details/manager`)
+            fetch(`${ process.env.VUE_APP_API_BASEURL }/service/ou/${ org_uuid }/details/manager`)
             .then((response) => {
                 return response.json()
             })
