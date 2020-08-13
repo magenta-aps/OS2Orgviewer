@@ -7,7 +7,13 @@
                 <manager :org-uuid="node.uuid" />
                 <employee-list :org-uuid="node.uuid" />
             </div>
-            <a :href="`#note_${ node.uuid }`" class="dossier-close-btn" title="Skjul udvidet information">Luk</a>
+            <a 
+                :href="`#node_${ node.uuid }`"
+                @click="closeDossier"
+                class="dossier-close-btn"
+                title="Skjul udvidet information">
+                Luk
+            </a>
         </article>
     </transition>
 </template>
@@ -21,6 +27,9 @@ export default {
         Manager,
         EmployeeList
     },
+    props: [
+        'nodeUuid'
+    ],
     data: function() {
         return {
             node: null
@@ -29,6 +38,7 @@ export default {
     methods: {
         closeDossier: function() {
             this.node = null
+            this.$emit('closedossier')
         },
         fetchOrg: function(uuid) {
             fetch(`${ process.env.VUE_APP_API_BASEURL }/service/ou/${ uuid }/`)
@@ -44,17 +54,10 @@ export default {
         },
         makeAvatar: function(string) {
             return string.substring(0,1)
-        },
-        hashCangeHandler: function() {
-            if (window.location.hash.substring(0,9) === '#details_') {
-                this.fetchOrg(window.location.hash.substring(9))
-            } else {
-                this.node = null
-            }
         }
     },
     created: function() {
-        window.addEventListener('hashchange', this.hashCangeHandler)
+        this.fetchOrg(this.nodeUuid)
     }
 }
 </script>
@@ -65,6 +68,12 @@ export default {
         background-color: #fff;
         display: flex;
         flex-flow: column nowrap;
+        position: fixed;
+        z-index: 100;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        height: 100%;
     }
     .dossier > div {
         padding: 2rem;
@@ -114,18 +123,23 @@ export default {
         background-color: #cef;
     }
 
-    @media screen and (max-width: 30rem) {
-        #dossier {
+    @media screen and (max-width: 40rem) {
+
+        .dossier {
             width: 100%;
-            left: 0;
-            overflow-y: scroll;
-            overflow-x: hidden;
+            max-width: 25rem;
         }
     }
 
-    @media screen and (min-width: 30rem) {
-        #dossier {
+    @media screen and (min-width: 40rem) {
+        .dossier {
             width: 25rem;
+        }
+    }
+
+    @media screen and (min-width: 90rem) {
+        .dossier {
+            width: 30rem;
         }
     }
 

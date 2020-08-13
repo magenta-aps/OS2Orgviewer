@@ -84,12 +84,11 @@ export default {
 
 .oc-chart-wrapper {
     height: 100%;
+    padding: 2rem 0;
 }
 
 .oc-chart {
-    overflow: scroll;
     height: 100%;
-    padding: 2rem 0;
 }
 
 .oc-chart .oc-chart-root-node > .oc-node-body::before,

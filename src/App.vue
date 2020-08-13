@@ -5,20 +5,17 @@
             <chart />
         </section>
 
-        <dossier />
-
     </div>
 </template>
 
 <script>
 import Chart from './components/chart/Chart.vue'
-import Dossier from './components/dossier/Dossier.vue'
+
 
 export default {
     name: 'App',
     components: {
-        Chart,
-        Dossier
+        Chart
     }
 }
 </script>
@@ -64,23 +61,8 @@ export default {
         height: 100%;
     }
 
-    #chart,
-    .dossier {
+    #chart {
         height: 100%;
-    }
-
-    @media screen and (max-width: 40rem) {
-
-        .dossier {
-            position: fixed;
-            z-index: 100;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            height: 100%;
-            width: 100%;
-            max-width: 30rem;
-        }
     }
 
     @media screen and (min-width: 40rem) {
@@ -88,16 +70,15 @@ export default {
         #app {
             display: flex;
             flex-flow: row nowrap;
+            justify-content: space-between;
             align-items: stretch;
+            max-width: 100%;
+            overflow: hidden;
         }
 
         #chart {
-            flex: 1 0 auto;
-        }
-
-        .dossier {
-            flex: 0 0 20rem;
-        }
+            
+        }   
     }
 
 </style>

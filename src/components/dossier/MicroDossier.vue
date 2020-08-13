@@ -1,30 +1,41 @@
 <template>
-    <a
-        :id="`node_${ nodeData.uuid }`"
-        :href="`#details_${ nodeData.uuid }`"
-        class="dossier-link" 
-        :class="{'dossier-link-current': is_current_node}"
-        title="Vis udvidet information">
-        <div class="dossier-link-avatar">{{ makeAvatar(nodeData.name) }}</div>
-        <p class="dossier-link-name">
-            {{ nodeData.name }}
-        </p>
-    </a>
+    <div>
+        <a
+            :id="`node_${ nodeData.uuid }`"
+            :href="`#details_${ nodeData.uuid }`"
+            @click="toggleDossier"
+            class="dossier-link"
+            title="Vis udvidet information">
+            <div class="dossier-link-avatar">{{ makeAvatar(nodeData.name) }}</div>
+            <p class="dossier-link-name">
+                {{ nodeData.name }}
+            </p>
+        </a>
+        <dossier v-if="dossier_open" :node-uuid="nodeData.uuid" @closedossier="dossier_open = false" />
+    </div>
 </template>
 
 <script>
+import Dossier from './Dossier.vue'
+
 export default {
+    components: {
+        Dossier
+    },
     props: [
         'nodeData'
     ],
-    computed: {
-        is_current_node: function() {
-            return false
+    data: function() {
+        return {
+            dossier_open: false
         }
     },
     methods: {
         makeAvatar: function(string) {
             return string.substring(0,1)
+        },
+        toggleDossier: function() {
+            this.dossier_open = !this.dossier_open
         }
     }
 }
