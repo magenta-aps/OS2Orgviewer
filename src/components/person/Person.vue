@@ -1,7 +1,10 @@
 <template>
     <slider @closeflyout="closeFlyout">
-        <article v-if="data" class="employee-details">
-            <dl>
+        <article v-if="data" class="oc-person">
+            <oc-header>
+                <h3>{{ data.name }}</h3>
+            </oc-header>
+            <dl class="oc-person-body">
                 <dt>Navn</dt>
                 <dd>{{ data.name }}</dd>
             
@@ -18,10 +21,12 @@
 
 <script>
 import Slider from '../layout/Slider.vue'
+import OcHeader from '../layout/Header.vue'
 
 export default {
     components: {
-        Slider
+        Slider,
+        OcHeader
     },
     props: [
         'data'
@@ -59,3 +64,16 @@ export default {
     }
 }
 </script>
+
+<style>
+
+.oc-header h3 {
+    margin: 0;
+    padding: 0;
+}
+
+.oc-person-body {
+    padding: 1rem;
+}
+
+</style>

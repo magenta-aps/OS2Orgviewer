@@ -1,9 +1,10 @@
 <template>
     <slider v-if="node" @closeflyout="closeDossier">
-        <article class="dossier" :id="`details_${ node.uuid }`">
-            <div>
-                <div class="dossier-avatar">{{ makeAvatar(node.name) }}</div>
+        <article class="oc-org" :id="`details_${ node.uuid }`">
+            <oc-header>
                 <h2>{{ node.name }}</h2>
+            </oc-header>
+            <div class="oc-org-body">
                 <manager v-for="manager in managers" :data="manager" :key="manager.uuid" />
                 <person-list :uuid="node.uuid" />
             </div>
@@ -16,13 +17,15 @@ import Slider from '../layout/Slider.vue'
 import PersonLite from '../person/PersonLite.vue'
 import PersonList from '../person/PersonList.vue'
 import Manager from './Manager.vue'
+import OcHeader from '../layout/Header.vue'
 
 export default {
     components: {
         PersonLite,
         PersonList,
         Slider,
-        Manager
+        Manager,
+        OcHeader
     },
     props: [
         'uuid'
@@ -63,9 +66,6 @@ export default {
             .catch(err => {
                 console.log(err)
             })
-        },
-        makeAvatar: function(string) {
-            return string.substring(0,1)
         }
     },
     created: function() {
@@ -75,18 +75,14 @@ export default {
 </script>
 
 <style>
-    
-    .dossier-avatar {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 6rem;
-        height: 6rem;
-        border-radius: 50%;
-        background-color: #faa;
-        color: #fff;
-        font-size: 3rem;
-        margin: 0 auto;
+
+    .oc-header h2 {
+        margin: 0;
+        padding: 0;
+    }
+
+    .oc-org-body {
+        padding: 1rem;
     }
 
 </style>

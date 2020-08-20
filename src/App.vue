@@ -1,5 +1,8 @@
 <template>
     <div id="app">
+        <oc-header>
+            <h1>Organisationsdiagram</h1>
+        </oc-header>
         <section id="tree">
             <tree />
         </section>
@@ -8,11 +11,13 @@
 
 <script>
 import Tree from './components/tree/Tree.vue'
+import OcHeader from './components/layout/Header.vue'
 
 
 export default {
     name: 'App',
     components: {
+        OcHeader,
         Tree
     }
 }
@@ -61,6 +66,11 @@ export default {
 
     #tree {
         height: 100%;
+    }
+
+    .oc-header h1 {
+        margin: 0;
+        padding: 0;
     }
 
 </style>

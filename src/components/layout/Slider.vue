@@ -1,11 +1,11 @@
 <template>
-    <div class="oc-flyout">
-        <div class="oc-flyout-body">
+    <div class="oc-slider">
+        <div class="oc-slider-body">
             <slot></slot>
         </div>
         <a
             @click.prevent="closeFlyout"
-            class="oc-flyout-close-btn"
+            class="oc-slider-close-btn"
             title="Skjul udvidet information">
             Luk
         </a>
@@ -24,7 +24,7 @@ export default {
 
 <style>
 
-    .oc-flyout {
+    .oc-slider {
         margin: 0;
         background-color: #fff;
         display: flex;
@@ -37,28 +37,27 @@ export default {
         height: 100%;
     }
 
-    .oc-flyout-body {
-        padding: 2rem;
+    .oc-slider-body {
         overflow-y: auto;
         overflow-x: hidden;
         flex-grow: 1;
     }
 
-    .oc-flyout-fade-enter-active,
-    .oc-flyout-fade-leave-active {
+    .oc-slider-fade-enter-active,
+    .oc-slider-fade-leave-active {
         /*transition: all .3s ease;*/
     }
-    .oc-flyout-fade-enter,
-    .oc-flyout-fade-leave-to {
+    .oc-slider-fade-enter,
+    .oc-slider-fade-leave-to {
         /*
         transform: translateX(100%);
         width: 0;
         */
     }
 
-    a.oc-flyout-close-btn,
-    a.oc-flyout-close-btn:link,
-    a.oc-flyout-close-btn:visited {
+    a.oc-slider-close-btn,
+    a.oc-slider-close-btn:link,
+    a.oc-slider-close-btn:visited {
         display: block;
         background-color: #6ad;
         color: #fff;
@@ -70,28 +69,28 @@ export default {
         padding: .5rem;
         font-size: smaller;
     }
-    a.oc-flyout-close-btn:hover,
-    a.oc-flyout-close-btn:active,
-    a.oc-flyout-close-btn:focus {
+    a.oc-slider-close-btn:hover,
+    a.oc-slider-close-btn:active,
+    a.oc-slider-close-btn:focus {
         background-color: #cef;
     }
 
     @media screen and (max-width: 40rem) {
 
-        .oc-flyout {
+        .oc-slider {
             width: 100%;
             max-width: 25rem;
         }
     }
 
     @media screen and (min-width: 40rem) {
-        .oc-flyout {
+        .oc-slider {
             width: 25rem;
         }
     }
 
     @media screen and (min-width: 90rem) {
-        .oc-flyout {
+        .oc-slider {
             width: 30rem;
         }
     }
