@@ -1,29 +1,29 @@
 <template>
     <div>
         <a
-            :id="`node_${ nodeData.uuid }`"
-            :href="`#details_${ nodeData.uuid }`"
+            :id="`node_${ data.uuid }`"
+            :href="`#details_${ data.uuid }`"
             @click="toggleDossier"
             class="dossier-link"
             title="Vis udvidet information">
-            <div class="dossier-link-avatar">{{ makeAvatar(nodeData.name) }}</div>
+            <div class="dossier-link-avatar">{{ makeAvatar(data.name) }}</div>
             <p class="dossier-link-name">
-                {{ nodeData.name }}
+                {{ data.name }}
             </p>
         </a>
-        <dossier v-if="dossier_open" :node-uuid="nodeData.uuid" @closedossier="dossier_open = false" />
+        <organisation v-if="dossier_open" :uuid="data.uuid" @closedossier="dossier_open = false" />
     </div>
 </template>
 
 <script>
-import Dossier from './Dossier.vue'
+import Organisation from './Organisation.vue'
 
 export default {
     components: {
-        Dossier
+        Organisation
     },
     props: [
-        'nodeData'
+        'data'
     ],
     data: function() {
         return {

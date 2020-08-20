@@ -1,16 +1,16 @@
 <template>
     <ul v-if="nodes" class="oc-branch">
-        <node v-for="node in nodes" :node-data="node" :key="node.uuid" />
+        <leaf v-for="node in nodes" :data="node" :key="node.uuid" />
     </ul>
 </template>
 
 <script>
-import Node from './Node.vue'
+import Leaf from './Leaf.vue'
 
 export default {
     name: 'oc-branch',
     components: {
-        Node
+        Leaf
     },
     data: function() {
         return {

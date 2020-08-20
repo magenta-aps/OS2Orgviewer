@@ -1,21 +1,19 @@
 <template>
     <div id="app">
-
-        <section id="chart">
-            <chart />
+        <section id="tree">
+            <tree />
         </section>
-
     </div>
 </template>
 
 <script>
-import Chart from './components/chart/Chart.vue'
+import Tree from './components/tree/Tree.vue'
 
 
 export default {
     name: 'App',
     components: {
-        Chart
+        Tree
     }
 }
 </script>
@@ -61,24 +59,8 @@ export default {
         height: 100%;
     }
 
-    #chart {
+    #tree {
         height: 100%;
-    }
-
-    @media screen and (min-width: 40rem) {
-        
-        #app {
-            display: flex;
-            flex-flow: row nowrap;
-            justify-content: space-between;
-            align-items: stretch;
-            max-width: 100%;
-            overflow: hidden;
-        }
-
-        #chart {
-            
-        }   
     }
 
 </style>

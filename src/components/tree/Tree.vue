@@ -4,9 +4,9 @@
             <ul class="oc-branch oc-chart-root-branch">
                 <li class="oc-node oc-chart-root-node">
                     <div class="oc-node-body">
-                        <micro-dossier v-if="node" :node-data="node" />
+                        <org-lite v-if="node" :data="node" />
                     </div>
-                    <oc-branch :uuid="entry_node_uuid" />
+                    <branch :uuid="entry_node_uuid" />
                 </li>
             </ul>
         </div>
@@ -14,9 +14,8 @@
 </template>
 
 <script>
-import OcBranch from './Branch.vue'
-import OcNode from './Node.vue'
-import MicroDossier from '../dossier/MicroDossier.vue'
+import Branch from './Branch.vue'
+import OrgLite from '../organisation/OrganisationLite.vue'
 
 export default {
     data: function() {
@@ -29,9 +28,8 @@ export default {
         }
     },
     components: {
-        OcBranch,
-        OcNode,
-        MicroDossier
+        Branch,
+        OrgLite
     },
     methods: {
         fetchOrg: function(uuid) {

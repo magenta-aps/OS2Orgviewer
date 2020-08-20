@@ -1,38 +1,38 @@
 <template>
     <li class="oc-node">
         <div class="oc-node-body">
-            <micro-dossier :node-data="nodeData" />
+            <org-lite :data="data" />
             <button 
-                v-if="!branch_open && nodeData.child_count > 0" 
+                v-if="!branch_open && data.child_count > 0" 
                 class="oc-node-expand-btn" 
                 type="button" 
                 @click="expandBranch"
                 title="Vis underordnede">
-                    ⊕ {{ nodeData.child_count }}
+                    ⊕ {{ data.child_count }}
             </button>
             <button 
-                v-if="branch_open" 
-                class="oc-node-expand-btn" 
+                v-if="branch_open"
+                class="oc-node-expand-btn"
                 type="button" 
                 @click="collapseBranch"
                 title="Skjul underordnede">
                     ⊖
             </button>
         </div>
-        <oc-branch v-if="branch_open" :uuid="nodeData.uuid" />
+        <branch v-if="branch_open" :uuid="data.uuid" />
     </li>
 </template>
 
 <script>
-import MicroDossier from '../dossier/MicroDossier.vue'
+import OrgLite from '../organisation/OrganisationLite.vue'
 
 export default {
     components: {
-        OcBranch: () => import('./Branch.vue'),
-        MicroDossier
+        Branch: () => import('./Branch.vue'),
+        OrgLite
     },
     props: [
-        'nodeData'
+        'data'
     ],
     data: function() {
         return {
