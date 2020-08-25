@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <oc-header>
-            <h1>Organisationsdiagram</h1>
+            <h1 slot="title">Organisationsdiagram</h1>
         </oc-header>
         <section id="tree">
             <tree />
@@ -12,7 +12,6 @@
 <script>
 import Tree from './components/tree/Tree.vue'
 import OcHeader from './components/layout/Header.vue'
-
 
 export default {
     name: 'App',

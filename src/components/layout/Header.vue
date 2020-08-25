@@ -1,6 +1,7 @@
 <template>
     <header class="oc-header">
-        <slot></slot>
+        <slot name="title"></slot>
+        <slot name="actions"></slot>
     </header>
 </template>
 
@@ -10,7 +11,11 @@
     background-color: white;
     padding: .75em 1rem;
     color: black;
-    box-shadow: .25rem .25rem 0 hsla(0,0%,0%,.1);
+    box-shadow: -.25rem .25rem 0 hsla(0,0%,0%,.1);
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .oc-header * {

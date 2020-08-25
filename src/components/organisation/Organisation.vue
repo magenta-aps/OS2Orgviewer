@@ -2,7 +2,7 @@
     <slider v-if="node" @closeflyout="closeDossier">
         <article class="oc-org" :id="`details_${ node.uuid }`">
             <oc-header>
-                <h2>{{ node.name }}</h2>
+                <h2 slot="title">{{ node.name }}</h2>
             </oc-header>
             <div class="oc-org-body">
                 <manager v-for="manager in managers" :data="manager" :key="manager.uuid" />

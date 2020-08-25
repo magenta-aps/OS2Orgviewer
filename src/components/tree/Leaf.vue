@@ -8,7 +8,7 @@
                 type="button" 
                 @click="expandBranch"
                 title="Vis underordnede">
-                    ⊕ {{ data.child_count }}
+                    + {{ data.child_count }}
             </button>
             <button 
                 v-if="branch_open"
@@ -16,7 +16,7 @@
                 type="button" 
                 @click="collapseBranch"
                 title="Skjul underordnede">
-                    ⊖
+                    -
             </button>
         </div>
         <branch v-if="branch_open" :uuid="data.uuid" />

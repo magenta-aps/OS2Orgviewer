@@ -6,10 +6,7 @@
             @click="toggleDossier"
             class="dossier-link"
             title="Vis udvidet information">
-            <div class="dossier-link-avatar">{{ makeAvatar(data.name) }}</div>
-            <p class="dossier-link-name">
-                {{ data.name }}
-            </p>
+            {{ data.name }}
         </a>
         <organisation v-if="dossier_open" :uuid="data.uuid" @closedossier="dossier_open = false" />
     </div>
@@ -31,9 +28,6 @@ export default {
         }
     },
     methods: {
-        makeAvatar: function(string) {
-            return string.substring(0,1)
-        },
         toggleDossier: function() {
             this.dossier_open = !this.dossier_open
         }
@@ -63,20 +57,5 @@ export default {
         box-shadow: .5rem .5rem 0 hsla(0,0%,0%,.2);
         z-index: 10;
         transform: translate(-.5rem, -.5rem);
-    }
-    .dossier-link-avatar {
-        flex: 0 0 2rem;
-        margin-right: .5rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 2rem;
-        height: 2rem;
-        border-radius: 50%;
-        background-color: #faa;
-        color: #fff;
-    }
-    .dossier-link-name {
-        margin: 0;
     }
 </style>

@@ -2,7 +2,7 @@
     <slider @closeflyout="closeFlyout">
         <article v-if="data" class="oc-person">
             <oc-header>
-                <h3>{{ data.name }}</h3>
+                <h3 slot="title">{{ data.name }}</h3>
             </oc-header>
             <dl class="oc-person-body">
                 <dt>Navn</dt>
