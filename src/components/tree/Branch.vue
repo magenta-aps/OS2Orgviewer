@@ -1,6 +1,6 @@
 <template>
     <ul v-if="nodes" class="oc-branch">
-        <leaf v-for="node in nodes" :data="node" :key="node.uuid" />
+        <leaf v-for="node in nodes" :uuid="node.uuid" :key="node.uuid" />
     </ul>
 </template>
 
@@ -12,30 +12,22 @@ export default {
     components: {
         Leaf
     },
-    data: function() {
-        return {
-            nodes: null
-        }
-    },
     props: [
         'uuid'
     ],
-    methods: {
-        fetchOrgChildren: function(uuid) {
-            fetch(`${ process.env.VUE_APP_API_BASEURL }/service/ou/${ uuid }/children`)
-            .then((response) => {
-                return response.json()
-            })
-            .then((orgs) => {
-                this.nodes = orgs
-            })
-            .catch(err => {
-                console.log(err)
-            })
+    computed: {
+        nodes: function() {
+            if (this.uuid) {
+                return this.$store.getters.getChildren(this.uuid)
+            } else {
+                const roots = this.$store.getters.getRootUuids
+                let root_nodes = []
+                for (let root in roots) {
+                    root_nodes.push(this.$store.getters.getNode(roots[root]))
+                }
+                return root_nodes
+            }
         }
-    },
-    created: function() {
-        this.fetchOrgChildren(this.uuid)
     }
 }
 </script>

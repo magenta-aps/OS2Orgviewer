@@ -1,33 +1,23 @@
 <template>
     <dl v-if="data" class="employee-item">
-        <dt>{{ data.job_function.name }}</dt>
-        <dd>
-            <a href="#" @click="details_open = true">
+        <dd v-if="data.person">
+            <router-link
+                class="oc-person-close"
+                :to="{ name: 'orgchart', query: { root: root_org_uuid, org: data.org_unit.uuid, orgopen: 'open', person: data.person.uuid } }">
                 {{ data.person.name }}
-            </a>
-            <person v-if="details_open" :data="data.person" @closeflyout="closeDetails" />
+            </router-link>
         </dd>
     </dl>
 </template>
 
 <script>
-import Person from './Person.vue'
-
 export default {
-    components: {
-        Person
-    },
     props: [
         'data'
     ],
-    data: function() {
-        return {
-            details_open: false
-        }
-    },
-    methods: {
-        closeDetails: function() {
-            this.details_open = false
+    computed: {
+        root_org_uuid: function() {
+            return this.$store.getters.getRootOrgUnitUuid
         }
     }
 }
@@ -41,6 +31,10 @@ export default {
 
     .employee-item dd {
         margin: 0;
+    }
+
+    .oc-person-close {
+
     }
 
 </style>

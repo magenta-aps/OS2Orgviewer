@@ -1,80 +1,62 @@
 <template>
-    <slider v-if="node" @closeflyout="closeDossier">
-        <article class="oc-org" :id="`details_${ node.uuid }`">
-            <oc-header>
-                <h2 slot="title">{{ node.name }}</h2>
-            </oc-header>
-            <div class="oc-org-body">
-                <manager v-for="manager in managers" :data="manager" :key="manager.uuid" />
-                <person-list :uuid="node.uuid" />
-            </div>
-        </article>
-    </slider>
+    <article class="oc-org" v-if="org_visible && org_data">
+        <oc-header>
+            <h2 slot="title" tabindex="-1" id="orgtitle">{{ org_data.name }}</h2>
+        </oc-header>
+        <div class="oc-org-body">
+            <!-- Managers seem to be redundant as they also appear in personlist -->
+            <!-- <managers :uuid="org_data.uuid" /> -->
+            <person-list :uuid="org_data.uuid" />
+        </div>
+        <router-link :to="{ name: 'orgchart', query: { root: root_org_uuid, org: org_data.uuid, orgopen: 'closed' } }" class="btn">
+            Luk
+        </router-link>
+    </article>
 </template>
 
 <script>
-import Slider from '../layout/Slider.vue'
-import PersonLite from '../person/PersonLite.vue'
 import PersonList from '../person/PersonList.vue'
-import Manager from './Manager.vue'
+import Managers from '../person/Managers.vue'
 import OcHeader from '../layout/Header.vue'
+import store from '../../store.js'
 
 export default {
     components: {
-        PersonLite,
         PersonList,
-        Slider,
-        Manager,
+        Managers,
         OcHeader
     },
-    props: [
-        'uuid'
-    ],
-    data: function() {
-        return {
-            node: null,
-            managers: null
-        }
-    },
-    methods: {
-        closeDossier: function() {
-            location.hash = `#node_${ this.node.uuid }`
-            this.node = null
-            this.$emit('closedossier')
+    computed: {
+        org_visible: function() {
+            return this.$store.getters.getActiveOrgVisibility
         },
-        fetchOrg: function(uuid) {
-            fetch(`${ process.env.VUE_APP_API_BASEURL }/service/ou/${ uuid }/`)
-            .then((response) => {
-                return response.json()
-            })
-            .then((org) => {
-                this.node = org
-                this.fetchManagers(org.uuid)
-            })
-            .catch(err => {
-                console.log(err)
-            })
+        org_uuid: function() {
+            return this.$store.getters.getActiveOrgUuid
         },
-        fetchManagers: function(org_uuid) {
-            fetch(`${ process.env.VUE_APP_API_BASEURL }/service/ou/${ org_uuid }/details/manager`)
-            .then((response) => {
-                return response.json()
-            })
-            .then((managers) => {
-                this.managers = managers
-            })
-            .catch(err => {
-                console.log(err)
-            })
+        org_data: function() {
+            return this.$store.getters.getNode(this.org_uuid)
+        },
+        root_org_uuid: function() {
+            return this.$store.getters.getRootOrgUnitUuid
         }
-    },
-    created: function() {
-        this.fetchOrg(this.uuid)
     }
 }
 </script>
 
 <style>
+
+    .oc-org {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        background-color: #fff;
+        z-index: 10;
+        display: flex;
+        flex-flow: column nowrap;
+        overflow: auto;
+    }
 
     .oc-header h2 {
         margin: 0;
@@ -83,6 +65,14 @@ export default {
 
     .oc-org-body {
         padding: 1rem;
+        flex-grow: 1;
+        overflow: auto;
+    }
+
+    @media screen and (min-width: 40rem) {
+        .oc-org {
+            max-width: 30rem;
+        }
     }
 
 </style>

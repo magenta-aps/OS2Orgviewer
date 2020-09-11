@@ -1,50 +1,35 @@
 <template>
-    <div v-if="employees">
-        <h3>Ansatte</h3>
-        <ul class="employee-list">
-            <li v-for="employee in employees" :key="employee.uuid">
-                <person-lite :data="employee" />
-            </li>
-        </ul>
-    </div>
+    <ul class="employee-list" v-if="employees">
+        <li v-for="employee in employees" :key="employee.uuid">
+            <person-lite :data="employee" />
+        </li>
+    </ul>
 </template>
 
 <script>
 import PersonLite from './PersonLite.vue'
+import Person from './Person.vue'
 
 export default {
     components: {
-        PersonLite
+        PersonLite,
+        Person
     },
     props: [
         'uuid'
     ],
-    data: function() {
-        return {
-            employees: null
+    computed: {
+        employees: function() {
+            return this.$store.getters.getPersons
         }
     },
     watch: {
-        uuid: function(new_val) {
-            this.fetchEmployees(new_val)
-        }
-    },
-    methods: {
-        fetchEmployees: function(org_uuid) {
-            fetch(`${ process.env.VUE_APP_API_BASEURL }/service/ou/${ org_uuid }/details/engagement`)
-            .then((response) => {
-                return response.json()
-            })
-            .then((employees) => {
-                this.employees = employees
-            })
-            .catch(err => {
-                console.log(err)
-            })
+        uuid: function(new_uuid) {
+            this.$store.dispatch('fetchEmployees', new_uuid)
         }
     },
     created: function() {
-        this.fetchEmployees(this.uuid)
+        this.$store.dispatch('fetchEmployees', this.uuid)
     }
 }
 </script>

@@ -1,63 +1,81 @@
 <template>
-    <li class="oc-node">
+    <li class="oc-node" v-if="node_data">
         <div class="oc-node-body">
-            <org-lite :data="data" />
-            <button 
-                v-if="!branch_open && data.child_count > 0" 
-                class="oc-node-expand-btn" 
-                type="button" 
-                @click="expandBranch"
-                title="Vis underordnede">
-                    + {{ data.child_count }}
-            </button>
-            <button 
-                v-if="branch_open"
-                class="oc-node-expand-btn"
-                type="button" 
-                @click="collapseBranch"
-                title="Skjul underordnede">
-                    -
-            </button>
+            <router-link 
+                v-if="node_data.uuid !== root_org_unit_uuid"
+                :to="`/orgchart?root=${ node_data.uuid }`">
+                Fokuser
+            </router-link>
+            <org-lite :data="node_data" />
+            <template v-if="determineChildCount(node_data)">
+                <button 
+                    v-if="!branch_open" 
+                    class="oc-node-expand-btn" 
+                    type="button" 
+                    @click="expandBranch"
+                    title="Vis underordnede">
+                        + {{ determineChildCount(node_data) }}
+                </button>
+                <button 
+                    v-if="branch_open"
+                    class="oc-node-expand-btn"
+                    type="button" 
+                    @click="collapseBranch"
+                    title="Skjul underordnede">
+                        - {{ determineChildCount(node_data) }}
+                </button>
+            </template>
         </div>
-        <branch v-if="branch_open" :uuid="data.uuid" />
+        <branch v-if="branch_open" :uuid="uuid" />
     </li>
 </template>
 
 <script>
 import OrgLite from '../organisation/OrganisationLite.vue'
+import Org from '../organisation/Organisation.vue'
 
 export default {
     components: {
         Branch: () => import('./Branch.vue'),
-        OrgLite
+        OrgLite,
+        Org
     },
-    props: [
-        'data'
-    ],
+    props: {
+        uuid: String,
+        expanded: {
+            type: Boolean,
+            default: false
+        }
+    },
     data: function() {
         return {
             branch_open: false
         }
     },
+    computed: {
+        node_data: function() {
+            return this.$store.getters.getNode(this.uuid)
+        },
+        root_org_unit_uuid: function() {
+            return this.$store.getters.getRootOrgUnitUuid
+        },
+    },
     methods: {
         expandBranch: function() {
             this.branch_open = true
+            this.$store.dispatch('fetchOrgUnitChildren', this.node_data.uuid)
         },
         collapseBranch: function() {
             this.branch_open = false
         },
-        // We might not need this
-        fetchOrg: function(uuid) {
-            fetch(`${ process.env.VUE_APP_API_BASEURL }/service/ou/${ uuid }/`)
-            .then((response) => {
-                return response.json()
-            })
-            .then((org) => {
-                
-            })
-            .catch(err => {
-                console.log(err)
-            })
+        determineChildCount: function(data) {
+            if (data.children) {
+                return data.children.length
+            } else if (data.child_count) {
+                return data.child_count
+            } else {
+                return false
+            }
         }
     }
 }
@@ -69,6 +87,7 @@ export default {
         position: relative;
         text-align: center;
         padding: 0 .5rem;
+        margin: 0 auto;
     }
 
     .oc-node::before {

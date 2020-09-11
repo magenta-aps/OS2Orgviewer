@@ -1,97 +1,83 @@
 <template>
-    <div class="oc-chart-wrapper" @mousedown="startDrag" @mouseup="endDrag" @mousemove="doDrag">
-        <div ref="chart" class="oc-chart">
-            <ul class="oc-branch oc-chart-root-branch">
-                <li class="oc-node oc-chart-root-node">
-                    <div class="oc-node-body">
-                        <org-lite v-if="node" :data="node" />
-                    </div>
-                    <branch :uuid="entry_node_uuid" />
-                </li>
-            </ul>
-        </div>
+    <div class="oc-chart" v-if="root_org_unit">
+        <router-link 
+            v-if="parent"
+            class="oc-chart-root-link"
+            :to="{ name: 'orgchart', query: { root: parent.uuid } }">
+            {{ parent.name }}
+        </router-link>
+
+        <ul class="oc-branch">
+            <leaf :uuid="root_org_unit_uuid" />
+        </ul>
+
     </div>
 </template>
 
 <script>
-import Branch from './Branch.vue'
-import OrgLite from '../organisation/OrganisationLite.vue'
+import Leaf from './Leaf.vue'
 
 export default {
-    data: function() {
-        return {
-            entry_node_uuid: 'f06ee470-9f17-566f-acbe-e938112d46d9',
-            node: null,
-            dragging: false,
-            x: null,
-            y: null
+    components: {
+        Leaf
+    },
+    computed: {
+        root_org_unit_uuid: function() {
+            return this.$store.getters.getRootOrgUnitUuid
+        },
+        root_org_unit: function() {
+            return this.$store.getters.getNode(this.root_org_unit_uuid)
+        },
+        parent: function() {
+            return this.$store.getters.getNode(this.root_org_unit.parent_uuid)
         }
     },
-    components: {
-        Branch,
-        OrgLite
-    },
-    methods: {
-        fetchOrg: function(uuid) {
-            fetch(`${ process.env.VUE_APP_API_BASEURL }/service/ou/${ uuid }/`)
-            .then((response) => {
-                return response.json()
-            })
-            .then((org) => {
-                this.node = org
-            })
-            .catch(err => {
-                console.log(err)
-            })
-        },
-        initDisplay: function() {
-            let viewport_center = (this.$refs.chart.scrollWidth / 2) - (window.innerWidth / 2)
-            setTimeout(() => {
-                this.$refs.chart.scrollTo(viewport_center, 0)
-            }, 300)
-        },
-        startDrag: function(ev) {
-            this.dragging = true
-            this.x = ev.x
-            this.y = ev.y
-        },
-        doDrag: function(ev) {
-            if (this.dragging) {
-                const offsetx = this.x - ev.x
-                const offsety = this.y - ev.y
-                this.x = ev.x
-                this.y = ev.y
-                ev.target.scrollLeft = ev.target.scrollLeft + offsetx
-                ev.target.scrollTop = ev.target.scrollTop + offsety
+    watch: {
+        $route: function(to, from) {
+            if (to.query.root !== from.query.root) {
+                this.$store.commit('setRootOrgUnitUuid', to.query.root)
             }
-        },
-        endDrag: function() {
-            this.dragging = false
         }
     },
     created: function() {
-        this.fetchOrg(this.entry_node_uuid)
-    },
-    mounted: function() {
-        this.initDisplay()
+        // Look up url params and initialize tree component based on that
+        if (this.$route.query.root) {
+            this.$store.dispatch('initFromRoot', this.$route.query.root)
+        } else {
+            this.$store.dispatch('initFromNothing')
+        }
+
+        window.rq = this.$route.query
     }
 }
 </script>
 
 <style>
 
-.oc-chart-wrapper {
-    height: 100%;
-    padding: 2rem 0;
-}
-
 .oc-chart {
+    flex-grow: 1;
+    overflow: auto;
     height: 100%;
+    width: 100%;
 }
 
 .oc-chart .oc-chart-root-node > .oc-node-body::before,
 .oc-chart .oc-chart-root-branch::before {
     content: none;
+}
+
+.oc-chart-root-link {
+    display: block;
+    padding: .25rem;
+    background-color: #fff;
+    text-align: center;
+    z-index: 100;
+}
+
+.oc-branch {
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
 </style>
