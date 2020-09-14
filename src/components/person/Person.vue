@@ -1,7 +1,7 @@
 <template>
     <article v-if="person_data" class="oc-person">
         <oc-header>
-            <h3 slot="title">
+            <h3 slot="title" tabindex="-1" id="persontitle">
                 {{ person_data.person.name }}
             </h3>
         </oc-header>

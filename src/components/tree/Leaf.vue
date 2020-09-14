@@ -1,12 +1,12 @@
 <template>
     <li class="oc-node" v-if="node_data">
         <div class="oc-node-body">
+            <org-lite :data="node_data" />
             <router-link 
                 v-if="node_data.uuid !== root_org_unit_uuid"
                 :to="`/orgchart?root=${ node_data.uuid }`">
                 Fokuser
             </router-link>
-            <org-lite :data="node_data" />
             <template v-if="determineChildCount(node_data)">
                 <button 
                     v-if="!branch_open" 

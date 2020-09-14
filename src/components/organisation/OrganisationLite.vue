@@ -1,6 +1,7 @@
 <template>
     <router-link 
         :to="{ name: 'orgchart', query: { root: root_org_uuid, org: data.uuid, orgopen: 'open' } }"
+        :id="`orgunit-${ data.uuid }`"
         class="oc-org-link" 
         title="Vis udvidet information">
         {{ data.name }}
