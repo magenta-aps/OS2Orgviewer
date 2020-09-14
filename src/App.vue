@@ -33,7 +33,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
     * {
         box-sizing: border-box;
     }
@@ -45,7 +45,7 @@ export default {
     }
 
     body {
-        background-color: #cef;
+        background-color: $color-bg-2;
         padding: 0;
         margin: 0;
     }
