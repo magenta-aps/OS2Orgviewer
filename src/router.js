@@ -43,6 +43,8 @@ router.beforeEach((to, from, next) => {
         setTimeout(function() {
             document.getElementById('persontitle').focus()
         }, 300)
+    } else {
+        store.commit('setActivePersonUuid', null)
     }
     next()
 })

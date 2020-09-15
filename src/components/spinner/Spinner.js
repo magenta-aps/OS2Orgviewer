@@ -1,4 +1,4 @@
-import './spinner.css'
+import './spinner.scss'
 
 /**
  * Create a GUI spinner instance. Handy for when users have to wait for something to load.

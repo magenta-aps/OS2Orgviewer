@@ -2,12 +2,12 @@
     <div class="oc-chart" v-if="root_org_unit">
         <router-link 
             v-if="parent"
-            class="oc-chart-root-link"
+            class="oc-chart-root-link btn"
             :to="{ name: 'orgchart', query: { root: parent.uuid } }">
             {{ parent.name }}
         </router-link>
 
-        <ul class="oc-branch">
+        <ul class="oc-branch oc-chart-root-branch">
             <leaf :uuid="root_org_unit_uuid" />
         </ul>
 
@@ -52,13 +52,16 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 
 .oc-chart {
     flex-grow: 1;
     overflow: auto;
     height: 100%;
     width: 100%;
+    display: flex;
+    align-items: center;
+    flex-flow: column nowrap;
 }
 
 .oc-chart .oc-chart-root-node > .oc-node-body::before,
@@ -67,17 +70,27 @@ export default {
 }
 
 .oc-chart-root-link {
-    display: block;
-    padding: .25rem;
-    background-color: #fff;
-    text-align: center;
-    z-index: 100;
+    display: inline-block !important;
+    box-shadow: $shadow-2;
 }
 
 .oc-branch {
     list-style: none;
     padding: 0;
     margin: 0;
+}
+
+@media screen and (max-width: 40rem) {
+
+    .oc-chart {
+        display: block;
+        margin: 0 0 0 1rem;
+    }
+
+    .oc-branch.oc-chart-root-branch {
+        padding-left: 0;
+    }
+
 }
 
 </style>

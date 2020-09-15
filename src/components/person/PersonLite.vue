@@ -1,13 +1,13 @@
 <template>
-    <dl v-if="data" class="employee-item">
-        <dd v-if="data.person">
+    <div v-if="data" class="oc-person-list-item">
+        <template v-if="data.person">
             <router-link
-                class="oc-person-close"
+                class="oc-person-open"
                 :to="{ name: 'orgchart', query: { root: root_org_uuid, org: data.org_unit.uuid, orgopen: 'open', person: data.person.uuid } }">
                 {{ data.person.name }}
             </router-link>
-        </dd>
-    </dl>
+        </template>
+    </div>
 </template>
 
 <script>
@@ -25,16 +25,8 @@ export default {
 
 <style>
 
-    .employee-item {
-        margin-top: 1rem;
-    }
-
-    .employee-item dd {
-        margin: 0;
-    }
-
-    .oc-person-close {
-
-    }
+.oc-person-list-item {
+    margin: 0 0 .5rem;
+}
 
 </style>

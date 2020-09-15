@@ -32,7 +32,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 .oc-branch {
     list-style: none;
     padding: 0;
@@ -48,7 +48,21 @@ export default {
     left: 50%;
     width: 3px;
     height: 1rem;
-    background-color: #000;
+    background-color: $shade-lightest;
     z-index: 2;
 }
+
+@media screen and (max-width: 40rem) {
+
+    .oc-branch {
+        display: block;
+        padding-left: 2rem;
+    }
+
+    .oc-branch::before {
+        content: none;
+    }
+    
+}
+
 </style>

@@ -21,7 +21,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 
     .oc-org-link,
     .oc-org-link:link,
@@ -29,7 +29,7 @@ export default {
         display: block;
         padding: .5rem .75rem;
         overflow: hidden;
-        background-color: #fff;
+        background-color: $shade-lightest;
         z-index: 3;
         transition: all .3s;
     }
@@ -37,8 +37,8 @@ export default {
     .oc-org-link:hover,
     .oc-org-link:active,
     .oc-org-link:focus {
-        color: #000;
-        box-shadow: .5rem .5rem 0 hsla(0,0%,0%,.2);
+        color: $shade-darkest;
+        box-shadow: $shadow-2;
         z-index: 10;
         transform: translate(-.5rem, -.5rem);
     }

@@ -26,8 +26,8 @@
 #spinner::before {
     animation: 1.5s linear infinite spinner;
     animation-play-state: inherit;
-    border: solid 1rem hsl(0,0%,75%);
-    border-bottom-color: hsl(0,0%,50%);
+    border: solid 1rem $color-1;
+    border-bottom-color: $color-2;
     border-radius: 50%;
     content: "";
     height: 6rem;
@@ -37,5 +37,5 @@
     top: 45%; 
     transform: translate3d(-50%, -50%, 0);
     width: 6rem;
-    box-shadow: 0 0 1rem hsla(0,0%,0%,.5)
+    box-shadow: $shadow-1;
 }

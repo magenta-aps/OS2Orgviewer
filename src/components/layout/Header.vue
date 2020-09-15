@@ -5,13 +5,13 @@
     </header>
 </template>
 
-<style>
+<style lang="scss">
 
 .oc-header {
-    background-color: white;
-    padding: .75em 1rem;
-    color: black;
-    box-shadow: -.25rem .25rem 0 hsla(0,0%,0%,.1);
+    background-color: $shade-lightest;
+    padding: 1rem;
+    color: $shade-darkest;
+    box-shadow: $shadow-2;
     display: flex;
     flex-flow: row nowrap;
     align-items: center;
@@ -21,6 +21,9 @@
 .oc-header * {
     font-size: 1.25rem;
     font-weight: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 </style>

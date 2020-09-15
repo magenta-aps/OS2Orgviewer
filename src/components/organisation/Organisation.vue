@@ -8,9 +8,7 @@
             <!-- <managers :uuid="org_data.uuid" /> -->
             <person-list :uuid="org_data.uuid" />
         </div>
-        <router-link :to="{ name: 'orgchart', query: { root: root_org_uuid, org: org_data.uuid, orgopen: 'closed' } }" class="btn">
-            Luk
-        </router-link>
+        <back-btn :route="{ name: 'orgchart', query: { root: root_org_uuid, org: org_data.uuid, orgopen: 'closed' } }" />
     </article>
 </template>
 
@@ -19,12 +17,14 @@ import PersonList from '../person/PersonList.vue'
 import Managers from '../person/Managers.vue'
 import OcHeader from '../layout/Header.vue'
 import store from '../../store.js'
+import BackBtn from '../buttons/BackBtn.vue'
 
 export default {
     components: {
         PersonList,
         Managers,
-        OcHeader
+        OcHeader,
+        BackBtn
     },
     computed: {
         org_visible: function() {
@@ -43,36 +43,50 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 
-    .oc-org {
-        position: fixed;
-        top: 0;
-        bottom: 0;
-        right: 0;
-        width: 100%;
-        background-color: #fff;
-        z-index: 10;
-        display: flex;
-        flex-flow: column nowrap;
-        overflow: auto;
-    }
+.oc-org {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    background-color: $shade-lightest;
+    z-index: 10;
+    display: flex;
+    flex-flow: column nowrap;
+    overflow: auto;
+}
+
+.oc-header h2 {
+    margin: 0;
+    padding: 0;
+}
+
+.oc-org-body {
+    padding: 1rem;
+    flex-grow: 1;
+    overflow: auto;
+}
+
+@media screen and (max-width: 40rem) {
 
     .oc-header h2 {
-        margin: 0;
-        padding: 0;
+        padding-left: 2.5rem;
     }
+    
+}
 
-    .oc-org-body {
-        padding: 1rem;
-        flex-grow: 1;
-        overflow: auto;
+@media screen and (min-width: 40rem) {
+    .oc-org {
+        max-width: 20rem;
     }
+}
 
-    @media screen and (min-width: 40rem) {
-        .oc-org {
-            max-width: 30rem;
-        }
+@media screen and (min-width: 60rem) {
+    .oc-org {
+        max-width: 25rem;
     }
+}
 
 </style>

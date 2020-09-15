@@ -2,29 +2,33 @@
     <li class="oc-node" v-if="node_data">
         <div class="oc-node-body">
             <org-lite :data="node_data" />
-            <router-link 
-                v-if="node_data.uuid !== root_org_unit_uuid"
-                :to="`/orgchart?root=${ node_data.uuid }`">
-                Fokuser
-            </router-link>
-            <template v-if="determineChildCount(node_data)">
-                <button 
-                    v-if="!branch_open" 
-                    class="oc-node-expand-btn" 
-                    type="button" 
-                    @click="expandBranch"
-                    title="Vis underordnede">
-                        + {{ determineChildCount(node_data) }}
-                </button>
-                <button 
-                    v-if="branch_open"
-                    class="oc-node-expand-btn"
-                    type="button" 
-                    @click="collapseBranch"
-                    title="Skjul underordnede">
-                        - {{ determineChildCount(node_data) }}
-                </button>
-            </template>
+            <div class="oc-node-actions">
+                <template v-if="determineChildCount(node_data)">
+                    <button 
+                        v-if="!branch_open" 
+                        class="oc-node-expand-btn btn open"
+                        type="button" 
+                        @click="expandBranch"
+                        title="Vis underenheder">
+                            {{ determineChildCount(node_data) }}
+                    </button>
+                    <button 
+                        v-if="branch_open"
+                        class="oc-node-expand-btn btn close"
+                        type="button" 
+                        @click="collapseBranch"
+                        title="Skjul underenheder">
+                            {{ determineChildCount(node_data) }}
+                    </button>
+                </template>
+                <router-link 
+                    class="oc-node-focus-btn btn"
+                    v-if="node_data.uuid !== root_org_unit_uuid"
+                    :to="`/orgchart?root=${ node_data.uuid }`"
+                    :title="`Fokusér på ${ node_data.name }`">
+                    ☆
+                </router-link>
+            </div>
         </div>
         <branch v-if="branch_open" :uuid="uuid" />
     </li>
@@ -81,14 +85,99 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+
+.oc-node {
+    position: relative;
+    text-align: center;
+    padding: 0 .5rem;
+    margin: 0 auto;
+}
+
+.oc-node-body {
+    background-color: $shade-lighter;
+    box-shadow: .5rem .5rem 0 hsla(0,0%,0%,.2);
+    padding: 0;
+    margin: 1rem auto;
+    width: 10rem;
+    height: auto;
+    position: relative;
+    text-align: left;
+}
+
+.oc-node-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.oc-node-expand-btn {
+    font-size: smaller;
+    text-align: right;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.oc-node-expand-btn::before {
+    content: '';
+    display: inline-block;
+    width: .25rem;
+    height: .25rem;
+    margin: 0 .25rem 0 0;
+    border: solid 0 $shade-lightest;
+    border-width: 2px 2px 0 0;
+    transition: transform .3s;
+    transform: rotate(-45deg);
+}
+
+.oc-node-expand-btn.open::before {
+    transform: rotate(135deg);
+}
+
+button.oc-node-focus-btn {
+    background-color: $color-2;
+}
+
+@media screen and (max-width: 40rem) {
 
     .oc-node {
-        position: relative;
-        text-align: center;
-        padding: 0 .5rem;
-        margin: 0 auto;
+        padding: 1.25rem 0 0 0;
     }
+
+    .oc-node-body {
+        margin: 0;
+    }
+
+    .oc-node::before {
+        content: '';
+        display: block;
+        position: absolute;
+        top: 0;
+        left: -1.25rem;
+        height: calc(100% + 1rem);
+        width: 3px;
+        background-color: $shade-lightest;
+    }
+
+    .oc-node:last-child::before {
+        height: 2.5rem;
+    }
+
+    .oc-node-body::before {
+        content: '';
+        display: block;
+        position: absolute;
+        top: 1.25rem;
+        left: -1.25rem;
+        height: 3px;
+        width: 1.25rem;
+        background-color: $shade-lightest;
+    }
+    
+}
+
+@media screen and (min-width: 40rem) {
 
     .oc-node::before {
         content: '';
@@ -98,7 +187,7 @@ export default {
         display: block;
         height: 3px;
         width: 100%;
-        background-color: #000;
+        background-color: $shade-lightest;
     }
 
     .oc-node:first-child::before {
@@ -116,17 +205,6 @@ export default {
         content: none;
     }
 
-    .oc-node-body {
-        background-color: #eee;
-        box-shadow: .5rem .5rem 0 hsla(0,0%,0%,.2);
-        padding: 0;
-        margin: 1rem auto;
-        width: 10rem;
-        height: auto;
-        position: relative;
-        text-align: left;
-    }
-
     .oc-node-body::before {
         content: '';
         position: absolute;
@@ -134,23 +212,10 @@ export default {
         left: 50%;
         width: 3px;
         height: 1rem;
-        background-color: #000;
+        background-color: $shade-lightest;
         z-index: 2;
     }
 
-    .oc-node-expand-btn {
-        display: block;
-        border: none;
-        background-color: #eee;
-        font-size: smaller;
-        padding: .5rem;
-        width: 100%;
-        text-align: right;
-    }
+}
 
-    .oc-node-expand-btn:hover,
-    .oc-node-expand-btn:active,
-    .oc-node-expand-btn:focus {
-        background-color: #ddd;
-    }
 </style>

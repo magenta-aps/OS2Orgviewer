@@ -9,68 +9,68 @@
             <dt>Navn</dt>
             <dd>{{ person_data.person.name }}</dd>
     
-            <template v-for="address in person_data.address_data">
-                <dt :key="address.address_type.uuid">{{ address.address_type.name }}</dt>
-                <dd :key="address.uuid">
-                    <a 
-                        v-if="address.address_type.name === 'Email'"
-                        :href="`mailto:${ address.name }`">
-                        {{ address.name }}
-                    </a>
-                    <span v-else>
-                        {{ address.name }}
-                    </span>
-                </dd>
+            <template v-if="address_data">
+                <template v-for="address in address_data">
+                    <dt :key="address.address_type.uuid">{{ address.address_type.name }}</dt>
+                    <dd :key="address.uuid">
+                        <a 
+                            v-if="address.address_type.name === 'Email'"
+                            :href="`mailto:${ address.name }`">
+                            {{ address.name }}
+                        </a>
+                        <span v-else>
+                            {{ address.name }}
+                        </span>
+                    </dd>
+                </template>
             </template>
         </dl>
-        <router-link 
-            class="btn"
-            :to="{ name: 'orgchart', query: { root: root_org_uuid, org: person_data.org_unit.uuid, orgopen: 'open' } }">
-            Luk
-        </router-link>
+        <back-btn :route="{ name: 'orgchart', query: { root: root_org_uuid, org: person_data.org_unit.uuid, orgopen: 'open' } }" />
     </article>
 </template>
 
 <script>
 import OcHeader from '../layout/Header.vue'
+import BackBtn from '../buttons/BackBtn.vue'
 
 let active_person_uuid = null
 
 export default {
     components: {
-        OcHeader
+        OcHeader,
+        BackBtn
     },
     data: function() {
         return {
-            person_data: null
+            address_data: null
         }
     },
     computed: {
+        person_uuid: function() {
+
+            return this.$store.getters.getActivePersonUuid
+        },
+        person_data: function() {
+            return this.$store.getters.getPerson(this.person_uuid)
+        },
         root_org_uuid: function() {
             return this.$store.getters.getRootOrgUnitUuid
         }
     },
     watch: {
-        $route: function(to) {
-            this.checkPersonUrlInfo(to.query)
-        }
-    },
-    methods: {
-        checkPersonUrlInfo: function(query) {
-            if (query.person) {
-                this.person_data = this.$store.state.person.persons[query.person]
-            } else {
-                this.person_data = null
+        person_uuid: function(new_uuid) {
+            if (new_uuid) {
+                this.$store.dispatch('fetchPersonAddresses', new_uuid)
+                .then(addresses => {
+                    this.address_data = addresses
+                })
             }
         }
-    },
-    created: function() {
-        this.checkPersonUrlInfo(this.$route.query)
     }
 }
 </script>
 
-<style>
+<style lang="scss">
 
 .oc-person {
     position: fixed;
@@ -82,7 +82,7 @@ export default {
     display: flex;
     flex-flow: column nowrap;
     overflow: auto;
-    background-color: #fff;
+    background-color: $shade-lightest;
 }
 
 .oc-header h3 {
@@ -95,10 +95,28 @@ export default {
     flex-grow: 1;
 }
 
-@media screen and (min-width: 40rem) {
-    .oc-person {
-        max-width: 30rem;
+@media screen and (max-width: 40rem) {
+
+    .oc-header h3 {
+        padding-left: 2.5rem;
     }
+    
+}
+
+@media screen and (min-width: 40rem) {
+    
+    .oc-person {
+        max-width: 20rem;
+    }
+
+}
+
+@media screen and (min-width: 60rem) {
+    
+    .oc-person {
+        max-width: 25rem;
+    }
+
 }
 
 </style>
