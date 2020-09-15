@@ -45,4 +45,12 @@ export default {
 
 }
 
+@media print {
+    
+    .oc-back-btn {
+        display: none !important;
+    }
+
+}
+
 </style>

@@ -119,4 +119,12 @@ export default {
 
 }
 
+@media print {
+    
+    .oc-person {
+        position: relative;
+    }
+
+}
+
 </style>

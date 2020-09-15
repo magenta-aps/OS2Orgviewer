@@ -26,4 +26,14 @@
     white-space: nowrap;
 }
 
+@media print {
+    
+    .oc-header {
+        background-color: #fff;
+        box-shadow: none;
+        border-bottom: solid 1pt #000;
+    }
+
+}
+
 </style>

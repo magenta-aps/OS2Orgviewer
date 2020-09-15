@@ -89,4 +89,12 @@ export default {
     }
 }
 
+@media print {
+    
+    .oc-org {
+        position: relative;
+    }
+
+}
+
 </style>

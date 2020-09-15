@@ -11,7 +11,7 @@ $color-3: #cef; // Light color for colored backgrounds
 $color-4: #eee; // Alternative light color for colored backgrounds
 
 $shade-lightest: #fff;
-$shade-lighter: lighten($color-3, 10%);
+$shade-lighter: lighten($color-3, 5%);
 $shade-light: $color-3;
 $shade-dark: darken($color-3, 10%);
 $shade-darker: darken($color-3, 20%);

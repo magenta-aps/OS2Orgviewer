@@ -218,4 +218,60 @@ button.oc-node-focus-btn {
 
 }
 
+@media print {
+
+    .oc-node-body {
+        background-color: #fff;
+        box-shadow: none;
+        border: solid 1pt #000;
+    }
+
+    .oc-node-body::before {
+        background-color: #000;
+    }
+
+    .oc-node-expand-btn,
+    .oc-node-focus-btn {
+        display: none !important;
+    }
+
+    .oc-node::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: block;
+        height: 1pt;
+        width: 100%;
+        border-top: solid 3pt #000;
+    }
+
+    .oc-node:first-child::before {
+        width: 50%;
+        left: 50%;
+    }
+
+    .oc-node:last-child::before {
+        width: 50%;
+        left: auto;
+        right: 50%;
+    }
+
+    .oc-node:first-child:last-child::before {
+        content: none;
+    }
+
+    .oc-node-body::before {
+        content: '';
+        position: absolute;
+        top: -1rem;
+        left: 50%;
+        width: 1pt;
+        height: 1rem;
+        border-left: solid 3pt #000;
+        z-index: 2;
+    }
+
+}
+
 </style>
