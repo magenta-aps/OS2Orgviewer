@@ -1,14 +1,25 @@
 <template>
     <article class="oc-org" v-if="org_visible && org_data">
         <oc-header>
-            <h2 slot="title" tabindex="-1" id="orgtitle">{{ org_data.name }}</h2>
+            <h2 slot="title">
+                <router-link
+                    id="orgtitle"
+                    :to="{ name: 'orgchart', query: { root: root_org_uuid, org: org_data.uuid, orgopen: 'closed' } }">
+                    {{ org_data.name }}
+                </router-link>
+            </h2>
         </oc-header>
         <div class="oc-org-body">
             <!-- Managers seem to be redundant as they also appear in personlist -->
             <!-- <managers :uuid="org_data.uuid" /> -->
             <person-list :uuid="org_data.uuid" />
         </div>
-        <back-btn :route="{ name: 'orgchart', query: { root: root_org_uuid, org: org_data.uuid, orgopen: 'closed' } }" />
+        <router-link
+            class="btn"
+            :to="{ name: 'orgchart', query: { root: root_org_uuid, org: org_data.uuid, orgopen: 'closed' } }"
+            title="luk og gå tilbage til x">
+            Luk
+        </router-link>
     </article>
 </template>
 
@@ -17,14 +28,12 @@ import PersonList from '../person/PersonList.vue'
 import Managers from '../person/Managers.vue'
 import OcHeader from '../layout/Header.vue'
 import store from '../../store.js'
-import BackBtn from '../buttons/BackBtn.vue'
 
 export default {
     components: {
         PersonList,
         Managers,
-        OcHeader,
-        BackBtn
+        OcHeader
     },
     computed: {
         org_visible: function() {
@@ -80,6 +89,7 @@ export default {
 @media screen and (min-width: 40rem) {
     .oc-org {
         max-width: 20rem;
+        box-shadow: $shadow-1;
     }
 }
 

@@ -41,24 +41,24 @@ const actions = {
     initFromPerson({commit, dispatch, state}, uuid) {
         dispatch('fetchPerson', uuid)
         .then(person => {
-            dispatch('fetchPersonEngagements', uuid)
-            .then(engagements => {
-                state.persons[uuid].engagement_data = engagements
-                commit('setRootOrgUnitUuid', state.persons[uuid].engagement_data[0].org_unit.uuid)
-                dispatch('fetchTree', state.persons[uuid].engagement_data[0].org_unit.uuid)
+            dispatch('fetchPersonAssociations', uuid)
+            .then(associations => {
+                state.persons[uuid].association_data = associations
+                commit('setRootOrgUnitUuid', state.persons[uuid].association_data[0].org_unit.uuid)
+                dispatch('fetchTree', state.persons[uuid].association_data[0].org_unit.uuid)
             })
         })
     },
-    fetchEmployees: ({commit}, org_uuid) => {
+    fetchAssociatedPeople: ({commit}, org_uuid) => {
         commit('setPersons', {})
-        ajax(`/service/ou/${ org_uuid }/details/engagement`)
-        .then((employees) => {
+        ajax(`/service/ou/${ org_uuid }/details/association`)
+        .then((people) => {
             let persons = {
                 cached: true,
                 parent_org_uuid: org_uuid
             }
-            for (let employee in employees) {
-                persons[employees[employee].person.uuid] = employees[employee]
+            for (let p in people) {
+                persons[people[p].person.uuid] = people[p]
             }
             commit('setPersons', persons)
         })
@@ -90,10 +90,10 @@ const actions = {
             return addresses
         })
     },
-    fetchPersonEngagements: ({}, uuid) => {
-        return ajax (`/service/e/${ uuid }/details/engagement`)
-        .then((engagements) => {
-            return engagements
+    fetchPersonAssociations: ({}, uuid) => {
+        return ajax (`/service/e/${ uuid }/details/association`)
+        .then((associations) => {
+            return associations
         })
     },
     fetchManagers: ({commit}, uuid) => {

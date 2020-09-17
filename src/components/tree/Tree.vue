@@ -1,10 +1,10 @@
 <template>
-    <div class="oc-chart" v-if="root_org_unit">
+    <div class="oc-chart" v-if="root_org_unit" :class="{'oc-chart-orgopen': $route.query.orgopen === 'open'}">
         <router-link 
             v-if="parent"
             class="oc-chart-root-link btn"
             :to="{ name: 'orgchart', query: { root: parent.uuid } }">
-            {{ parent.name }}
+            Et niveau op
         </router-link>
 
         <ul class="oc-branch oc-chart-root-branch">
@@ -46,8 +46,6 @@ export default {
         } else {
             this.$store.dispatch('initFromNothing')
         }
-
-        window.rq = this.$route.query
     }
 }
 </script>
@@ -55,12 +53,11 @@ export default {
 <style lang="scss">
 
 .oc-chart {
-    flex-grow: 1;
     overflow: auto;
     height: 100%;
-    width: 100%;
+    width: auto;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     flex-flow: column nowrap;
 }
 
@@ -89,6 +86,26 @@ export default {
 
     .oc-branch.oc-chart-root-branch {
         padding-left: 0;
+    }
+
+}
+
+@media screen and (min-width: 40rem) {
+
+    .oc-branch.oc-chart-root-branch {
+        margin: 0 auto;
+    }
+
+    .oc-chart-orgopen {
+        margin-right: 20rem;
+    }
+
+}
+
+@media screen and (min-width: 60rem) {
+
+    .oc-chart-orgopen {
+        margin-right: 25rem;
     }
 
 }

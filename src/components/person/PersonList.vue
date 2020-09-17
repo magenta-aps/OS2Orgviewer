@@ -1,7 +1,7 @@
 <template>
-    <ul class="employee-list" v-if="employees">
-        <li v-for="employee in employees" :key="employee.uuid">
-            <person-lite :data="employee" />
+    <ul class="people-list" v-if="people">
+        <li v-for="person in people" :key="person.uuid">
+            <person-lite :data="person" />
         </li>
     </ul>
 </template>
@@ -19,24 +19,24 @@ export default {
         'uuid'
     ],
     computed: {
-        employees: function() {
+        people: function() {
             return this.$store.getters.getPersons
         }
     },
     watch: {
         uuid: function(new_uuid) {
-            this.$store.dispatch('fetchEmployees', new_uuid)
+            this.$store.dispatch('fetchAssociatedPeople', new_uuid)
         }
     },
     created: function() {
-        this.$store.dispatch('fetchEmployees', this.uuid)
+        this.$store.dispatch('fetchAssociatedPeople', this.uuid)
     }
 }
 </script>
 
 <style>
 
-    .employee-list {
+    .people-list {
         list-style: none;
         margin: 0;
         padding: 0;

@@ -1,13 +1,21 @@
 <template>
     <article v-if="person_data" class="oc-person">
         <oc-header>
-            <h3 slot="title" tabindex="-1" id="persontitle">
-                {{ person_data.person.name }}
+            <h3 slot="title">
+                <router-link 
+                    id="persontitle" 
+                    :to="{ name: 'orgchart', query: { root: root_org_uuid, org: person_data.org_unit.uuid, orgopen: 'open' } }">
+                    {{ person_data.person.name }}
+                </router-link>
             </h3>
         </oc-header>
         <dl class="oc-person-body">
+            
             <dt>Navn</dt>
             <dd>{{ person_data.person.name }}</dd>
+            
+            <dt>Tilknytning</dt>
+            <dd>{{ person_data.association_type.name }}</dd>
     
             <template v-if="address_data">
                 <template v-for="address in address_data">
@@ -25,20 +33,22 @@
                 </template>
             </template>
         </dl>
-        <back-btn :route="{ name: 'orgchart', query: { root: root_org_uuid, org: person_data.org_unit.uuid, orgopen: 'open' } }" />
+        <router-link
+            class="btn"
+            :to="{ name: 'orgchart', query: { root: root_org_uuid, org: person_data.org_unit.uuid, orgopen: 'open' } }">
+            Luk
+        </router-link>
     </article>
 </template>
 
 <script>
 import OcHeader from '../layout/Header.vue'
-import BackBtn from '../buttons/BackBtn.vue'
 
 let active_person_uuid = null
 
 export default {
     components: {
-        OcHeader,
-        BackBtn
+        OcHeader
     },
     data: function() {
         return {

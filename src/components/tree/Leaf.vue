@@ -25,7 +25,7 @@
                     class="oc-node-focus-btn btn"
                     v-if="node_data.uuid !== root_org_unit_uuid"
                     :to="`/orgchart?root=${ node_data.uuid }`"
-                    :title="`Fokusér på ${ node_data.name }`">
+                    :title="`Vis kun ${ node_data.name }`">
                     ☆
                 </router-link>
             </div>

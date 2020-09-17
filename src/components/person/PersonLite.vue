@@ -1,12 +1,15 @@
 <template>
     <div v-if="data" class="oc-person-list-item">
-        <template v-if="data.person">
-            <router-link
-                class="oc-person-open"
-                :to="{ name: 'orgchart', query: { root: root_org_uuid, org: data.org_unit.uuid, orgopen: 'open', person: data.person.uuid } }">
-                {{ data.person.name }}
-            </router-link>
-        </template>
+        <dl v-if="data.person">
+            <dt>{{ data.association_type.name }}</dt>
+            <dd>
+                <router-link
+                    class="oc-person-open"
+                    :to="{ name: 'orgchart', query: { root: root_org_uuid, org: data.org_unit.uuid, orgopen: 'open', person: data.person.uuid } }">
+                    {{ data.person.name }}
+                </router-link>
+            </dd>
+        </dl>
     </div>
 </template>
 
