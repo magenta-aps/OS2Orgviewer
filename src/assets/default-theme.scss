@@ -1,4 +1,5 @@
 /*
+
     SASS variables for CSS theme
 */
 
@@ -11,13 +12,13 @@ $color-3: #cef; // Light color for colored backgrounds
 $color-4: #eee; // Alternative light color for colored backgrounds
 
 $shade-lightest: #fff;
-$shade-lighter: lighten($color-3, 5%);
+$shade-lighter: lighten($color-3, 10%);
 $shade-light: $color-3;
 $shade-dark: darken($color-3, 10%);
 $shade-darker: darken($color-3, 20%);
 $shade-darkest: #000;
 
-$shadow-1: 0 0 1rem hsla(0,0%,0%,.5);
+$shadow-1: -.5rem .5rem 0 hsla(0,0%,0%,.2);
 $shadow-2: .5rem .5rem 0 hsla(0,0%,0%,.2);
 
 $font: 1em/1.3 Avenir, Helvetica, Arial, sans-serif;

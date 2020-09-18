@@ -19,6 +19,7 @@ const router = new Router({
 })
 
 router.beforeEach((to, from, next) => {
+    console.log('load')
     if (to.query.root) {
         store.commit('setRootOrgUnitUuid', to.query.root)
     }

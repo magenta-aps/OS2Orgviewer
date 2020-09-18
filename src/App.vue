@@ -6,7 +6,7 @@
                 slot="title" 
                 v-if="organisations" 
                 :title="`${ organisations[0].name }s organisation`">
-                {{ organisations[0].name }}s organisation
+                {{ title }}
             </h1>
         </oc-header>
         <main id="oc-main">
@@ -30,6 +30,11 @@ export default {
         Tree, 
         Organisation,
         Person
+    },
+    data: function() {
+        return {
+            title: process.env.VUE_APP_TITLE
+        }
     },
     computed: {
         organisations: function() {

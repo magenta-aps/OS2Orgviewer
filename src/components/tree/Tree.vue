@@ -97,7 +97,7 @@ export default {
     }
 
     .oc-chart-orgopen {
-        margin-right: 20rem;
+        margin-right: 23rem;
     }
 
 }
@@ -105,7 +105,7 @@ export default {
 @media screen and (min-width: 60rem) {
 
     .oc-chart-orgopen {
-        margin-right: 25rem;
+        margin-right: 28rem;
     }
 
 }

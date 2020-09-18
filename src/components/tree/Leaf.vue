@@ -1,34 +1,28 @@
 <template>
     <li class="oc-node" v-if="node_data">
         <div class="oc-node-body">
-            <org-lite :data="node_data" />
-            <div class="oc-node-actions">
-                <template v-if="determineChildCount(node_data)">
-                    <button 
-                        v-if="!branch_open" 
-                        class="oc-node-expand-btn btn open"
-                        type="button" 
-                        @click="expandBranch"
-                        title="Vis underenheder">
-                            {{ determineChildCount(node_data) }}
-                    </button>
-                    <button 
-                        v-if="branch_open"
-                        class="oc-node-expand-btn btn close"
-                        type="button" 
-                        @click="collapseBranch"
-                        title="Skjul underenheder">
-                            {{ determineChildCount(node_data) }}
-                    </button>
-                </template>
+            <div class="oc-node-title">
+                <org-lite :data="node_data" />
                 <router-link 
                     class="oc-node-focus-btn btn"
                     v-if="node_data.uuid !== root_org_unit_uuid"
                     :to="`/orgchart?root=${ node_data.uuid }`"
                     :title="`Vis kun ${ node_data.name }`">
-                    ☆
+                    <svg class="svg-focus" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path class="svg-path" d="M5 15H3v4c0 1.1.9 2 2 2h4v-2H5v-4zM5 5h4V3H5c-1.1 0-2 .9-2 2v4h2V5zm14-2h-4v2h4v4h2V5c0-1.1-.9-2-2-2zm0 16h-4v2h4c1.1 0 2-.9 2-2v-4h-2v4zM12 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" /></svg>
                 </router-link>
             </div>
+        
+            <button 
+                v-if="determineChildCount(node_data)"
+                class="oc-node-expand-btn btn"
+                :class="branch_open ? 'close': 'open'"
+                type="button" 
+                @click="toggleBranch"
+                :title="branch_open ? `Skjul ${determineChildCount(node_data)} underenheder` : `Vis ${determineChildCount(node_data)} underenheder`">
+                    <svg class="svg-toggle" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path class="svg-path" d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/></svg>
+                    {{ determineChildCount(node_data) }}
+            </button>
+        
         </div>
         <branch v-if="branch_open" :uuid="uuid" />
     </li>
@@ -65,12 +59,11 @@ export default {
         },
     },
     methods: {
-        expandBranch: function() {
-            this.branch_open = true
-            this.$store.dispatch('fetchOrgUnitChildren', this.node_data.uuid)
-        },
-        collapseBranch: function() {
-            this.branch_open = false
+        toggleBranch: function() {
+            this.branch_open = !this.branch_open
+            if (this.branch_open) {
+                this.$store.dispatch('fetchOrgUnitChildren', this.node_data.uuid)
+            }
         },
         determineChildCount: function(data) {
             if (data.children) {
@@ -105,38 +98,64 @@ export default {
     text-align: left;
 }
 
-.oc-node-actions {
+.oc-node-title {
     display: flex;
-    justify-content: flex-end;
+    flex-flow: row nowrap;
+}
+
+.oc-node .oc-org-link {
+    flex-grow: 1;
 }
 
 .oc-node-expand-btn {
+    width: 100%;
     font-size: smaller;
     text-align: right;
-    flex-grow: 1;
     display: flex;
     align-items: center;
     justify-content: flex-end;
 }
 
-.oc-node-expand-btn::before {
-    content: '';
-    display: inline-block;
-    width: .25rem;
-    height: .25rem;
-    margin: 0 .25rem 0 0;
-    border: solid 0 $shade-lightest;
-    border-width: 2px 2px 0 0;
-    transition: transform .3s;
-    transform: rotate(-45deg);
+a.oc-node-focus-btn.btn,
+a.oc-node-focus-btn.btn:link,
+a.oc-node-focus-btn.btn:visited  {
+    background-color: $shade-lightest;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+    padding: .5rem;
+
+    .svg-focus {
+        width: .75rem;
+        height: .75rem;
+    }
+
+    .svg-path {
+        fill: $color-1;
+    }
 }
 
-.oc-node-expand-btn.open::before {
-    transform: rotate(135deg);
-}
-
-button.oc-node-focus-btn {
+a.oc-node-focus-btn.btn:hover,
+a.oc-node-focus-btn.btn:active,
+a.oc-node-focus-btn.btn:focus {
     background-color: $color-2;
+    
+    .svg-path {
+        fill: $shade-lightest;
+    }
+}
+
+.svg-toggle {
+    transition: transform .3s;
+}
+
+.svg-toggle .svg-path {
+    fill: $shade-lightest;
+}
+
+.oc-node-expand-btn.close .svg-toggle {
+    transform: rotate(180deg);
 }
 
 @media screen and (max-width: 40rem) {
