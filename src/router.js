@@ -19,13 +19,11 @@ const router = new Router({
 })
 
 router.beforeEach((to, from, next) => {
-    console.log('load')
-    if (to.query.root) {
-        store.commit('setRootOrgUnitUuid', to.query.root)
-    }
-    if (to.query.org) {
-        store.commit('setActiveOrgUuid', to.query.org)
-    }
+    
+    store.dispatch('checkRootorg', to.query.root)
+    store.dispatch('checkActiveOrg', to.query.org)
+    store.dispatch('checkActiveOrgExpanded', {org: to.query.org, expanded: to.query.expanded})
+    
     if (to.query.orgopen && to.query.org) {
         if (to.query.orgopen === 'open') {
             store.commit('setActiveOrgVisibility', true) 

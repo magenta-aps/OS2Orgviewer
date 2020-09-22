@@ -72,4 +72,16 @@ On person click
   > tree should update, displaying person data
 
 
+### Data flow
+
+Data flows between REST API, state graph, and tree view
+
+1. User actions update URL
+2. Router updates state based on URL
+3. State requests info from REST API when appropriate
+4. Tree view displays state
+
+
+
+
 

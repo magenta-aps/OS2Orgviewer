@@ -44,8 +44,10 @@ const actions = {
             dispatch('fetchPersonAssociations', uuid)
             .then(associations => {
                 state.persons[uuid].association_data = associations
-                commit('setRootOrgUnitUuid', state.persons[uuid].association_data[0].org_unit.uuid)
                 dispatch('fetchTree', state.persons[uuid].association_data[0].org_unit.uuid)
+                .then(tree => {
+                    dispatch('mapTreeToGraph', tree)
+                })
             })
         })
     },

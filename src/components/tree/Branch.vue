@@ -17,16 +17,7 @@ export default {
     ],
     computed: {
         nodes: function() {
-            if (this.uuid) {
-                return this.$store.getters.getChildren(this.uuid)
-            } else {
-                const roots = this.$store.getters.getRootUuids
-                let root_nodes = []
-                for (let root in roots) {
-                    root_nodes.push(this.$store.getters.getNode(roots[root]))
-                }
-                return root_nodes
-            }
+            return this.$store.getters.getChildren(this.uuid)
         }
     }
 }

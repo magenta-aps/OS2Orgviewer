@@ -11,18 +11,16 @@
                     <svg class="svg-focus" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path class="svg-path" d="M5 15H3v4c0 1.1.9 2 2 2h4v-2H5v-4zM5 5h4V3H5c-1.1 0-2 .9-2 2v4h2V5zm14-2h-4v2h4v4h2V5c0-1.1-.9-2-2-2zm0 16h-4v2h4c1.1 0 2-.9 2-2v-4h-2v4zM12 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" /></svg>
                 </router-link>
             </div>
-        
             <button 
-                v-if="determineChildCount(node_data)"
+                v-if="node_data.child_count"
                 class="oc-node-expand-btn btn"
                 :class="branch_open ? 'close': 'open'"
                 type="button" 
                 @click="toggleBranch"
-                :title="branch_open ? `Skjul ${determineChildCount(node_data)} underenheder` : `Vis ${determineChildCount(node_data)} underenheder`">
+                :title="branch_open ? `Skjul ${ node_data.child_count } underenheder` : `Vis ${ node_data.child_count } underenheder`">
                     <svg class="svg-toggle" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path class="svg-path" d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/></svg>
-                    {{ determineChildCount(node_data) }}
+                    {{ node_data.child_count }}
             </button>
-        
         </div>
         <branch v-if="branch_open" :uuid="uuid" />
     </li>
@@ -56,23 +54,32 @@ export default {
         },
         root_org_unit_uuid: function() {
             return this.$store.getters.getRootOrgUnitUuid
-        },
+        }
     },
     methods: {
         toggleBranch: function() {
+            let route = { 
+                name: 'orgchart', 
+                query: { 
+                    root: this.root_org_unit_uuid, 
+                    org: this.node_data.uuid, 
+                    orgopen: 'closed' 
+                } 
+            }
             this.branch_open = !this.branch_open
             if (this.branch_open) {
-                this.$store.dispatch('fetchOrgUnitChildren', this.node_data.uuid)
-            }
-        },
-        determineChildCount: function(data) {
-            if (data.children) {
-                return data.children.length
-            } else if (data.child_count) {
-                return data.child_count
+                route.query.orgexpanded = 'expanded'
+                this.$store.dispatch('checkOrgChildren', this.uuid)
             } else {
-                return false
+                route.query.orgexpanded = 'collapsed'
             }
+            this.$router.push(route)
+        }
+    },
+    created: function() {
+        if (this.node_data.expanded) {
+            this.branch_open = true
+            //this.$store.dispatch('fetchOrgUnitChildren', this.node_data.uuid)
         }
     }
 }

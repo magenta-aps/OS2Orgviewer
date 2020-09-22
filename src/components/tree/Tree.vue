@@ -30,22 +30,25 @@ export default {
         },
         parent: function() {
             return this.$store.getters.getNode(this.root_org_unit.parent_uuid)
-        }
-    },
-    watch: {
-        $route: function(to, from) {
-            if (to.query.root !== from.query.root) {
-                this.$store.commit('setRootOrgUnitUuid', to.query.root)
-            }
+        },
+        
+        active_org: function() {
+            return this.$store.getters.getActiveOrgUuid
+        },
+        graph: function() {
+            return this.$store.getters.getGraph
         }
     },
     created: function() {
         // Look up url params and initialize tree component based on that
-        if (this.$route.query.root) {
-            this.$store.dispatch('initFromRoot', this.$route.query.root)
-        } else {
-            this.$store.dispatch('initFromNothing')
+        //this.$store.dispatch('initTree', {root: this.$route.query.root, org: this.$route.query.org})
+        window.showData = () => {
+            console.log('root', this.root_org_unit_uuid)
+            console.log('active org', this.active_org)
+            console.log('graph', this.graph)
+            return true
         }
+        
     }
 }
 </script>
