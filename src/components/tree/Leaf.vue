@@ -1,6 +1,6 @@
 <template>
     <li class="oc-node" v-if="node_data">
-        <div class="oc-node-body">
+        <div class="oc-node-body" :class="{'active': active_org_uuid === node_data.uuid}">
             <div class="oc-node-title">
                 <org-lite :data="node_data" />
                 <router-link 
@@ -36,16 +36,16 @@ export default {
         OrgLite,
         Org
     },
-    props: {
-        uuid: String,
-        expanded: {
-            type: Boolean,
-            default: false
-        }
-    },
     data: function() {
         return {
             branch_open: false
+        }
+    },
+    props: {
+        uuid: String,
+        showChildren: {
+            type: Boolean,
+            default: false
         }
     },
     computed: {
@@ -54,32 +54,38 @@ export default {
         },
         root_org_unit_uuid: function() {
             return this.$store.getters.getRootOrgUnitUuid
+        },
+        active_org_uuid: function() {
+            return this.$store.getters.getActiveOrgUuid
+        }
+    },
+    watch: {
+        showChildren: function(new_val) {
+            if (new_val) {
+                this.$store.dispatch('checkOrgChildren', this.uuid)
+                this.branch_open = true
+            }
         }
     },
     methods: {
         toggleBranch: function() {
+            this.branch_open = !this.branch_open
             let route = { 
                 name: 'orgchart', 
                 query: { 
                     root: this.root_org_unit_uuid, 
                     org: this.node_data.uuid, 
-                    orgopen: 'closed' 
+                    orgopen: 0,
+                    showchildren: this.branch_open ? 1 : 0
                 } 
-            }
-            this.branch_open = !this.branch_open
-            if (this.branch_open) {
-                route.query.orgexpanded = 'expanded'
-                this.$store.dispatch('checkOrgChildren', this.uuid)
-            } else {
-                route.query.orgexpanded = 'collapsed'
             }
             this.$router.push(route)
         }
     },
     created: function() {
-        if (this.node_data.expanded) {
+        if (this.showChildren) {
+            this.$store.dispatch('checkOrgChildren', this.uuid)
             this.branch_open = true
-            //this.$store.dispatch('fetchOrgUnitChildren', this.node_data.uuid)
         }
     }
 }
@@ -103,6 +109,10 @@ export default {
     height: auto;
     position: relative;
     text-align: left;
+}
+
+.oc-node-body.active {
+    box-shadow: 0 0 0 1.5rem hsla(0,0%,100%,.5);
 }
 
 .oc-node-title {

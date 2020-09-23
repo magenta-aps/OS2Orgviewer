@@ -5,7 +5,7 @@
             <dd>
                 <router-link
                     class="oc-person-open"
-                    :to="{ name: 'orgchart', query: { root: root_org_uuid, org: data.org_unit.uuid, orgopen: 'open', person: data.person.uuid } }">
+                    :to="{ name: 'orgchart', query: { root: root_org_uuid, org: data.org_unit.uuid, orgopen: 1, person: data.person.uuid } }">
                     {{ data.person.name }}
                 </router-link>
             </dd>

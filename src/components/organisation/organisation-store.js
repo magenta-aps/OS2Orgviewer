@@ -1,53 +1,24 @@
 import Vue from 'vue'
 import ajax from '../http/http.js'
 
-const normalizeOrgUnit = function(org_unit) {
-    let new_org_unit = org_unit
-    // Check for existing org unit object
-    if (state.graph[org_unit.uuid]) {
-        new_org_unit = state.graph[org_unit.uuid]
-    }
-    // Update parent UUID if any
-    if (org_unit.parent && !new_org_unit.parent_uuid) {
-        new_org_unit.parent_uuid = org_unit.parent.uuid
-    }
-    // Update child_list if applicable
-    if (org_unit.children && !new_org_unit.child_list) {
-        new_org_unit.child_list = []
-        for (let c in org_unit.children) {
-            new_org_unit.child_list.push(org_unit.children[c].uuid)
+const mapTreeToGraph = function(branch, parent_uuid) {
+    for (let n in branch) {
+        branch[n].parent_uuid = parent_uuid
+        if (branch[n].children) {
+            branch[n].showchildren = true
+            mapTreeToGraph(branch[n].children, branch[n].uuid)
+        } else {
+            branch[n].showchildren = false
         }
+        mutations.addNode(state, branch[n])
     }
-    // Update child_count if not present
-    if (!new_org_unit.child_count && !org_unit.child_count) {
-        if (new_org_unit.children) {
-            new_org_unit.child_count = new_org_unit.children.length
-        }
-    }
-    return new_org_unit
-}
-
-const updateParent = function(parent_uuid, child_uuid) {
-    let parent = state.graph[parent_uuid]
-    if (!parent.child_list) {
-        parent.child_list = [
-            child_uuid
-        ]
-    } else {
-        const existing_child = parent.child_list.findIndex(function(uuid) {
-            return uuid === child_uuid
-        })
-        if (existing_child < 0) {
-            parent.child_list.push(child_uuid)
-        }
-    }
-    Vue.set(state.graph, parent_uuid, parent)
 }
 
 const state = {
     graph: {},
     active_org_uuid: null,
-    active_org_visible: false,
+    active_org_display_children: 0,
+    active_org_visible: 0,
     root_org_uuid: null,
     global_organisations: null
 }
@@ -61,16 +32,27 @@ const getters = {
     },
     getChildren: (state) => (org_unit_uuid) => {
         let nodes = []
-        for (let n in state.graph[org_unit_uuid].child_list) {
-            nodes.push(state.graph[state.graph[org_unit_uuid].child_list[n]])
+        for (let c in state.graph[org_unit_uuid].child_list) {
+            nodes.push(state.graph[state.graph[org_unit_uuid].child_list[c]])
         }
         return nodes
     },
     getActiveOrgUuid: state => {
         return state.active_org_uuid
     },
+    getDisplayChildren: state => {
+        if (state.active_org_uuid && state.active_org_display_children == 1) {
+            return true
+        } else {
+            return false
+        }
+    },
     getActiveOrgVisibility: state => {
-        return state.active_org_visible
+        if (state.active_org_uuid && state.active_org_visible == 1) {
+            return true
+        } else {
+            return false
+        }
     },
     getRootOrgUnitUuid: state => {
         return state.root_org_uuid
@@ -81,54 +63,80 @@ const getters = {
 }
 const mutations = {
     addNode: (state, node) => {
-        Vue.set(state.graph, node.uuid, normalizeOrgUnit(node))
+        Vue.set(state.graph, node.uuid, node)
     },
     setActiveOrgUuid: (state, uuid) => {
         state.active_org_uuid = uuid
     },
-    setActiveOrgVisibility: (state, bool) => {
-        state.active_org_visible = bool
+    setDisplayChildren: (state, display_1_0) => {
+        state.active_org_display_children = display_1_0
+    },
+    setActiveOrgVisibility: (state, open_1_0) => {
+        state.active_org_visible = open_1_0
     },
     setRootOrgUuid: (state, uuid) => {
         state.root_org_uuid = uuid
     },
     setOrganisations: (state, orgs) => {
         state.global_organisations = orgs
+    },
+    updateRelations: (state) => {
+        for (let o in state.graph) {
+            if (state.graph[o].children) {
+                let child_list = []
+                if (state.graph[o].child_list) {
+                    child_list = state.graph[o].child_list
+                }
+                for (let c in state.graph[o].children) {
+                    let child = state.graph[o].children[c]
+                    let existing_child = state.graph[o].child_list.findIndex(function(c) {
+                        return c === child.uuid
+                    })
+                    if (existing_child < 0) {
+                        child_list.push(child.uuid)
+                    }
+                    Vue.set(state.graph[child.uuid], parent_uuid, state.graph[o].uuid)
+                }
+                Vue.set(state.graph[o], child_list, child_list)
+            }
+        }
+        /*
+        for (let o in state.graph) {
+            for (let c in state.graph[o].child_list) {
+                let child = state.graph[state.graph[o].child_list[c]]
+                child.parent_uuid = state.graph[o].uuid
+                Vue.set(state.graph, child.uuid, child)
+            }
+        }
+        */
     }
 }
 const actions = {
-    checkRootorg: ({state, dispatch, commit}, root_org_uuid) => {
-        if (!state.graph[root_org_uuid]) {
-            dispatch('fetchGlobalOrgs')
-            .then(orgs => { 
-                for (let org in orgs) {
-                    ajax(`/service/o/${ orgs[org].uuid }/children`)
-                    .then((tree) => {
-                        dispatch('mapTreeToGraph', tree)
-                        // We only want to deal with one root. 
-                        // Taking the first org unit child and passing it on
-                        commit('setRootOrgUuid', tree[0].uuid)
-                    })
-                }
-            })
-        } else {
-            commit('setRootOrgUuid', root_org_uuid)
-        }
-    },
-    checkActiveOrg: ({state, dispatch, commit}, org_unit_uuid) => {
-        if (!state.graph[org_unit_uuid]) {
-            dispatch('fetchTree', org_unit_uuid)
-            .then(tree => {
-                dispatch('mapTreeToGraph', tree)
-                commit('setActiveOrgUuid', org_unit_uuid)
-                dispatch('fetchOrgUnitChildren', org_unit_uuid)
-            })
-        } else {
-            commit('setActiveOrgUuid', org_unit_uuid)
-        }
+    updateState: ({state, dispatch, commit}) => {
+
+        // fetch ancestortree from active org or root in that order
+        if (state.graph[state.active_org_uuid] && state.graph[state.root_org_uuid]) {
+            dispatch('fetchOrgUnitChildren', state.active_org_uuid)
+        } else  {
+            let uuid = null
+            if (state.active_org_uuid) {
+                uuid = state.active_org_uuid
+            } else if (state.root_org_uuid) {
+                uuid = state.root_org_uuid
+            }
+            if (uuid) {
+                dispatch('fetchTree', uuid)
+                .then(tree => {
+                    dispatch('fetchOrgUnitChildren', uuid)
+                })
+            }
+        }  
+
+        // update person info
+        dispatch('updatePerson')
     },
     checkActiveOrgExpanded: ({dispatch}, payload) => {
-        if (payload.expanded === 'expanded') {
+        if (payload.showchildren == 1) {
             dispatch('fetchOrgUnitChildren', payload.org)
         }
     },
@@ -138,46 +146,25 @@ const actions = {
             dispatch('fetchOrgUnitChildren', org_uuid)
         }
     },
-    /*
-    initTree: ({dispatch}, params) => {
-        dispatch('fetchGlobalOrgs')
-        .then(orgs => {
-            if (params.root && params.org) {
-                dispatch('initFromUrl', params)
-            } else {
-                dispatch('initFromNothing', orgs)
-            }
-        })
-    },
-    initFromNothing: ({dispatch, commit}, orgs) => {
-        for (let org in orgs) {
-            ajax(`/service/o/${ orgs[org].uuid }/children`)
-            .then((tree) => {
-                dispatch('mapTreeToGraph', tree)
-                // We only want to deal with one root. 
-                // Taking the first org unit child and passing it on
-                commit('setRootOrgUuid', tree[0].uuid)
-            })
-        }
-    },
-    initFromUrl: ({dispatch, commit}, params) => {
-        dispatch('fetchTree', params.org)
-        .then(tree => {
-            console.log(tree)
-            dispatch('mapTreeToGraph', tree)
-        })
-    },
-    */
     fetchGlobalOrgs: ({commit}) => {
         return ajax(`/service/o/`)
         .then(orgs => {
             commit('setOrganisations', orgs)
-            return orgs
+            // We assume there is only one organisation
+            return ajax(`/service/o/${ orgs[0].uuid }/children`)
+            .then(children => {
+                for (let c in children) {
+                    children[c].showchildren = false
+                    commit('addNode', children[c])
+                }
+                return children
+            })
         })
     },
     fetchTree: ({}, org_unit_uuid) => {
         return ajax(`/service/ou/ancestor-tree?uuid=${ org_unit_uuid }`)
         .then(tree => {
+            mapTreeToGraph(tree, org_unit_uuid)
             return tree
         })
     },
@@ -188,27 +175,24 @@ const actions = {
             commit('addNode', org_unit)
         })
     },
-    fetchOrgUnitChildren: ({commit}, uuid) => {
+    fetchOrgUnitChildren: ({commit, state}, uuid) => {
         ajax(`/service/ou/${ uuid }/children`)
         .then((ous) => {
+            let parent_node = state.graph[uuid]
+            if (!parent_node.child_list) {
+                parent_node.child_list = []
+            }
             for (let ou in ous) {
-                updateParent(uuid, ous[ou].uuid)
-                ous[ou].parent_uuid = uuid
                 commit('addNode', ous[ou])
+                let existing = parent_node.child_list.findIndex(function(c) {
+                    return c === ous[ou].uuid
+                })
+                if (existing < 0) {
+                    parent_node.child_list.push(ous[ou].uuid)
+                }
             }
+            commit('addNode', parent_node)
         })
-    },
-    mapTreeToGraph: ({commit, dispatch}, branch) => {
-        for (let node in branch) {
-            if (branch[node].children) {
-                branch[node].expanded = true
-                branch[node].child_count = branch[node].children.length
-                dispatch('mapTreeToGraph', branch[node].children)
-            } else {
-                branch[node].expanded = false
-            }
-            commit('addNode', branch[node])
-        }
     }
 }
 

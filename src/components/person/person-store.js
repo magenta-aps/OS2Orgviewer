@@ -38,18 +38,18 @@ const mutations = {
     }
 }
 const actions = {
-    initFromPerson({commit, dispatch, state}, uuid) {
-        dispatch('fetchPerson', uuid)
-        .then(person => {
-            dispatch('fetchPersonAssociations', uuid)
-            .then(associations => {
-                state.persons[uuid].association_data = associations
-                dispatch('fetchTree', state.persons[uuid].association_data[0].org_unit.uuid)
-                .then(tree => {
-                    dispatch('mapTreeToGraph', tree)
+    updatePerson({dispatch, state}) {
+        if (!state.active_person_uuid) {
+            return 
+        } else {
+            dispatch('fetchPerson', state.active_person_uuid)
+            .then(() => {
+                dispatch('fetchPersonAssociations', state.active_person_uuid)
+                .then(associations => {
+                    state.persons[state.active_person_uuid].association_data = associations
                 })
             })
-        })
+        }
     },
     fetchAssociatedPeople: ({commit}, org_uuid) => {
         commit('setPersons', {})

@@ -40,6 +40,25 @@ export default {
         organisations: function() {
             return this.$store.getters.getOrganisations
         }
+    },
+    created: function() {
+        this.$store.dispatch('fetchGlobalOrgs')
+        .then(org_children => {
+            if (!this.$route.query.root) {
+                // We only want to deal with one root. 
+                // Taking the first org unit child and passing it on
+                this.$router.push({ 
+                    name: 'orgchart', 
+                    query: { 
+                        root: org_children[0].uuid, 
+                        org: org_children[0].uuid, 
+                        orgopen: 0,
+                        showchildren: 1
+                    } 
+                })
+            }
+        })
+        console.log(this.$store.getters.getGraph)
     }
 }
 </script>

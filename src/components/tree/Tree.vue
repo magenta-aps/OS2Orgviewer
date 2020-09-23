@@ -1,14 +1,14 @@
 <template>
-    <div class="oc-chart" v-if="root_org_unit" :class="{'oc-chart-orgopen': $route.query.orgopen === 'open'}">
+    <div class="oc-chart" v-if="root_org_unit" :class="{'oc-chart-orgopen': $route.query.orgopen == 1}">
         <router-link 
-            v-if="parent"
+            v-if="parent_org_unit"
             class="oc-chart-root-link btn"
-            :to="{ name: 'orgchart', query: { root: parent.uuid } }">
+            :to="{ name: 'orgchart', query: { root: parent_org_unit, org: parent_org_unit, showchildren: 1, orgopen: 0 } }">
             Et niveau op
         </router-link>
 
         <ul class="oc-branch oc-chart-root-branch">
-            <leaf :uuid="root_org_unit_uuid" />
+            <leaf :uuid="root_org_unit_uuid" :show-children="true" />
         </ul>
 
     </div>
@@ -26,29 +26,16 @@ export default {
             return this.$store.getters.getRootOrgUnitUuid
         },
         root_org_unit: function() {
-            return this.$store.getters.getNode(this.root_org_unit_uuid)
+            let orgunit = this.$store.getters.getNode(this.root_org_unit_uuid)
+            if (orgunit !== undefined && !orgunit.showchildren) {
+                orgunit.showchildren = true
+                this.$store.commit('addNode', orgunit)
+            }
+            return orgunit
         },
-        parent: function() {
-            return this.$store.getters.getNode(this.root_org_unit.parent_uuid)
-        },
-        
-        active_org: function() {
-            return this.$store.getters.getActiveOrgUuid
-        },
-        graph: function() {
-            return this.$store.getters.getGraph
+        parent_org_unit: function() {
+            return this.$store.getters.getNode(this.root_org_unit_uuid).parent_uuid
         }
-    },
-    created: function() {
-        // Look up url params and initialize tree component based on that
-        //this.$store.dispatch('initTree', {root: this.$route.query.root, org: this.$route.query.org})
-        window.showData = () => {
-            console.log('root', this.root_org_unit_uuid)
-            console.log('active org', this.active_org)
-            console.log('graph', this.graph)
-            return true
-        }
-        
     }
 }
 </script>

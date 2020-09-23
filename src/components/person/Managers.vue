@@ -3,7 +3,7 @@
         <template v-for="manager in managers">
             <dt :key="manager.uuid">{{ manager.manager_type.name }}</dt>
             <dd :key="manager.person.uuid">
-                <router-link :to="{ name: 'orgchart', query: { root: root_org_uuid, org: uuid, orgopen: 'open', person: manager.person.uuid } }">
+                <router-link :to="{ name: 'orgchart', query: { root: root_org_uuid, org: uuid, orgopen: 1, person: manager.person.uuid } }">
                     {{ manager.person.name }}
                 </router-link>
             </dd>
