@@ -35,11 +35,6 @@
                 </template>
             </template>
         </dl>
-        <router-link
-            class="btn"
-            :to="{ name: 'orgchart', query: { root: root_org_uuid, org: person_data.org_unit.uuid, orgopen: 1 } }">
-            Luk
-        </router-link>
     </article>
 </template>
 

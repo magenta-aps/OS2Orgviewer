@@ -17,11 +17,6 @@
             <!-- <managers :uuid="org_data.uuid" /> -->
             <person-list :uuid="org_data.uuid" />
         </div>
-        <router-link
-            class="btn"
-            :to="{ name: 'orgchart', query: { root: root_org_uuid, org: org_data.uuid, orgopen: 0 } }">
-            Luk
-        </router-link>
     </article>
 </template>
 

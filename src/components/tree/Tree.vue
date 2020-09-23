@@ -1,9 +1,9 @@
 <template>
     <div class="oc-chart" v-if="root_org_unit" :class="{'oc-chart-orgopen': $route.query.orgopen == 1}">
         <router-link 
-            v-if="parent_org_unit"
+            v-if="parent_org_unit_uuid"
             class="oc-chart-root-link btn"
-            :to="{ name: 'orgchart', query: { root: parent_org_unit, org: parent_org_unit, showchildren: 1, orgopen: 0 } }">
+            :to="{ name: 'orgchart', query: { root: parent_org_unit_uuid, org: root_org_unit_uuid, showchildren: 1, orgopen: 0 } }">
             Et niveau op
         </router-link>
 
@@ -29,12 +29,12 @@ export default {
             let orgunit = this.$store.getters.getNode(this.root_org_unit_uuid)
             if (orgunit !== undefined && !orgunit.showchildren) {
                 orgunit.showchildren = true
-                this.$store.commit('addNode', orgunit)
+                this.$store.commit('updateNode', orgunit)
             }
             return orgunit
         },
-        parent_org_unit: function() {
-            return this.$store.getters.getNode(this.root_org_unit_uuid).parent_uuid
+        parent_org_unit_uuid: function() {
+            return this.root_org_unit.parent_uuid
         }
     }
 }
@@ -59,6 +59,7 @@ export default {
 .oc-chart-root-link {
     display: inline-block !important;
     box-shadow: $shadow-2;
+    margin: 0 auto;
 }
 
 .oc-branch {

@@ -10,7 +10,7 @@ const mapTreeToGraph = function(branch, parent_uuid) {
         } else {
             branch[n].showchildren = false
         }
-        mutations.addNode(state, branch[n])
+        mutations.updateNode(state, branch[n])
     }
 }
 
@@ -62,8 +62,13 @@ const getters = {
     }
 }
 const mutations = {
-    addNode: (state, node) => {
-        Vue.set(state.graph, node.uuid, node)
+    updateNode: (state, node_data) => {
+        if (!state.graph[node_data.uuid]) {
+            Vue.set(state.graph, node_data.uuid, node_data)
+        } else {
+            let new_node = Object.assign(node_data, state.graph[node_data.uuid])
+            Vue.set(state.graph, node_data.uuid, new_node)
+        }
     },
     setActiveOrgUuid: (state, uuid) => {
         state.active_org_uuid = uuid
@@ -79,36 +84,6 @@ const mutations = {
     },
     setOrganisations: (state, orgs) => {
         state.global_organisations = orgs
-    },
-    updateRelations: (state) => {
-        for (let o in state.graph) {
-            if (state.graph[o].children) {
-                let child_list = []
-                if (state.graph[o].child_list) {
-                    child_list = state.graph[o].child_list
-                }
-                for (let c in state.graph[o].children) {
-                    let child = state.graph[o].children[c]
-                    let existing_child = state.graph[o].child_list.findIndex(function(c) {
-                        return c === child.uuid
-                    })
-                    if (existing_child < 0) {
-                        child_list.push(child.uuid)
-                    }
-                    Vue.set(state.graph[child.uuid], parent_uuid, state.graph[o].uuid)
-                }
-                Vue.set(state.graph[o], child_list, child_list)
-            }
-        }
-        /*
-        for (let o in state.graph) {
-            for (let c in state.graph[o].child_list) {
-                let child = state.graph[state.graph[o].child_list[c]]
-                child.parent_uuid = state.graph[o].uuid
-                Vue.set(state.graph, child.uuid, child)
-            }
-        }
-        */
     }
 }
 const actions = {
@@ -126,7 +101,7 @@ const actions = {
             }
             if (uuid) {
                 dispatch('fetchTree', uuid)
-                .then(tree => {
+                .then(() => {
                     dispatch('fetchOrgUnitChildren', uuid)
                 })
             }
@@ -155,7 +130,8 @@ const actions = {
             .then(children => {
                 for (let c in children) {
                     children[c].showchildren = false
-                    commit('addNode', children[c])
+                    children[c].parent_uuid = false
+                    commit('updateNode', children[c])
                 }
                 return children
             })
@@ -164,7 +140,7 @@ const actions = {
     fetchTree: ({}, org_unit_uuid) => {
         return ajax(`/service/ou/ancestor-tree?uuid=${ org_unit_uuid }`)
         .then(tree => {
-            mapTreeToGraph(tree, org_unit_uuid)
+            mapTreeToGraph(tree, false)
             return tree
         })
     },
@@ -172,7 +148,7 @@ const actions = {
         ajax(`/service/ou/${ uuid }/`)
         .then((org_unit) => {
             dispatch('fetchOrgUnitChildren', uuid)
-            commit('addNode', org_unit)
+            commit('updateNode', org_unit)
         })
     },
     fetchOrgUnitChildren: ({commit, state}, uuid) => {
@@ -183,7 +159,7 @@ const actions = {
                 parent_node.child_list = []
             }
             for (let ou in ous) {
-                commit('addNode', ous[ou])
+                commit('updateNode', ous[ou])
                 let existing = parent_node.child_list.findIndex(function(c) {
                     return c === ous[ou].uuid
                 })
@@ -191,7 +167,7 @@ const actions = {
                     parent_node.child_list.push(ous[ou].uuid)
                 }
             }
-            commit('addNode', parent_node)
+            commit('updateNode', parent_node)
         })
     }
 }
