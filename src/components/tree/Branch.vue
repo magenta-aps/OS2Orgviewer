@@ -1,6 +1,6 @@
 <template>
     <ul v-if="nodes" class="oc-branch">
-        <leaf v-for="node in nodes" :uuid="node.uuid" :key="node.uuid" />
+        <leaf v-for="node in nodes" :uuid="node.uuid" :key="node.uuid" :show-children="node.showchildren" />
     </ul>
 </template>
 

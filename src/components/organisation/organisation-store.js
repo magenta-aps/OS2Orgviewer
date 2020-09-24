@@ -66,7 +66,7 @@ const mutations = {
         if (!state.graph[node_data.uuid]) {
             Vue.set(state.graph, node_data.uuid, node_data)
         } else {
-            let new_node = Object.assign(node_data, state.graph[node_data.uuid])
+            let new_node = Object.assign({}, node_data, state.graph[node_data.uuid])
             Vue.set(state.graph, node_data.uuid, new_node)
         }
     },
@@ -91,7 +91,10 @@ const actions = {
 
         // fetch ancestortree from active org or root in that order
         if (state.graph[state.active_org_uuid] && state.graph[state.root_org_uuid]) {
-            dispatch('fetchOrgUnitChildren', state.active_org_uuid)
+            dispatch('fetchTree', state.active_org_uuid)
+                .then(() => {
+                    dispatch('fetchOrgUnitChildren', state.active_org_uuid)
+                })
         } else  {
             let uuid = null
             if (state.active_org_uuid) {

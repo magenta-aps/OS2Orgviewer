@@ -9,12 +9,16 @@ const router = new Router({
         {
             path: '/orgchart',
             name: 'orgchart'
+        },
+        {
+            path: '/search',
+            name: 'search'
         }
+
     ]
 })
 
 router.beforeEach((to, from, next) => {
-
     store.commit('setRootOrgUuid', to.query.root)
     store.commit('setActiveOrgUuid', to.query.org)
     store.commit('setActivePersonUuid', to.query.person)
