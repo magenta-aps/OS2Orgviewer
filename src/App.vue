@@ -17,29 +17,21 @@
             </div>
         </oc-header>
         <main id="oc-main">
-            <tree id="tree" />
-            <organisation id="organisation" />
-            <person id="person" />
-            <search id="search" />
+            <router-view id="tree" name="tree"></router-view>
+            <router-view id="organisation" name="organisation"></router-view>
+            <router-view id="person" name="person"></router-view>
+            <router-view id="search" name="search"></router-view>
         </main>
     </div>
 </template>
 
 <script>
 import OcHeader from './components/layout/Header.vue'
-import Tree from './components/tree/Tree.vue'
-import Organisation from './components/organisation/Organisation.vue'
-import Person from './components/person/Person.vue'
-import Search from './components/search/Search.vue'
 
 export default {
     name: 'App',
     components: {
-        OcHeader,
-        Tree, 
-        Organisation,
-        Person,
-        Search
+        OcHeader
     },
     data: function() {
         return {
@@ -53,21 +45,6 @@ export default {
     },
     created: function() {
         this.$store.dispatch('fetchGlobalOrgs')
-        .then(org_children => {
-            if (!this.$route.query.root) {
-                // We only want to deal with one root. 
-                // Taking the first org unit child and passing it on
-                this.$router.push({
-                    name: 'orgchart',
-                    query: {
-                        root: org_children[0].uuid,
-                        org: org_children[0].uuid,
-                        orgopen: 0,
-                        showchildren: 1
-                    }
-                })
-            }
-        })
     }
 }
 </script>

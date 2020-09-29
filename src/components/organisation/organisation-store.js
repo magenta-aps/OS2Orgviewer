@@ -19,7 +19,7 @@ const state = {
     active_org_uuid: null,
     active_org_display_children: 0,
     active_org_visible: 0,
-    root_org_uuid: null,
+    root_org_uuid: process.env.VUE_APP_ROOT_UUID,
     global_organisations: null
 }
 
@@ -128,16 +128,7 @@ const actions = {
         return ajax(`/service/o/`)
         .then(orgs => {
             commit('setOrganisations', orgs)
-            // We assume there is only one organisation
-            return ajax(`/service/o/${ orgs[0].uuid }/children`)
-            .then(children => {
-                for (let c in children) {
-                    children[c].showchildren = false
-                    children[c].parent_uuid = false
-                    commit('updateNode', children[c])
-                }
-                return children
-            })
+            return orgs
         })
     },
     fetchTree: ({}, org_unit_uuid) => {
