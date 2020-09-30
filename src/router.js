@@ -13,7 +13,14 @@ const router = new Router({
     routes: [
         {
             path: '/',
-            redirect: `/orgchart?root=${ store.state.organisation.root_org_uuid }&org=${ store.state.organisation.root_org_uuid }`
+            redirect: {
+                name: 'orgchart',
+                query: {
+                    root: store.state.organisation.root_org_uuid,
+                    org: store.state.organisation.root_org_uuid,
+                    showchildren: 1
+                }
+            }
         },
         {
             path: '/orgchart',
@@ -31,22 +38,7 @@ const router = new Router({
                 search: Search
             }
         }
-
     ]
-})
-
-router.beforeEach((to, from, next) => {
-    if (to.query.root) {
-        store.commit('setRootOrgUuid', to.query.root)
-    }
-    if (to.query.org) {
-        store.commit('setActiveOrgUuid', to.query.org)
-    }
-    store.commit('setDisplayChildren', to.query.showchildren)
-    store.commit('setActiveOrgVisibility', to.query.orgopen)
-
-    store.dispatch('updateState')
-    next()
 })
 
 export default router

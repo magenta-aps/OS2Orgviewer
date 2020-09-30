@@ -44,7 +44,7 @@ export default {
         }
     },
     created: function() {
-        this.$store.dispatch('fetchGlobalOrgs')
+        this.$store.dispatch('fetchGlobalOrgs')        
     }
 }
 </script>

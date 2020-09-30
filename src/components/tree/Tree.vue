@@ -1,16 +1,14 @@
 <template>
-    <div class="oc-chart" v-if="root_org_unit" :class="{'oc-chart-orgopen': $route.query.orgopen == 1}">
+    <div class="oc-chart" v-if="root_org_uuid" :class="{'oc-chart-orgopen': $route.query.orgopen == 1}">
         <router-link 
-            v-if="parent_org_unit_uuid"
+            v-if="root_org_unit && root_org_unit.parent"
             class="oc-chart-root-link btn"
-            :to="{ name: 'orgchart', query: { root: parent_org_unit_uuid, org: root_org_unit_uuid, showchildren: 1, orgopen: 0 } }">
+            :to="{ name: 'orgchart', query: { root: root_org_unit.parent.uuid, org: root_org_uuid, showchildren: 1, orgopen: 0 } }">
             Et niveau op
         </router-link>
-
         <ul class="oc-branch oc-chart-root-branch">
-            <leaf :uuid="root_org_unit_uuid" :show-children="true" />
+            <leaf :uuid="root_org_uuid" :show-children="true" />
         </ul>
-
     </div>
 </template>
 
@@ -22,20 +20,28 @@ export default {
         Leaf
     },
     computed: {
-        root_org_unit_uuid: function() {
-            return this.$store.getters.getRootOrgUnitUuid
+        root_org_uuid: function() {
+            return this.$route.query.root
         },
         root_org_unit: function() {
-            let orgunit = this.$store.getters.getNode(this.root_org_unit_uuid)
-            if (orgunit !== undefined && !orgunit.showchildren) {
-                orgunit.showchildren = true
-                this.$store.commit('updateNode', orgunit)
-            }
-            return orgunit
-        },
-        parent_org_unit_uuid: function() {
-            return this.root_org_unit.parent_uuid
+            return this.$store.getters.getOrgUnit(this.$route.query.root)
         }
+    },
+    watch: {
+        $route: function(to) {
+            this.update(to.query.root)
+        }
+    },
+    methods: {
+        update: function(root_uuid) {
+            if (root_uuid) {
+                this.$store.dispatch('fetchOrgUnit', root_uuid)
+            }
+        }
+    },
+    created: function() {
+        this.update(this.$route.query.root)
+        this.$store.dispatch('fetchTree', this.$route.query.org)
     }
 }
 </script>

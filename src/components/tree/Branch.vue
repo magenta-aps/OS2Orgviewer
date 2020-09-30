@@ -1,7 +1,9 @@
 <template>
+
     <ul v-if="nodes" class="oc-branch">
         <leaf v-for="node in nodes" :uuid="node.uuid" :key="node.uuid" :show-children="node.showchildren" />
     </ul>
+
 </template>
 
 <script>
@@ -19,6 +21,21 @@ export default {
         nodes: function() {
             return this.$store.getters.getChildren(this.uuid)
         }
+    },
+    watch: {
+        uuid: function(new_uuid) {
+            this.update(new_uuid)
+        }
+    },
+    methods: {
+        update: function(uuid) {
+            if (uuid) {
+                this.$store.dispatch('fetchOrgUnitChildren', uuid)
+            }
+        }
+    },
+    created: function() {
+        this.update(this.uuid)
     }
 }
 </script>

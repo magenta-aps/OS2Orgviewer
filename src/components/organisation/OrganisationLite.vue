@@ -1,6 +1,6 @@
 <template>
     <router-link 
-        :to="{ name: 'orgchart', query: { root: root_org_uuid, org: data.uuid, orgopen: 1 } }"
+        :to="{ name: 'orgchart', query: { root: root_org_uuid, org: data.uuid, orgopen: 1, showchildren: 1 } }"
         :id="`orgunit-${ data.uuid }`"
         class="oc-org-link" 
         title="Vis udvidet information">
@@ -15,7 +15,7 @@ export default {
     ],
     computed: {
         root_org_uuid: function() {
-            return this.$store.getters.getRootOrgUnitUuid
+            return this.$route.query.root
         }
     }
 }

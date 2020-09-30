@@ -6,7 +6,7 @@
                 <router-link 
                     class="oc-node-focus-btn btn"
                     v-if="node_data.uuid !== root_org_unit_uuid"
-                    :to="`/orgchart?root=${ node_data.uuid }`"
+                    :to="`/orgchart?root=${ node_data.uuid }&org=${ node_data.uuid }&showchildren=1`"
                     :title="`Vis kun ${ node_data.name }`">
                     <svg class="svg-focus" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path class="svg-path" d="M5 15H3v4c0 1.1.9 2 2 2h4v-2H5v-4zM5 5h4V3H5c-1.1 0-2 .9-2 2v4h2V5zm14-2h-4v2h4v4h2V5c0-1.1-.9-2-2-2zm0 16h-4v2h4c1.1 0 2-.9 2-2v-4h-2v4zM12 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" /></svg>
                 </router-link>
@@ -50,31 +50,44 @@ export default {
     },
     computed: {
         node_data: function() {
-            return this.$store.getters.getNode(this.uuid)
+            return this.$store.getters.getOrgUnit(this.uuid)
         },
         root_org_unit_uuid: function() {
-            return this.$store.getters.getRootOrgUnitUuid
+            return this.$route.query.root
         },
         active_org_uuid: function() {
-            return this.$store.getters.getActiveOrgUuid
-        }
-    },
-    watch: {
-        showChildren: function(new_val) {
-            if (new_val) {
-                this.$store.dispatch('checkOrgChildren', this.uuid)
-                this.branch_open = true
+            return this.$route.query.org
+        },
+        query_showchildren_applies: function() {
+            if (this.$route.query.org === this.uuid && this.$route.query.showchildren == 1) {
+                return true
+            } else {
+                return false
             }
         }
     },
+    watch: {
+        showChildren: function(new_bool) {
+            this.update(new_bool)
+        },
+        node_data: function(new_org_unit) {
+            this.update(this.showChildren)
+        }
+    },
     methods: {
+        update: function(show_children_bool) {
+            if (show_children_bool || this.query_showchildren_applies) {
+                this.$store.dispatch('checkOrgChildren', this.uuid)
+                this.branch_open = true
+            }
+        },
         toggleBranch: function() {
             this.branch_open = !this.branch_open
-            let route = { 
+            let route = {
                 name: 'orgchart', 
                 query: { 
                     root: this.root_org_unit_uuid, 
-                    org: this.node_data.uuid, 
+                    org: this.node_data.uuid,
                     orgopen: 0,
                     showchildren: this.branch_open ? 1 : 0
                 } 
@@ -83,10 +96,7 @@ export default {
         }
     },
     created: function() {
-        if (this.showChildren) {
-            this.$store.dispatch('checkOrgChildren', this.uuid)
-            this.branch_open = true
-        }
+        this.update(this.showChildren)
     }
 }
 </script>
