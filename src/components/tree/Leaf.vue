@@ -22,7 +22,7 @@
                     {{ node_data.child_count }}
             </button>
         </div>
-        <branch v-if="branch_open" :uuid="uuid" />
+        <branch v-if="branch_open" :uuid="uuid" :class="{'oc-chart-root-branch': root_org_unit_uuid === node_data.uuid }" :level="level + 1" />
     </li>
 </template>
 
@@ -46,7 +46,8 @@ export default {
         showChildren: {
             type: Boolean,
             default: false
-        }
+        },
+        level: Number
     },
     computed: {
         node_data: function() {
@@ -106,15 +107,41 @@ export default {
 .oc-node {
     position: relative;
     text-align: center;
-    padding: 0 .5rem;
+    padding: 1.25rem 0 0 0;
     margin: 0 auto;
+}
+
+.oc-node::before {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    left: -1.25rem;
+    height: calc(100% + 1rem);
+    width: 3px;
+    background-color: $shade-lightest;
+}
+
+.oc-node:last-child::before {
+    height: 2.5rem;
+}
+
+.oc-node-body::before {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 1.25rem;
+    left: -1.25rem;
+    height: 3px;
+    width: 1.25rem;
+    background-color: $shade-lightest;
 }
 
 .oc-node-body {
     background-color: $shade-lighter;
     box-shadow: .5rem .5rem 0 hsla(0,0%,0%,.2);
     padding: 0;
-    margin: 1rem auto;
+    margin: 0;
     width: 10rem;
     height: auto;
     position: relative;
@@ -185,47 +212,13 @@ a.oc-node-focus-btn.btn:focus {
     transform: rotate(180deg);
 }
 
-@media screen and (max-width: 40rem) {
-
-    .oc-node {
-        padding: 1.25rem 0 0 0;
-    }
-
-    .oc-node-body {
-        margin: 0;
-    }
-
-    .oc-node::before {
-        content: '';
-        display: block;
-        position: absolute;
-        top: 0;
-        left: -1.25rem;
-        height: calc(100% + 1rem);
-        width: 3px;
-        background-color: $shade-lightest;
-    }
-
-    .oc-node:last-child::before {
-        height: 2.5rem;
-    }
-
-    .oc-node-body::before {
-        content: '';
-        display: block;
-        position: absolute;
-        top: 1.25rem;
-        left: -1.25rem;
-        height: 3px;
-        width: 1.25rem;
-        background-color: $shade-lightest;
-    }
-    
-}
-
 @media screen and (min-width: 40rem) {
 
-    .oc-node::before {
+    .oc-branch.oc-chart-root-branch > .oc-node {
+        padding: 0 .5rem;
+    }
+
+    .oc-branch.oc-chart-root-branch > .oc-node::before {
         content: '';
         position: absolute;
         top: 0;
@@ -236,22 +229,26 @@ a.oc-node-focus-btn.btn:focus {
         background-color: $shade-lightest;
     }
 
-    .oc-node:first-child::before {
+    .oc-branch.oc-chart-root-branch > .oc-node:first-child::before {
         width: 50%;
         left: 50%;
     }
 
-    .oc-node:last-child::before {
+    .oc-branch.oc-chart-root-branch > .oc-node:last-child::before {
         width: 50%;
         left: auto;
         right: 50%;
     }
 
-    .oc-node:first-child:last-child::before {
+    .oc-branch.oc-chart-root-branch > .oc-node:first-child:last-child::before {
         content: none;
     }
 
-    .oc-node-body::before {
+    .oc-branch.oc-chart-root-branch > .oc-node > .oc-node-body {
+        margin: 1rem auto;
+    }
+
+    .oc-branch.oc-chart-root-branch > .oc-node > .oc-node-body::before {
         content: '';
         position: absolute;
         top: -1rem;
@@ -261,7 +258,6 @@ a.oc-node-focus-btn.btn:focus {
         background-color: $shade-lightest;
         z-index: 2;
     }
-
 }
 
 @media print {

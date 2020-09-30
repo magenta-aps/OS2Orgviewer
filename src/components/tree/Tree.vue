@@ -7,7 +7,7 @@
             Et niveau op
         </router-link>
         <ul class="oc-branch oc-chart-root-branch">
-            <leaf :uuid="root_org_uuid" :show-children="true" />
+            <leaf :uuid="root_org_uuid" :show-children="true" class="oc-chart-root-leaf" :level="0" />
         </ul>
     </div>
 </template>
@@ -78,11 +78,7 @@ export default {
 
     .oc-chart {
         display: block;
-        margin: 0 0 0 1rem;
-    }
-
-    .oc-branch.oc-chart-root-branch {
-        padding-left: 0;
+        margin: 0;
     }
 
 }

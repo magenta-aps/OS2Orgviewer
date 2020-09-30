@@ -1,7 +1,7 @@
 <template>
 
-    <ul v-if="nodes" class="oc-branch">
-        <leaf v-for="node in nodes" :uuid="node.uuid" :key="node.uuid" :show-children="node.showchildren" />
+    <ul v-if="nodes" :class="`oc-branch oc-branch-level-${ level }`">
+        <leaf v-for="node in nodes" :uuid="node.uuid" :key="node.uuid" :show-children="node.showchildren" :level="level" />
     </ul>
 
 </template>
@@ -15,7 +15,8 @@ export default {
         Leaf
     },
     props: [
-        'uuid'
+        'uuid',
+        'level'
     ],
     computed: {
         nodes: function() {
@@ -41,36 +42,53 @@ export default {
 </script>
 
 <style lang="scss">
+
 .oc-branch {
     list-style: none;
-    padding: 0;
+    padding: 0 0 0 3rem;
     margin: 0;
-    display: flex;
-    flex-flow: row nowrap;
+    display: block;
     position: relative;
 }
-.oc-branch::before {
-    content: '';
-    position: absolute;
-    top: -1rem;
-    left: 50%;
-    width: 3px;
-    height: 1rem;
-    background-color: $shade-lightest;
-    z-index: 2;
-}
 
-@media screen and (max-width: 40rem) {
-
-    .oc-branch {
-        display: block;
-        padding-left: 2rem;
-    }
-
-    .oc-branch::before {
-        content: none;
-    }
+@media screen and (min-width: 40rem) {
     
+    .oc-branch.oc-chart-root-branch {
+        display: flex;
+        flex-flow: row nowrap;
+        padding: 0;
+    }
+
+    .oc-branch.oc-chart-root-branch::before {
+        content: '';
+        position: absolute;
+        top: -1rem;
+        left: 50%;
+        width: 3px;
+        height: 1rem;
+        background-color: $shade-lightest;
+        z-index: 2;
+    }
+
+    .oc-branch-level-2::before {
+        content: '';
+        position: absolute;
+        top: -1rem;
+        left: 6.5rem;
+        width: 3px;
+        height: 1rem;
+        background-color: $shade-lightest;
+    }
+
+    .oc-branch-level-2::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 1.75rem;
+        width: 5rem;
+        height: 3px;
+        background-color: $shade-lightest;
+    }
 }
 
 @media print {
@@ -87,5 +105,4 @@ export default {
     }
 
 }
-
 </style>
