@@ -39,8 +39,9 @@ router.beforeEach((to, from, next) => {
     if (to.query.root) {
         store.commit('setRootOrgUuid', to.query.root)
     }
-    store.commit('setActiveOrgUuid', to.query.org)
-    store.commit('setActivePersonUuid', to.query.person)
+    if (to.query.org) {
+        store.commit('setActiveOrgUuid', to.query.org)
+    }
     store.commit('setDisplayChildren', to.query.showchildren)
     store.commit('setActiveOrgVisibility', to.query.orgopen)
 

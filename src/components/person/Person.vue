@@ -3,10 +3,10 @@
         <oc-header>
             <h3 slot="title">
                 <router-link 
-                    :to="{ name: 'orgchart', query: { root: root_org_uuid, org: person_data.org_unit.uuid, orgopen: 1 } }"
-                    :title="`Tilbage til ${ person_data.org_unit.name }`">
+                    :to="{ name: 'orgchart', query: { root: root_org_uuid, org: org_unit_uuid, orgopen: 1, showchildren: 1 } }"
+                    :title="`Tilbage til ${ person_data.association_data[0].org_unit.name }`">
                     <svg class="svg-back" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path class="svg-path" d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
-                    <span class="oc-person-title">{{ person_data.person.name }}</span>
+                    <span class="oc-person-title">{{ person_data.name }}</span>
                     <svg class="svg-close" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path class="svg-path" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
                 </router-link>
             </h3>
@@ -14,13 +14,13 @@
         <dl class="oc-person-body">
             
             <dt>Navn</dt>
-            <dd>{{ person_data.person.name }}</dd>
+            <dd>{{ person_data.name }}</dd>
             
             <dt>Tilknytning</dt>
-            <dd>{{ person_data.association_type.name }}</dd>
+            <dd>{{ person_data.association_data[0].association_type.name }}</dd>
     
-            <template v-if="address_data">
-                <template v-for="address in address_data">
+            <template v-if="person_data.address_data">
+                <template v-for="address in person_data.address_data">
                     <dt :key="address.address_type.uuid">{{ address.address_type.name }}</dt>
                     <dd :key="address.uuid">
                         <a 
@@ -41,38 +41,35 @@
 <script>
 import OcHeader from '../layout/Header.vue'
 
-let active_person_uuid = null
-
 export default {
     components: {
         OcHeader
     },
-    data: function() {
-        return {
-            address_data: null
-        }
-    },
     computed: {
-        person_uuid: function() {
-
-            return this.$store.getters.getActivePersonUuid
-        },
         person_data: function() {
-            return this.$store.getters.getPerson(this.person_uuid)
+            return this.$store.getters.getPerson(this.$route.query.person)
+        },
+        org_unit_uuid: function() {
+            return this.$route.query.org
         },
         root_org_uuid: function() {
-            return this.$store.getters.getRootOrgUnitUuid
+            return this.$route.query.root
         }
     },
     watch: {
-        person_uuid: function(new_uuid) {
-            if (new_uuid) {
-                this.$store.dispatch('fetchPersonAddresses', new_uuid)
-                .then(addresses => {
-                    this.address_data = addresses
-                })
+        $route: function(to) {
+            this.update(to.query.person)
+        }
+    },
+    methods: {
+        update: function(person_uuid) {
+            if (person_uuid) {
+                this.$store.dispatch('fetchPerson', person_uuid)
             }
         }
+    },
+    created: function() {
+        this.update(this.$route.query.person)
     }
 }
 </script>

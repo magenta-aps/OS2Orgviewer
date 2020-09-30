@@ -37,51 +37,13 @@ All org_units' data are stored in graph array.
 Every org_unit contains children and parent properties as lists of uuids
 Root org_unit and current org_unit are stored as different values
 
-### Navigation
-On first load, URL params indicate what org_unit and/or person data to focus
-On subsequent navigation, URL params should update with currently focused org_unit or person
-
-On First load
-> check for uuid person or uuid org_unit in url params
-  > if person uuid
-    > load persondata into list of persons (presumed empty)
-    > mark focused person
-    > mark focused org
-    > fetch correponding org and load ancestortree data
-    > add ancestortree data to org graph (presumed empty)
-    > draw tree
-  > if org uuid
-    > mark focused org
-    > load ancestortree data
-    > add ancestortree data to org graph (presumed empty)
-    > draw tree
-  > if no uuid
-    > fetch root orgs
-    > mark root orgs[0] as focused org
-    > load children data of orgs[0] and add to org graph (presumed empty)
-    > draw tree
-
-On org click
-  > load org data and add to graph (unless org is already present)
-  > mark org as focused org
-  > tree should update, displaying org data
-
-On person click
-  > load person data and add to personlist (unless person is already present)
-  > mark person as focused person
-  > tree should update, displaying person data
-
-
 ### Data flow
 
 Data flows between REST API, state graph, and tree view
 
-1. User actions update URL
-2. Router updates state based on URL
-3. State requests info from REST API when appropriate
-4. Tree view displays state
-
-
-
+1. User actions update URL query
+2. Components watch for changes in URL query and dispatches state action to check for data
+3. State checks if data is available or fetches it via REST API
+4. Components ask state for data based on URL query
 
 

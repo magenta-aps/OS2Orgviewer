@@ -3,7 +3,6 @@ import ajax from '../http/http.js'
 
 const state = {
     persons: {},
-    active_person_uuid: null,
     managers: null
 }
 
@@ -16,64 +15,47 @@ const getters = {
     },
     getManagers: state => {
         return state.managers
-    },
-    getActivePersonUuid: state => {
-        return state.active_person_uuid
     }
 }
 const mutations = {
     setPersons: (state, persons) => {
         state.persons = persons
     },
-    addPerson: (state, person) => {
+    updatePerson: (state, person) => {
         if (!state.persons[person.uuid]) {
             Vue.set(state.persons, person.uuid, person)
+        } else {
+            let new_person = Object.assign({}, person, state.persons[person.uuid])
+            Vue.set(state.persons, person.uuid, new_person)
         }
     },
     setManagers: (state, managers) => {
         state.managers = managers
-    },
-    setActivePersonUuid: (state, uuid) => {
-        state.active_person_uuid = uuid
     }
 }
 const actions = {
-    updatePerson({dispatch, state}) {
-        if (!state.active_person_uuid) {
-            return 
-        } else {
-            dispatch('fetchPerson', state.active_person_uuid)
-            .then(() => {
-                dispatch('fetchPersonAssociations', state.active_person_uuid)
-                .then(associations => {
-                    state.persons[state.active_person_uuid].association_data = associations
-                })
-            })
-        }
-    },
     fetchAssociatedPeople: ({commit}, org_uuid) => {
         commit('setPersons', {})
         ajax(`/service/ou/${ org_uuid }/details/association`)
         .then((people) => {
-            let persons = {
-                cached: true,
-                parent_org_uuid: org_uuid
-            }
             for (let p in people) {
-                persons[people[p].person.uuid] = people[p]
+                commit('updatePerson', people[p])   
             }
-            commit('setPersons', persons)
         })
     },
     fetchPerson: ({state, commit, dispatch}, uuid) => {
-        if (!state.persons[uuid]) {
+        if (!state.persons[uuid] || !state.persons[uuid].address_data) {
             return dispatch('fetchPersonByHttp', uuid)
             .then((person) => {
                 dispatch('fetchPersonAddresses', uuid)
                 .then(addresses => {
                     person.address_data = addresses
+                    dispatch('fetchPersonAssociations', uuid)
+                    .then(associations => {
+                        person.association_data = associations
+                        commit('updatePerson', person)
+                    })
                 })
-                commit('addPerson', person)
                 return person
             })
         } else {

@@ -108,10 +108,7 @@ const actions = {
                     dispatch('fetchOrgUnitChildren', uuid)
                 })
             }
-        }  
-
-        // update person info
-        dispatch('updatePerson')
+        }
     },
     checkActiveOrgExpanded: ({dispatch}, payload) => {
         if (payload.showchildren == 1) {

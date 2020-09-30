@@ -89,9 +89,9 @@ export default {
                 this.$router.push({
                     name: 'orgchart',
                     query: {
-                        person: person_uuid,
-                        root: this.root_org_unit_uuid, 
+                        root: this.root_org_unit_uuid,
                         org: associations[0].org_unit.uuid,
+                        person: person_uuid,
                         orgopen: 1,
                         showchildren: 1
                     }
