@@ -53,16 +53,14 @@ export default {
     },
     methods: {
         debounce: function(func, wait) {
-            return () => {
-                const context = this,
-                    args = arguments,
-                    later = () => {
-                        this.timeout = null
-                        func.apply(context, args)
-                    }
-                clearTimeout(this.timeout)
-                this.timeout = setTimeout(later, wait)
-            }
+            const context = this,
+                args = arguments,
+                later = () => {
+                    this.timeout = null
+                    func.apply(context, args)
+                }
+            clearTimeout(this.timeout)
+            this.timeout = setTimeout(later, wait)
         },
         considerSearching: function() {
             if (this.query.length > 2) {
