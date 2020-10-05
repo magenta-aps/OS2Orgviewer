@@ -1,3 +1,4 @@
+import 'whatwg-fetch'
 import spinner from '../spinner/Spinner.js'
 
 let loadstack = []
