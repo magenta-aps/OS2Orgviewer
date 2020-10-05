@@ -22,7 +22,7 @@
     "vue-template-compiler": "^2.6.11"
   },
   "browserslist": [
-    "> 0.5%",
+    "> 0.5% and not dead",
     "IE 11"
   ]
 }

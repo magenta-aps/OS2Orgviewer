@@ -1,6 +1,6 @@
 <template>
 
-    <ul v-if="nodes" :class="`oc-branch oc-branch-level-${ level }`">
+    <ul v-if="nodes && nodes.length > 0" :class="`oc-branch oc-branch-level-${ level }`">
         <leaf v-for="node in nodes" :uuid="node.uuid" :key="node.uuid" :show-children="node.showchildren" :level="level" />
     </ul>
 
