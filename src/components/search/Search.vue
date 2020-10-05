@@ -9,12 +9,7 @@
             <h3>Personer</h3>
             <ul class="oc-search-list">
                 <li v-for="res in person_results" :key="res.uuid">
-                    <dl>
-                        <dt>Person</dt>
-                        <dd>
-                            <a href="#" @click.prevent="navToPerson(res.uuid)">{{ res.name }}</a>
-                        </dd>
-                    </dl>
+                    <a href="#" @click.prevent="navToPerson(res.uuid)">{{ res.name }}</a>
                 </li>
             </ul>
         </section>
@@ -53,14 +48,16 @@ export default {
     },
     methods: {
         debounce: function(func, wait) {
-            const context = this,
-                args = arguments,
-                later = () => {
-                    this.timeout = null
-                    func.apply(context, args)
-                }
-            clearTimeout(this.timeout)
-            this.timeout = setTimeout(later, wait)
+            return () => {
+                const context = this,
+                    args = arguments,
+                    later = () => {
+                        this.timeout = null
+                        func.apply(context, args)
+                    }
+                clearTimeout(this.timeout)
+                this.timeout = setTimeout(later, wait)
+            }
         },
         considerSearching: function() {
             if (this.query.length > 2) {

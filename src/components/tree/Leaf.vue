@@ -149,7 +149,7 @@ export default {
 }
 
 .oc-node-body.active {
-    box-shadow: 0 0 0 1.5rem hsla(0,0%,100%,.5);
+    box-shadow: 0 0 0 .75rem hsla(0,0%,100%,.5);
 }
 
 .oc-node-title {
