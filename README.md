@@ -3,6 +3,7 @@
 
 ## Project setup
 ```
+npm update
 npm install
 ```
 
@@ -11,10 +12,11 @@ npm install
 npm run serve
 ```
 
-### Compiles and minifies for production
+### Compiles for production and deploy
 ```
 npm run build
 ```
+After compile, serve `index.html` and associated static resources from the generated `/dist` folder.
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
