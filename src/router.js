@@ -1,11 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import store from './store.js'
 
 import Search from './components/search/Search.vue'
 import Tree from './components/tree/Tree.vue'
 import Organisation from './components/organisation/Organisation.vue'
 import Person from './components/person/Person.vue'
+import SomethingWrong from './components/error/SomethingWrong.vue'
 
 Vue.use(Router)
 
@@ -16,8 +16,8 @@ const router = new Router({
             redirect: {
                 name: 'orgchart',
                 query: {
-                    root: store.state.organisation.root_org_uuid,
-                    org: store.state.organisation.root_org_uuid,
+                    root: process.env.VUE_APP_ROOT_UUID,
+                    org: process.env.VUE_APP_ROOT_UUID,
                     showchildren: 1
                 }
             }
@@ -37,6 +37,17 @@ const router = new Router({
             components: {
                 search: Search
             }
+        },
+        {
+            path: '/error',
+            name: '404',
+            components: {
+                error: SomethingWrong
+            }
+        },
+        {
+            path: '*',
+            redirect: '/error'
         }
     ]
 })

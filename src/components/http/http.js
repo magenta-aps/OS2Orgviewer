@@ -1,7 +1,21 @@
 import 'whatwg-fetch'
 import spinner from '../spinner/Spinner.js'
+import router from '../../router.js'
 
 let loadstack = []
+
+const ajax_init = {
+    method: 'GET',
+    headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+        'X-Client-Name': 'OS2mo-UI',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+        'Access-Control-Allow-Methods': 'GET, POST, DELETE, PUT'
+    },
+    credentials: 'same-origin',
+    mode: 'cors'
+}
 
 function startSpin() {
     loadstack.push(true)
@@ -19,7 +33,7 @@ function stopSpin() {
 
 function ajax(request) {
     startSpin()
-    return fetch(process.env.VUE_APP_API_BASEURL + request)
+    return fetch(process.env.VUE_APP_API_BASEURL + request, ajax_init)
     .then((response) => {
         return response.json()
     })
@@ -28,9 +42,9 @@ function ajax(request) {
         return res
     })
     .catch(err => {
-        console.log(err)
         stopSpin()
-        return err
+        router.push('/error')
+        //return err
     })
 }
 

@@ -3,9 +3,7 @@
         <oc-header>
             <h1 
                 id="oc-header-title" 
-                slot="title" 
-                v-if="organisations" 
-                :title="`${ organisations[0].name }s organisation`">
+                slot="title">
                 <router-link to="/">
                     {{ title }}
                 </router-link>
@@ -21,6 +19,7 @@
             <router-view id="organisation" name="organisation"></router-view>
             <router-view id="person" name="person"></router-view>
             <router-view id="search" name="search"></router-view>
+            <router-view id="error" name="error"></router-view>
         </main>
     </div>
 </template>
