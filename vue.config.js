@@ -7,5 +7,7 @@ module.exports = {
                 additionalData: `@import "${ process.env.VUE_APP_THEME_PATH }";`
             }
         }
-    }
+    },
+    outputDir: process.env.BUILD_DIST_FOLDER,
+    productionSourceMap: false
 }
