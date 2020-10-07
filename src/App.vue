@@ -122,6 +122,7 @@ dd {
         align-items: center;
     }
     & img {
+        flex: 0 0 auto;
         height: 1.25rem;
         width: auto;
         margin-right: .75rem;
