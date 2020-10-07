@@ -116,6 +116,16 @@ dd {
 }
 
 #oc-header-title {
+    & a {
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
+    }
+    & img {
+        height: 1.25rem;
+        width: auto;
+        margin-right: .75rem;
+    }
     @include branding;
 }
 
