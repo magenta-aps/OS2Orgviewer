@@ -5,6 +5,7 @@
                 id="oc-header-title" 
                 slot="title">
                 <router-link to="/">
+                    <img :src="logo_src" alt="">
                     {{ title }}
                 </router-link>
             </h1>
@@ -34,7 +35,8 @@ export default {
     },
     data: function() {
         return {
-            title: process.env.VUE_APP_TITLE
+            title: process.env.VUE_APP_TITLE,
+            logo_src: process.env.VUE_APP_LOGO_PATH
         }
     },
     computed: {
