@@ -8,5 +8,6 @@ module.exports = {
             }
         }
     },
-    outputDir: process.env.BUILD_DIST_FOLDER
+    outputDir: process.env.BUILD_DIST_FOLDER,
+    productionSourceMap: false
 }
