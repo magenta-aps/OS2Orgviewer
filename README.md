@@ -16,7 +16,7 @@ npm run serve
 ```
 npm run build
 ```
-After compile, serve `index.html` and associated static resources from the generated `/dist` folder.
+After compile, serve `index.html` and associated static resources from the generated folder specified in your `BUILD_DIST_FOLDER` environment variable (see below).
 
 
 ## Customization
@@ -30,11 +30,13 @@ Check the [full documentation on setting environment variables.](https://cli.vue
 * `VUE_APP_API_BASEURL` - the hostname and/or port of the OS2MO REST API you want the application to pull data from.
 * `VUE_APP_TITLE` - the application title. It will appear in the UI header and in the HTML document title.
 * `VUE_APP_ROOT_UUID` - and UUID representing whatever organisation unit you want as the default root org. unit.
-* `VUE_APP_THEME_PATH` - local path to SCSS file containing custom theme variables. Se [./src/assets/default-theme.scss](./src/assets/default-theme.scss) for inspiration.
+* `VUE_APP_THEME_PATH` - local path to SCSS file containing custom theme variables. You can make a copy of [./src/assets/default-theme.scss](./src/assets/default-theme.scss) and edit it to create your own custom theme.
 * `VUE_APP_FAVICON_PATH` - local or global path to image file (usually `favicon.ico`) you want as your application's favicon.
+* `BUILD_DIST_FOLDER` - the output folder for your production build. These are the files that go on a server somewhere.
 
 
 ### Customizing build configuration
+
 For build configurations, refer to the [Vue-CLI configuration reference](https://cli.vuejs.org/config/).
 
 
