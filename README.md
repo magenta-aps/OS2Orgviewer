@@ -31,6 +31,7 @@ Check the [full documentation on setting environment variables.](https://cli.vue
 * `VUE_APP_TITLE` - the application title. It will appear in the UI header and in the HTML document title.
 * `VUE_APP_ROOT_UUID` - and UUID representing whatever organisation unit you want as the default root org. unit.
 * `VUE_APP_THEME_PATH` - local path to SCSS file containing custom theme variables. You can make a copy of [./src/assets/default-theme.scss](./src/assets/default-theme.scss) and edit it to create your own custom theme.
+* `VUE_APP_LOGO_PATH` - local or global path to image file you want as your application's branding image.
 * `VUE_APP_FAVICON_PATH` - local or global path to image file (usually `favicon.ico`) you want as your application's favicon.
 * `BUILD_DIST_FOLDER` - the output folder for your production build. These are the files that go on a server somewhere.
 
