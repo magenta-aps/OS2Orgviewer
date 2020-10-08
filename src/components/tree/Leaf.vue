@@ -3,7 +3,7 @@
         <div class="oc-node-body" :class="{'active': active_org_uuid === node_data.uuid}">
             <div class="oc-node-title">
                 <org-lite :data="node_data" />
-                <router-link 
+                <router-link
                     class="oc-node-focus-btn btn"
                     v-if="node_data.uuid !== root_org_unit_uuid"
                     :to="`/orgchart?root=${ node_data.uuid }&org=${ node_data.uuid }&showchildren=1`"

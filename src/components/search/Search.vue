@@ -17,7 +17,7 @@
             <h3>Afdelinger</h3>
             <ul class="oc-search-list">
                 <li v-for="res in org_results" :key="res.uuid">
-                    <router-link :to="`/orgchart?root=${ root_org_unit_uuid }&org=${ res.uuid }&orgopen=1&showchildren=1`">
+                    <router-link :to="{ name: 'orgchart', query: { target: 'orgunit', root: root_org_unit_uuid, org: res.uuid, orgopen: 1, showchildren: 1 } }">
                         {{ res.name }}
                     </router-link>
                 </li>
@@ -84,6 +84,7 @@ export default {
                 this.$router.push({
                     name: 'orgchart',
                     query: {
+                        target: 'person',
                         root: this.root_org_unit_uuid,
                         org: associations[0].org_unit.uuid,
                         person: person_uuid,

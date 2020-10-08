@@ -1,7 +1,7 @@
 <template>
     <router-link 
-        :to="{ name: 'orgchart', query: { root: root_org_uuid, org: data.uuid, orgopen: 1, showchildren: 1 } }"
-        :id="`orgunit-${ data.uuid }`"
+        :to="{ name: 'orgchart', query: { target: 'orgunit', root: root_org_uuid, org: data.uuid, orgopen: 1 } }"
+        :id="`ou-${ data.uuid }`"
         class="oc-org-link btn" 
         title="Vis udvidet information">
         {{ data.name }}
@@ -9,6 +9,8 @@
 </template>
 
 <script>
+import Vue from 'vue'
+
 export default {
     props: [
         'data'
@@ -16,6 +18,15 @@ export default {
     computed: {
         root_org_uuid: function() {
             return this.$route.query.root
+        }
+    },
+    watch: {
+        $route: function(to) {
+            Vue.nextTick(() => {
+                if (to.query.org === this.data.uuid && to.query.target === 'tree') {
+                    document.getElementById(`ou-${ this.data.uuid }`).focus()
+                }
+            })
         }
     }
 }

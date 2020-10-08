@@ -1,10 +1,13 @@
 <template>
-    <article class="oc-org" v-if="org_visible && org_data">
+    <article 
+        class="oc-org" 
+        v-if="org_visible && org_data"
+        :tabindex="$route.query.person ? -1 : 0">
         <oc-header>
             <h2 slot="title">
                 <router-link
                     id="orgtitle"
-                    :to="{ name: 'orgchart', query: { root: root_org_uuid, org: org_data.uuid, orgopen: 0, showchildren: 1 } }"
+                    :to="{ name: 'orgchart', query: { target: 'tree', root: root_org_uuid, org: org_data.uuid, orgopen: 0, showchildren: 1 } }"
                     :title="`Luk visning af ${ org_data.name }`">
                     <svg class="svg-back" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path class="svg-path" d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
                     <span class="oc-org-title">{{ org_data.name }}</span>
@@ -21,6 +24,7 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import PersonList from '../person/PersonList.vue'
 import Managers from '../person/Managers.vue'
 import OcHeader from '../layout/Header.vue'
@@ -50,8 +54,15 @@ export default {
     watch: {
         $route: function(to) {
             this.update(to.query.org)
+        },
+        org_data: function(new_data) {
+            Vue.nextTick(() => {
+                if (new_data && this.$route.query.target === 'orgunit') {
+                    document.getElementById('orgtitle').focus()
+                }
+            })
         }
-    },
+     },
     methods: {
         update: function(org_uuid) {
             if (org_uuid) {
