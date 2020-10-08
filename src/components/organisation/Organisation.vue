@@ -89,6 +89,7 @@ export default {
     display: flex;
     flex-flow: row nowrap;
     align-items: center;
+    padding: .75rem 1rem;
 }
 
 .oc-org-title {
@@ -123,7 +124,7 @@ export default {
     
     .oc-org {
         max-width: 23rem;
-        box-shadow: $shadow-1;
+        box-shadow: $shadow-2;
 
         .svg-back {
             display: none;

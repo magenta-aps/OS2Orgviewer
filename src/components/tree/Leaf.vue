@@ -13,7 +13,7 @@
             </div>
             <button 
                 v-if="node_data.child_count"
-                class="oc-node-expand-btn btn"
+                class="oc-node-expand-btn inverse"
                 :class="branch_open ? 'close': 'open'"
                 type="button" 
                 @click="toggleBranch"
@@ -168,17 +168,16 @@ export default {
     display: flex;
     align-items: center;
     justify-content: flex-end;
+    padding: .125rem .5rem !important;
 }
 
 a.oc-node-focus-btn.btn,
 a.oc-node-focus-btn.btn:link,
 a.oc-node-focus-btn.btn:visited  {
-    background-color: $shade-lightest;
     display: flex;
     flex-flow: column nowrap;
     justify-content: center;
     align-items: center;
-    padding: .5rem;
 
     .svg-focus {
         width: .75rem;
@@ -193,10 +192,8 @@ a.oc-node-focus-btn.btn:visited  {
 a.oc-node-focus-btn.btn:hover,
 a.oc-node-focus-btn.btn:active,
 a.oc-node-focus-btn.btn:focus {
-    background-color: $color-2;
-    
     .svg-path {
-        fill: $shade-lightest;
+        fill: $shade-darkest;
     }
 }
 

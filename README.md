@@ -1,18 +1,24 @@
-# orgchart
+# OS2Orgviewer
 
+This is a web application that displays a chart over an organization and its members.
+You can navigate the chart, display info on individual sections and people, and search for people or units within the organisation.
+It pulls organization information from OS2MO REST API.
 
 ## Project setup
+Assuming you have [Node.js](https://nodejs.org/en/) installed, check out this code and install the build dependencies:
 ```
+git clone git@git.magenta.dk:rammearkitektur/os2orgviewer.git
+cd os2orgviewer
 npm update
 npm install
 ```
 
-### Compiles and hot-reloads for development
+### Start a development server with hot reload
 ```
 npm run serve
 ```
 
-### Compiles for production and deploy
+### Compile for production and deploy
 ```
 npm run build
 ```

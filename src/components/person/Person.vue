@@ -98,6 +98,7 @@ export default {
     display: flex;
     flex-flow: row nowrap;
     align-items: center;
+    padding: .75rem 1rem;
 }
 
 .oc-person-title {
@@ -131,7 +132,7 @@ export default {
 
     .oc-person {
         max-width: 18rem;
-        box-shadow: $shadow-1;
+        box-shadow: $shadow-2;
 
         .svg-back {
             display: none;

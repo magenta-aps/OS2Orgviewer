@@ -9,9 +9,7 @@
 
 .oc-header {
     background-color: $shade-lightest;
-    padding: 1rem;
     color: $shade-darkest;
-    box-shadow: $shadow-2;
     display: flex;
     flex-flow: row nowrap;
     align-items: center;
@@ -20,10 +18,6 @@
 
 .oc-header * {
     font-size: 1.25rem;
-    font-weight: normal;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
 }
 
 @media print {

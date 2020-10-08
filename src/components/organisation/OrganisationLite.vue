@@ -2,7 +2,7 @@
     <router-link 
         :to="{ name: 'orgchart', query: { root: root_org_uuid, org: data.uuid, orgopen: 1, showchildren: 1 } }"
         :id="`orgunit-${ data.uuid }`"
-        class="oc-org-link" 
+        class="oc-org-link btn" 
         title="Vis udvidet information">
         {{ data.name }}
     </router-link>
@@ -26,28 +26,15 @@ export default {
 .oc-org-link,
 .oc-org-link:link,
 .oc-org-link:visited {
-    display: block;
-    padding: .5rem .75rem;
-    overflow: hidden;
-    background-color: $shade-lightest;
-    z-index: 3;
-    transition: all .3s;
-}
-
-.oc-org-link:hover,
-.oc-org-link:active,
-.oc-org-link:focus {
-    color: $shade-darkest;
-    box-shadow: $shadow-2;
-    z-index: 10;
-    transform: translate(-.5rem, -.5rem);
+    text-align: left !important;
+    white-space: normal !important;
+    padding: .5rem .75rem !important;
 }
 
 @media print {
     
     .oc-org-link {
-        color: #000;
-        background-color: #fff;
+                
     }
 
 }
