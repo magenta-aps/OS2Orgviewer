@@ -33,7 +33,7 @@ function stopSpin() {
 
 function ajax(request) {
     startSpin()
-    return fetch(process.env.VUE_APP_API_BASEURL + request, ajax_init)
+    return fetch(GLOBAL_API_URL + request, ajax_init)
     .then((response) => {
         return response.json()
     })
