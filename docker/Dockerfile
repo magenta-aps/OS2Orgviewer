@@ -1,15 +1,35 @@
-FROM node:14 as build-stage
-WORKDIR /app
+# SPDX-FileCopyrightText: 2019-2020 Magenta ApS
+# SPDX-License-Identifier: MPL-2.0
 
+################################################################################
+# Changes to this file requires approval from Labs. Please add a person from   #
+# Labs as required approval to your MR if you have any changes.                #
+################################################################################
+
+FROM node:14 AS builder
+
+WORKDIR /code/frontend
+
+# Install packages
 COPY package*.json ./
 RUN npm install
 
-COPY ./ .
+# Copy in and build source
+COPY . ./
 RUN npm run build
 
-FROM nginx:1-alpine as production-stage
+
+FROM nginx:1-alpine AS dist
+LABEL org.opencontainers.image.title="OS2OrgViewer" \
+      org.opencontainers.image.vendor="Magenta ApS" \
+      org.opencontainers.image.licenses="MPL-2.0" \
+      org.opencontainers.image.url="https://git.magenta.dk/rammearkitektur/os2orgviewer" \
+      org.opencontainers.image.source="https://git.magenta.dk/rammearkitektur/os2orgviewer"
 # Copy in configuration script
 COPY ./docker/30-sed-on-index-html.sh /docker-entrypoint.d/30-sed-on-index-html.sh
 RUN chmod +x /docker-entrypoint.d/30-sed-on-index-html.sh
+
 # Copy in os2orgviewer
-COPY --from=build-stage /app/dist /usr/share/nginx/html
+# RUN rm -rf /usr/share/nginx/html
+COPY --from=builder /code/frontend/dist /usr/share/nginx/html
+RUN ls /usr/share/nginx/html/
