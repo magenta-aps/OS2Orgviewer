@@ -1,8 +1,8 @@
 <template>
     <div class="oc-search">
-        <h2>Søgning</h2>
         <form @submit.prevent="search">
-            <input type="search" v-model="query" @input="considerSearching">
+            <label for="search-input">Søg efter enheder eller personer</label>
+            <input type="search" v-model="query" @input="considerSearching" id="search-input">
             <input type="submit" value="Søg">
         </form>
         <section v-if="person_results && person_results.length > 0">
@@ -94,6 +94,9 @@ export default {
                 })
             })
         }
+    },
+    mounted: function() {
+        document.getElementById('search-input').focus()
     }
 }
 </script>

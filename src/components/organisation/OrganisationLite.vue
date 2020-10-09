@@ -2,8 +2,8 @@
     <router-link 
         :to="{ name: 'orgchart', query: { target: 'orgunit', root: root_org_uuid, org: data.uuid, orgopen: 1 } }"
         :id="`ou-${ data.uuid }`"
-        class="oc-org-link btn" 
-        title="Vis udvidet information">
+        class="oc-org-link btn">
+        <span class="sr-only">Vis detaljer for </span>
         {{ data.name }}
     </router-link>
 </template>

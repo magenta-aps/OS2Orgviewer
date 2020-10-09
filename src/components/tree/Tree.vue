@@ -55,6 +55,7 @@ export default {
     display: flex;
     align-items: flex-start;
     flex-flow: column nowrap;
+    padding-bottom: 2rem;
 }
 
 .oc-chart .oc-chart-root-node > .oc-node-body::before,
