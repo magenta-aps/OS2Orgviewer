@@ -45,12 +45,11 @@ $shadow-2: -.5rem 0 0 hsla(0,0%,0%,.2);
 $font: 1em/1.4 Tahoma, Helvetica, sans-serif;
 
 @mixin branding {
-    & > a {
-        font-size: 1.125rem;
-    }
-    & img {
-        height: 1.5rem;
-        margin-right: 1rem;
+    padding: 0.8rem 1rem !important;
+
+    img {    
+            height: 1.5rem;
+            width: auto;
     }
 }
 

@@ -1,28 +1,24 @@
 <template>
     <div class="oc-search">
-        <form @submit.prevent="search">
-            <label for="search-input">Søg efter enheder eller personer</label>
-            <input type="search" v-model="query" @input="considerSearching" id="search-input">
-            <input type="submit" value="Søg">
+        <h2 class="oc-search-title">Søg efter afdeling eller person</h2>
+        <form @submit.prevent="search" class="oc-search-form">
+            <label for="search-input" class="sr-only">Søg</label>
+            <input type="search" v-model="query" @input="considerSearching" id="search-input" placeholder="Indtast afdeling eller person">
+            <input type="submit" value="Søg" class="inverse oc-search-submit">
         </form>
-        <section v-if="person_results && person_results.length > 0">
-            <h3>Personer</h3>
+        <div v-if="results && results.length > 0">
+            <h3 class="oc-search-results-header">{{ results.length }} søgeresultater</h3>
             <ul class="oc-search-list">
-                <li v-for="res in person_results" :key="res.uuid">
-                    <a href="#" @click.prevent="navToPerson(res.uuid)">{{ res.name }}</a>
-                </li>
-            </ul>
-        </section>
-        <section v-if="org_results && org_results.length > 0">
-            <h3>Afdelinger</h3>
-            <ul class="oc-search-list">
-                <li v-for="res in org_results" :key="res.uuid">
-                    <router-link :to="{ name: 'orgchart', query: { target: 'orgunit', root: root_org_unit_uuid, org: res.uuid, orgopen: 1, showchildren: 1 } }">
+                <li v-for="res in results" :key="res.uuid">
+                    <a v-if="res.givenname" href="#" @click.prevent="navToPerson(res.uuid)">{{ res.name }}</a>
+                    <router-link 
+                        v-else
+                        :to="{ name: 'orgchart', query: { target: 'orgunit', root: root_org_unit_uuid, org: res.uuid, orgopen: 1, showchildren: 1 } }">
                         {{ res.name }}
                     </router-link>
                 </li>
             </ul>
-        </section>
+        </div>
     </div>
 </template>
 
@@ -33,8 +29,7 @@ export default {
     data: function() {
         return {
             query: null,
-            person_results: null,
-            org_results: null,
+            results: null,
             timeout: null
         }
     },
@@ -65,14 +60,18 @@ export default {
             }
         },
         search: function() {
+            let search_res = []
             ajax(`/service/o/${ this.organisation_uuid }/e/?query=${ this.query }`)
-            .then(res => {
-                this.person_results = res.items
+            .then(person_res => {
+                ajax(`/service/o/${ this.organisation_uuid }/ou/?query=${ this.query }`)
+                .then(org_res => {
+                    search_res = person_res.items.concat(org_res.items)
+                    this.results = search_res.sort(function(a,b) {
+                        return a.name > b.name
+                    })
+                })    
             })
-            ajax(`/service/o/${ this.organisation_uuid }/ou/?query=${ this.query }`)
-            .then(res => {
-                this.org_results = res.items
-            })
+            
         },
         navToPerson: function(person_uuid) {
             this.$store.dispatch('fetchPersonAssociations', person_uuid)
@@ -103,15 +102,67 @@ export default {
 
 <style lang="scss">
 
+.oc-search {
+    margin: 0;
+    padding: 2rem 1rem;
+    background-color: $shade-lightest;
+    height: 100%;
+    width: 100%;
+}
+
+.oc-search-title {
+    text-align: center;
+    font-size: 1.25rem;
+    padding: 0;
+    margin: 1rem;
+}
+
+.oc-search-form {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-self: center;
+    padding: 0 0 1rem;
+}
+
+#search-input {
+    padding: .5rem .75rem;
+    flex: 1 0 auto;
+    max-width: 20rem;
+    border: solid 1px $shade-lighter;
+    font-size: smaller;
+}
+
+.oc-search-submit {
+    display: inline-block !important;
+    font-size: smaller !important;
+    padding: .75rem 1rem !important;
+}
+
+.oc-search-results-header {
+    text-align: center;
+    margin: 1rem auto 0;
+}
+
+.oc-search-list {
+    list-style: none;
+    margin: 2rem auto;
+    padding: 0;
+    overflow: auto;
+    height: 100%;
+    column-count: 5;
+    column-width: 12rem;
+    column-gap: 2rem;
+}
+
+.oc-search-list > li {
+    margin: 0 0 .5rem;
+}
+
+@media screen and (min-width: 40rem) {
+    
     .oc-search {
-        background-color: $shade-lightest;
-        padding: 1rem;
+        
     }
-
-    .oc-search-list {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-    }
-
+}
 </style>

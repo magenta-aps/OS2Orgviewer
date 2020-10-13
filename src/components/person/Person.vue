@@ -101,6 +101,7 @@ export default {
 .oc-person .oc-header h3 {
     margin: 0;
     padding: 0;
+    width: 100%;
 }
 
 .oc-person .oc-header h3 a {

@@ -1,7 +1,8 @@
 <template>
     <header class="oc-header">
+        <slot name="preaction"></slot>
         <slot name="title"></slot>
-        <slot name="actions"></slot>
+        <slot name="postaction"></slot>
     </header>
 </template>
 
@@ -13,19 +14,19 @@
     display: flex;
     flex-flow: row nowrap;
     align-items: center;
-    justify-content: space-between;
+    width: 100%;
 }
 
-.oc-header * {
-    font-size: 1.25rem;
+.oc-header h1,
+.oc-header h2,
+.oc-header h3 {
+    font-size: 1.125rem;
 }
 
 @media print {
     
     .oc-header {
         background-color: #fff;
-        box-shadow: none;
-        border-bottom: solid 1pt #000;
     }
 
 }

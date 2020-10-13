@@ -94,6 +94,7 @@ export default {
 .oc-org .oc-header h2 {
     margin: 0;
     padding: 0;
+    width: 100%;
 }
 
 .oc-org .oc-header h2 a {

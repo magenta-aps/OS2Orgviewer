@@ -1,20 +1,17 @@
 <template>
     <div id="app">
         <oc-header>
-            <h1 
-                id="oc-header-title" 
-                slot="title">
-                <router-link to="/">
-                    <img :src="logo_src" alt="">
-                    {{ title }}
-                </router-link>
+            <router-link slot="preaction" to="/" class="oc-header-preaction btn" :title="`Vis øverste niveau i ${ title }`">
+                <img :src="logo_src" alt="">
+                <span class="sr-only">Vis øverste niveau i {{ title }}</span>
+            </router-link>
+            <h1 slot="title" class="oc-header-title">
+                {{ title }}
             </h1>
-            <div slot="actions" class="oc-header-actions">
-                <router-link :to="'/search'" class="oc-header-search-link btn">
-                    <svg class="oc-search-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black" width="18px" height="18px"><path d="M0 0h24v24H0z" fill="none"/><path class="oc-search-svg-path" d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-                    <span class="sr-only">Søg</span>
-                </router-link>
-            </div>
+            <router-link slot="postaction" :to="'/search'" class="oc-header-postaction btn">
+                <svg class="oc-search-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black" width="18px" height="18px"><path d="M0 0h24v24H0z" fill="none"/><path class="oc-search-svg-path" d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                <span class="sr-only">Åben søgefunktion</span>
+            </router-link>
         </oc-header>
         <main id="oc-main">
             <router-view id="tree" name="tree"></router-view>
@@ -98,33 +95,41 @@ a:focus {
 button,
 a.btn,
 a.btn:link,
-a.btn:visited {
+a.btn:visited,
+input[type="submit"] {
     @include button;
 }
 
 button:hover,
-a.btn:hover {
+a.btn:hover,
+input[type="submit"]:hover {
     @include button-hover;
 }
 
 button:active,
-a.btn:active {
+a.btn:active,
+input[type="submit"]:active {
     @include button-active;
 }
 
 button:focus,
-a.btn:focus {
+a.btn:focus,
+input[type="submit"]:focus {
     @include button-focus;
 }
 
-button.inverse {
+button.inverse,
+input[type="submit"].inverse {
     background-color: $color-1;
     color: $shade-lightest;
 }
 
 button.inverse:hover,
 button.inverse:active,
-button.inverse:focus {
+button.inverse:focus,
+input[type="submit"].inverse:hover,
+input[type="submit"].inverse:active,
+input[type="submit"].inverse:focus {
     background-color: darken($color-1, 10%);
 }
 
@@ -154,53 +159,45 @@ dd {
     flex-flow: column nowrap;
 }
 
-#oc-header-title {
-    & a {
-        display: flex;
-        flex-flow: row nowrap;
-        align-items: center;
-        padding: .75rem 1rem;
-    }
-    & img {
-        flex: 0 0 auto;
-        height: 1.25rem;
-        width: auto;
-        margin-right: .75rem;
-    }
+a.oc-header-preaction {
+    flex: 0 0 auto;
+    display: flex !important;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
     @include branding;
 }
 
-.oc-header-actions {
-    flex: 0 0 2rem;
+.oc-header-title {
+    flex: 1 1 auto;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin: 0;
 }
 
-.oc-header-search-link {
-    display: block;
-    min-width: 2.5rem;
-    font-size: 1.5rem;
-    text-align: center;
+a.oc-header-postaction {
+    flex: 0 0 auto;
+    align-self: flex-end;
+    font-size: 1.5rem !important;
+    padding: 0.75rem 1rem !important;
     line-height: 1;
+
+    .oc-search-svg-path {
+        fill: $color-1;
+    }
+}
+
+a.oc-header-postaction:hover,
+a.oc-header-postaction:active,
+a.oc-header-postaction:focus {
+    .oc-search-svg-path {
+        fill: $shade-darkest;
+    }
 }
 
 #oc-main {
     flex-grow: 1;
-}
-
-.oc-header h1 {
-    margin: 0;
-    padding: 0;
-}
-
-.oc-search-svg-path {
-    fill: $color-1;
-}
-
-a.btn:hover,
-a.btn:active,
-a.btn:focus {
-    .oc-search-svg-path {
-        fill: $shade-darkest;
-    }
 }
 
 @media print {
