@@ -12,40 +12,28 @@
                 </router-link>
             </h3>
         </oc-header>
-        <dl class="oc-person-body">
-            
-            <dt>Navn</dt>
-            <dd>{{ person_data.name }}</dd>
-            
-            <dt>Tilknytning</dt>
-            <dd>{{ person_data.association_data[0].association_type.name }}</dd>
-    
-            <template v-if="person_data.address_data">
-                <template v-for="address in person_data.address_data">
-                    <dt :key="address.address_type.uuid">{{ address.address_type.name }}</dt>
-                    <dd :key="address.uuid">
-                        <a 
-                            v-if="address.address_type.name === 'Email'"
-                            :href="`mailto:${ address.name }`">
-                            {{ address.name }}
-                        </a>
-                        <span v-else>
-                            {{ address.name }}
-                        </span>
-                    </dd>
-                </template>
-            </template>
-        </dl>
+        <div class="oc-person-body">
+            <dl>
+                <dt>Navn</dt>
+                <dd>{{ person_data.name }}</dd>
+                
+                <dt>Tilknytning</dt>
+                <dd>{{ person_data.association_data[0].association_type.name }}</dd>
+            </dl>
+            <address-list v-if="person_data.address_data" :list="person_data.address_data" />    
+        </div>
     </article>
 </template>
 
 <script>
 import Vue from 'vue'
 import OcHeader from '../layout/Header.vue'
+import AddressList from '../address/AddressList.vue'
 
 export default {
     components: {
-        OcHeader
+        OcHeader,
+        AddressList
     },
     computed: {
         person_data: function() {
@@ -116,7 +104,7 @@ export default {
 }
 
 .oc-person-body {
-    padding: 1rem;
+    padding: 0 1rem 1rem;
     flex-grow: 1;
 }
 

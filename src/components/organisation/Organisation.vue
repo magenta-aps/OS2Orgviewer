@@ -19,6 +19,10 @@
             <!-- Managers seem to be redundant as they also appear in personlist -->
             <!-- <managers :uuid="org_data.uuid" /> -->
             <person-list :uuid="org_data.uuid" />
+            <template v-if="org_data.address_data">
+                <hr>
+                <address-list :list="org_data.address_data" />
+            </template>
         </div>
     </article>
 </template>
@@ -26,6 +30,7 @@
 <script>
 import Vue from 'vue'
 import PersonList from '../person/PersonList.vue'
+import AddressList from '../address/AddressList.vue'
 import Managers from '../person/Managers.vue'
 import OcHeader from '../layout/Header.vue'
 import store from '../../store.js'
@@ -33,6 +38,7 @@ import store from '../../store.js'
 export default {
     components: {
         PersonList,
+        AddressList,
         Managers,
         OcHeader
     },
@@ -67,6 +73,9 @@ export default {
         update: function(org_uuid) {
             if (org_uuid) {
                 this.$store.dispatch('fetchOrgUnit', org_uuid)
+                .then(() => {
+                    this.$store.dispatch('fetchOrgUnitAddresses', org_uuid)
+                })
             }
         }
     },

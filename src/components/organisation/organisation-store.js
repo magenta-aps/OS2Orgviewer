@@ -80,11 +80,14 @@ const actions = {
     },
     fetchOrgUnit: ({commit, dispatch}, uuid) => {
         if (!state.graph[uuid]) {
-            ajax(`/service/ou/${ uuid }/`)
+            return ajax(`/service/ou/${ uuid }/`)
             .then(org_unit => {
                 commit('updateNode', org_unit)
                 dispatch('fetchOrgUnitChildren', uuid)
+                return org_unit
             })
+        } else {
+            return state.graph[uuid]
         }
     },
     fetchOrgUnitChildren: ({commit, state}, uuid) => {
@@ -105,6 +108,14 @@ const actions = {
             }
             parent_node.child_count = parent_node.child_list.length
             commit('updateNode', parent_node)
+        })
+    },
+    fetchOrgUnitAddresses: ({commit, state}, uuid) => {
+        ajax(`/service/ou/${ uuid }/details/address`)
+        .then((addresses) => {
+            let new_node = state.graph[uuid]
+            new_node.address_data = addresses
+            commit('updateNode', new_node)
         })
     }
 }
