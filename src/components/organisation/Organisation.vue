@@ -101,7 +101,7 @@ export default {
     overflow: auto;
 }
 
-.oc-org.dim > *{
+.oc-org.dim > * {
     opacity: .5;
 }
 
@@ -177,6 +177,19 @@ export default {
     
     .oc-org {
         position: relative;
+    }
+
+    .oc-org.dim > * {
+        opacity: 1 !important;
+    }
+
+    #orgtitle {
+        border-bottom: solid 1pt #000;
+    }
+
+    .svg-close,
+    .svg-back {
+        display: none !important;
     }
 }
 

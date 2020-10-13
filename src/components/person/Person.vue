@@ -160,6 +160,15 @@ export default {
         position: relative;
     }
 
+    #persontitle {
+        border-bottom: solid 1pt #000;
+    }
+
+    .svg-close,
+    .svg-back {
+        display: none !important;
+    }
+
 }
 
 </style>

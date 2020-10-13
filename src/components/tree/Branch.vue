@@ -93,16 +93,6 @@ export default {
 
 @media print {
 
-    .oc-branch::before {
-        content: '';
-        position: absolute;
-        top: -1rem;
-        left: 50%;
-        width: 1pt;
-        height: 1rem;
-        border-left: solid 3pt #000;
-        z-index: 2;
-    }
 
 }
 </style>

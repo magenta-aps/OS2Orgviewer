@@ -228,6 +228,20 @@ a.oc-header-postaction:focus {
         background-color: #fff !important;
     }
 
+    #oc-global-header {
+        box-shadow: none;
+        border-bottom: solid 1pt #000;
+    }
+
+    a.oc-header-preaction {
+        border: solid 1pt #000;
+        padding-left: 0 !important;
+    }
+
+    .oc-header-postaction,
+    .sr-only {
+        display: none !important;
+    }
 }
 
 </style>

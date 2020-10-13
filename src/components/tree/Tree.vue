@@ -104,4 +104,9 @@ export default {
 
 }
 
+@media print {
+    .oc-chart {
+        display: block !important;
+    }
+}
 </style>
