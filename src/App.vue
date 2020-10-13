@@ -134,7 +134,7 @@ input[type="submit"].inverse:focus {
 }
 
 dt {
-    opacity: .75;
+    color: $shade-darker;
     font-size: smaller;
 }
 

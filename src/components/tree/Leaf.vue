@@ -15,6 +15,7 @@
                 v-if="node_data.child_count"
                 class="oc-node-expand-btn inverse"
                 :class="branch_open ? 'close': 'open'"
+                :aria-expanded="branch_open ? 'true': 'false'"
                 type="button" 
                 @click="toggleBranch">
                     <svg class="svg-toggle" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path class="svg-path" d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/></svg>

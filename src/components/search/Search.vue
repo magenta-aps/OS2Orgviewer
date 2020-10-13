@@ -1,5 +1,5 @@
 <template>
-    <div class="oc-search">
+    <section class="oc-search">
         <h2 class="oc-search-title">Søg efter afdeling eller person</h2>
         <form @submit.prevent="search" class="oc-search-form">
             <label for="search-input" class="sr-only">Søg</label>
@@ -7,7 +7,7 @@
             <input type="submit" value="Søg" class="inverse oc-search-submit">
         </form>
         <div v-if="results && results.length > 0">
-            <h3 class="oc-search-results-header">{{ results.length }} søgeresultater</h3>
+            <h3 class="oc-search-results-header" tabindex="-1">{{ results.length }} søgeresultater</h3>
             <ul class="oc-search-list">
                 <li v-for="res in results" :key="res.uuid">
                     <a v-if="res.givenname" href="#" @click.prevent="navToPerson(res.uuid)">{{ res.name }}</a>
@@ -19,10 +19,11 @@
                 </li>
             </ul>
         </div>
-    </div>
+    </section>
 </template>
 
 <script>
+import Vue from 'vue'
 import ajax from '../http/http.js'
 
 export default {
@@ -68,6 +69,9 @@ export default {
                     search_res = person_res.items.concat(org_res.items)
                     this.results = search_res.sort(function(a,b) {
                         return a.name > b.name
+                    })
+                    Vue.nextTick(() => {
+                        document.querySelector('.oc-search-results-header').focus()
                     })
                 })    
             })
