@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <oc-header>
+        <oc-header id="oc-global-header">
             <router-link slot="preaction" to="/" class="oc-header-preaction btn" :title="`Vis øverste niveau i ${ title }`">
                 <img :src="logo_src" alt="">
                 <span class="sr-only">Vis øverste niveau i {{ title }}</span>
@@ -165,6 +165,11 @@ hr {
     flex-flow: column nowrap;
 }
 
+#oc-global-header {
+    box-shadow: $shadow-3;
+    flex: 0 0 auto;
+}
+
 a.oc-header-preaction {
     flex: 0 0 auto;
     display: flex !important;
@@ -203,7 +208,7 @@ a.oc-header-postaction:focus {
 }
 
 #oc-main {
-    flex-grow: 1;
+    flex: 1 1 auto;
 }
 
 @media print {

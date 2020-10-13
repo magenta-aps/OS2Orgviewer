@@ -1,6 +1,7 @@
 <template>
     <article 
         class="oc-org" 
+        :class="{'dim': $route.query.person}"
         v-if="org_visible && org_data"
         :tabindex="$route.query.person ? -1 : 0">
         <oc-header>
@@ -98,6 +99,10 @@ export default {
     display: flex;
     flex-flow: column nowrap;
     overflow: auto;
+}
+
+.oc-org.dim > *{
+    opacity: .5;
 }
 
 .oc-org .oc-header h2 {
