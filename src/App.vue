@@ -119,6 +119,9 @@ input[type="submit"]:focus {
 }
 
 button.inverse,
+a.btn.inverse,
+a.btn.inverse:link,
+a.btn.inverse:visited,
 input[type="submit"].inverse {
     background-color: $color-1;
     color: $shade-lightest;
@@ -127,6 +130,9 @@ input[type="submit"].inverse {
 button.inverse:hover,
 button.inverse:active,
 button.inverse:focus,
+a.btn.inverse:hover,
+a.btn.inverse:active,
+a.btn.inverse:focus,
 input[type="submit"].inverse:hover,
 input[type="submit"].inverse:active,
 input[type="submit"].inverse:focus {

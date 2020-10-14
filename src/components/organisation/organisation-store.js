@@ -78,17 +78,13 @@ const actions = {
             return tree
         })
     },
-    fetchOrgUnit: ({commit, dispatch}, uuid) => {
-        if (!state.graph[uuid]) {
-            return ajax(`/service/ou/${ uuid }/`)
-            .then(org_unit => {
-                commit('updateNode', org_unit)
-                dispatch('fetchOrgUnitChildren', uuid)
-                return org_unit
-            })
-        } else {
+    fetchOrgUnit: ({commit, dispatch, state}, uuid) => {
+        return ajax(`/service/ou/${ uuid }/`)
+        .then(org_unit => {
+            commit('updateNode', org_unit)
+            dispatch('fetchOrgUnitChildren', uuid)
             return state.graph[uuid]
-        }
+        })
     },
     fetchOrgUnitChildren: ({commit, state}, uuid) => {
         ajax(`/service/ou/${ uuid }/children`)
