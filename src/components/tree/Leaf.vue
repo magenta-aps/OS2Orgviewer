@@ -24,7 +24,7 @@
                     <span class="sr-only"> underenheder</span>
             </button>
         </div>
-        <branch v-if="branch_open" :uuid="uuid" :class="{'oc-chart-root-branch': root_org_unit_uuid === node_data.uuid }" :level="level + 1" />
+        <branch v-if="branch_open" :uuid="uuid" :level="level + 1" />
     </li>
 </template>
 
@@ -110,7 +110,7 @@ export default {
     position: relative;
     text-align: center;
     padding: 1.25rem 0 0 0;
-    margin: 0 auto;
+    margin: 0;
 }
 
 .oc-node::before {
@@ -213,50 +213,7 @@ a.oc-node-focus-btn.btn:focus {
 
 @media screen and (min-width: 40rem) {
 
-    .oc-branch.oc-chart-root-branch > .oc-node {
-        padding: 0 .5rem;
-    }
-
-    .oc-branch.oc-chart-root-branch > .oc-node::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        display: block;
-        height: 3px;
-        width: 100%;
-        background-color: $shade-lightest;
-    }
-
-    .oc-branch.oc-chart-root-branch > .oc-node:first-child::before {
-        width: 50%;
-        left: 50%;
-    }
-
-    .oc-branch.oc-chart-root-branch > .oc-node:last-child::before {
-        width: 50%;
-        left: auto;
-        right: 50%;
-    }
-
-    .oc-branch.oc-chart-root-branch > .oc-node:first-child:last-child::before {
-        content: none;
-    }
-
-    .oc-branch.oc-chart-root-branch > .oc-node > .oc-node-body {
-        margin: 1rem auto;
-    }
-
-    .oc-branch.oc-chart-root-branch > .oc-node > .oc-node-body::before {
-        content: '';
-        position: absolute;
-        top: -1rem;
-        left: 50%;
-        width: 3px;
-        height: 1rem;
-        background-color: $shade-lightest;
-        z-index: 2;
-    }
+   
 }
 
 @media print {

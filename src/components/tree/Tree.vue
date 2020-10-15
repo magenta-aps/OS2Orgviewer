@@ -59,11 +59,6 @@ export default {
     flex-flow: column nowrap;
 }
 
-.oc-chart .oc-chart-root-node > .oc-node-body::before,
-.oc-chart .oc-chart-root-branch::before {
-    content: none;
-}
-
 .oc-chart-root-nav {
     background-color: $shade-lightest;
     width: 100%;
@@ -71,8 +66,6 @@ export default {
 
 .oc-branch.oc-chart-root-branch {
     width: 100%;
-    overflow: auto;
-    flex-grow: 1;
 }
 
 .oc-chart-root-link {
@@ -86,12 +79,6 @@ export default {
     }
 }
 
-.oc-branch {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
 @media screen and (max-width: 40rem) {
 
     .oc-chart {
@@ -103,8 +90,64 @@ export default {
 
 @media screen and (min-width: 40rem) {
 
-    .oc-branch.oc-chart-root-branch {
-        margin: 0 auto;
+    .oc-chart-root-branch {
+        padding: 0 !important;
+        overflow: auto;
+        height: 100%;
+        width: 100%;
+    }
+
+    .oc-chart-root-leaf {
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: center;
+    }
+
+    .oc-chart-root-leaf::before {
+        left: 50%;
+    }
+
+    .oc-chart-root-leaf > .oc-node-body::before {
+        top: auto;
+        bottom: -1.25rem;
+        height: 1.25rem;
+        width: 3px;
+        left: 50%;
+    }
+
+    .oc-branch.oc-branch-level-1 {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: flex-start;
+        width: auto;
+        margin: 1.25rem auto 0;
+    }
+
+    .oc-branch.oc-branch-level-1 > .oc-node {
+        padding: 1.25rem 1rem 0;
+    }
+
+    .oc-branch.oc-branch-level-1 > .oc-node::before {
+        height: 3px;
+        width: 100%;
+        top: 0;
+        left: 0;
+    }
+
+    .oc-branch.oc-branch-level-1 > .oc-node:first-child:before {
+        width: 100%;
+        left: 6rem;
+    }
+
+    .oc-branch.oc-branch-level-1 > .oc-node:last-child:before {
+        width: 6rem;
+    }
+
+    .oc-branch.oc-branch-level-1 > .oc-node > .oc-node-body::before {
+        width: 3px;
+        height: 1.25rem;
+        top: -1.25rem;
+        left: 50%;
     }
 
     .oc-chart-orgopen {
@@ -122,8 +165,13 @@ export default {
 }
 
 @media print {
+
     .oc-chart {
         display: block !important;
+    }
+
+    .oc-chart-root-nav {
+        display: none !important;
     }
 }
 </style>
