@@ -11,11 +11,11 @@ FROM node:14 AS builder
 WORKDIR /code/frontend
 
 # Install packages
-COPY package*.json ./
+COPY app/package*.json ./
 RUN npm install
 
 # Copy in and build source
-COPY . ./
+COPY app ./
 RUN npm run build
 
 
