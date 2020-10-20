@@ -44,7 +44,9 @@ export default {
     },
     created: function() {
         this.update(this.$route.query.root)
-        this.$store.dispatch('fetchTree', this.$route.query.org)
+        if (this.$route.query.org !== this.$route.query.root) {
+            this.$store.dispatch('fetchTree', this.$route.query.org)
+        }
     }
 }
 </script>
@@ -66,6 +68,7 @@ export default {
 
 .oc-branch.oc-chart-root-branch {
     width: 100%;
+    padding-bottom: 2rem;
 }
 
 .oc-chart-root-link {
@@ -91,7 +94,7 @@ export default {
 @media screen and (min-width: 40rem) {
 
     .oc-chart-root-branch {
-        padding: 0 !important;
+        padding: 0 0 2rem !important;
         overflow: auto;
         height: 100%;
         width: 100%;

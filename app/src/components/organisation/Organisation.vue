@@ -1,31 +1,33 @@
 <template>
-    <article 
-        class="oc-org" 
-        :class="{'dim': $route.query.person}"
-        v-if="org_visible && org_data"
-        :tabindex="$route.query.person ? -1 : 0">
-        <oc-header>
-            <h2 slot="title">
-                <router-link
-                    id="orgtitle"
-                    :to="{ name: 'orgchart', query: { target: 'tree', root: root_org_uuid, org: org_data.uuid, orgopen: 0, showchildren: 1 } }">
-                    <svg class="svg-back" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path class="svg-path" d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
-                    <span class="oc-org-title">{{ org_data.name }}</span>
-                    <span class="sr-only">Luk visning af {{ org_data.name }}</span>
-                    <svg class="svg-close" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path class="svg-path" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
-                </router-link>
-            </h2>
-        </oc-header>
-        <div class="oc-org-body">
-            <!-- Managers seem to be redundant as they also appear in personlist -->
-            <!-- <managers :uuid="org_data.uuid" /> -->
-            <person-list :uuid="org_data.uuid" />
-            <template v-if="org_data.address_data">
-                <hr>
-                <address-list :list="org_data.address_data" />
-            </template>
-        </div>
-    </article>
+    <transition name="oc-fade">
+        <article 
+            class="oc-org" 
+            :class="{'dim': $route.query.person}"
+            v-if="org_visible && org_data"
+            :tabindex="$route.query.person ? -1 : 0">
+            <oc-header>
+                <h2 slot="title">
+                    <router-link
+                        id="orgtitle"
+                        :to="{ name: 'orgchart', query: { target: 'tree', root: root_org_uuid, org: org_data.uuid, orgopen: 0, showchildren: 1 } }">
+                        <svg class="svg-back" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path class="svg-path" d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+                        <span class="oc-org-title">{{ org_data.name }}</span>
+                        <span class="sr-only">Luk visning af {{ org_data.name }}</span>
+                        <svg class="svg-close" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path class="svg-path" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                    </router-link>
+                </h2>
+            </oc-header>
+            <div class="oc-org-body">
+                <!-- Managers seem to be redundant as they also appear in personlist -->
+                <!-- <managers :uuid="org_data.uuid" /> -->
+                <person-list :uuid="org_data.uuid" />
+                <template v-if="org_data.address_data">
+                    <hr>
+                    <address-list :list="org_data.address_data" />
+                </template>
+            </div>
+        </article>
+    </transition>
 </template>
 
 <script>

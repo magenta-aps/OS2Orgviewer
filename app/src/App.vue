@@ -217,6 +217,16 @@ a.oc-header-postaction:focus {
     flex: 1 1 auto;
 }
 
+.oc-fade-enter-active, 
+.oc-fade-leave-active {    
+    transition: transform .3s;
+}
+
+.oc-fade-enter, 
+.oc-fade-leave-to {
+    transform: translateX(100%);
+}
+
 @media print {
     
     body,

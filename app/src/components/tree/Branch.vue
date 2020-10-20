@@ -1,9 +1,7 @@
 <template>
-
     <ul v-if="nodes && nodes.length > 0" :class="`oc-branch oc-branch-level-${ level }`">
         <leaf v-for="node in nodes" :uuid="node.uuid" :key="node.uuid" :show-children="node.showchildren" :level="level" />
     </ul>
-
 </template>
 
 <script>
@@ -49,14 +47,5 @@ export default {
     margin: 0;
     display: block;
     position: relative;
-}
-
-@media screen and (min-width: 40rem) {
-    
-}
-
-@media print {
-
-
 }
 </style>

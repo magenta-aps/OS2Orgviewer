@@ -1,28 +1,30 @@
 <template>
-    <article v-if="person_data" class="oc-person">
-        <oc-header>
-            <h3 slot="title">
-                <router-link 
-                    :to="{ name: 'orgchart', query: { target: 'orgunit', root: root_org_uuid, org: org_unit_uuid, orgopen: 1, showchildren: 1 } }"
-                    id="persontitle">
-                    <svg class="svg-back" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path class="svg-path" d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
-                    <span class="oc-person-title">{{ person_data.name }}</span>
-                    <svg class="svg-close" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path class="svg-path" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
-                    <span class="sr-only">Tilbage til {{ person_data.association_data[0].org_unit.name }}</span>
-                </router-link>
-            </h3>
-        </oc-header>
-        <div class="oc-person-body">
-            <dl>
-                <dt>Navn</dt>
-                <dd>{{ person_data.name }}</dd>
-                
-                <dt>Tilknytning</dt>
-                <dd>{{ person_data.association_data[0].association_type.name }}</dd>
-            </dl>
-            <address-list v-if="person_data.address_data" :list="person_data.address_data" />    
-        </div>
-    </article>
+    <transition name="oc-fade">
+        <article v-if="person_data" class="oc-person">
+            <oc-header>
+                <h3 slot="title">
+                    <router-link 
+                        :to="{ name: 'orgchart', query: { target: 'orgunit', root: root_org_uuid, org: org_unit_uuid, orgopen: 1, showchildren: 1 } }"
+                        id="persontitle">
+                        <svg class="svg-back" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path class="svg-path" d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+                        <span class="oc-person-title">{{ person_data.name }}</span>
+                        <svg class="svg-close" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path class="svg-path" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                        <span class="sr-only">Tilbage til {{ person_data.association_data[0].org_unit.name }}</span>
+                    </router-link>
+                </h3>
+            </oc-header>
+            <div class="oc-person-body">
+                <dl>
+                    <dt>Navn</dt>
+                    <dd>{{ person_data.name }}</dd>
+                    
+                    <dt>Tilknytning</dt>
+                    <dd>{{ person_data.association_data[0].association_type.name }}</dd>
+                </dl>
+                <address-list v-if="person_data.address_data" :list="person_data.address_data" />    
+            </div>
+        </article>
+    </transition>
 </template>
 
 <script>
