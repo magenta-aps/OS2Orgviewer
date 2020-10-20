@@ -26,8 +26,11 @@ LABEL org.opencontainers.image.title="OS2OrgViewer" \
       org.opencontainers.image.url="https://git.magenta.dk/rammearkitektur/os2orgviewer" \
       org.opencontainers.image.source="https://git.magenta.dk/rammearkitektur/os2orgviewer"
 # Copy in configuration script
+COPY ./docker/25-symlink-html.sh /docker-entrypoint.d/25-symlink-html.sh
+RUN chmod 775 /docker-entrypoint.d/25-symlink-html.sh
+
 COPY ./docker/30-sed-on-index-html.sh /docker-entrypoint.d/30-sed-on-index-html.sh
 RUN chmod 775 /docker-entrypoint.d/30-sed-on-index-html.sh
 
 # Copy in os2orgviewer
-COPY --from=builder /code/dist/frederikshavn-med /usr/share/nginx/html
+COPY --from=builder /code/dist /code/dist

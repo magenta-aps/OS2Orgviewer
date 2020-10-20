@@ -9,7 +9,7 @@ replace_global_url() {
 
   if [ ! -f $index_file ]; then
     echo >&3 "$ME: ERROR: $index_file does not exist"
-    return 0
+    exit 1
   fi
   sed "s#var GLOBAL_API_URL = '.*'#var GLOBAL_API_URL = '${GLOBAL_API_URL}'#g" -i $index_file
 }
