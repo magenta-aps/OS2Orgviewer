@@ -1,20 +1,35 @@
 # Development and configuration
 
+Refer to the [the general README](../README.md) for setup instructions.
+
+
 ## Start a development server with hot reload
 ```
-npm run serve
+npm run serve (default)
+OR
+npm run serve-frederikshavn-med (with customer-specific theme and setup)
 ```
 
 ## Compile for production and deploy
 ```
 npm run build
 ```
-After compile, serve `index.html` and associated static resources from the generated folder specified in your `BUILD_DIST_FOLDER` environment variable (see below).
+This command creates a build for every customer specific setup and copies them into individual directories inside the `/dist` folder. The default build resides in the the `dist/default` folder.
+
+After compile, pick any build folder and serve `index.html` and its associated static resources. 
 
 
 ## Customization
 
-This project ships with a `.env` file containing the environment variables you need to set to customize the application. You should make a copy of `.env` and call it `.env.local`. Set the environment as needed for your local setup in that new file. Next time you build the project, the system will pull environment varibales from `.env.local` if it exists.
+Inside the [app](/app) folder, you'll find `.env` files containing the environment variables you need to set to customize the application for specific uses. Every custom setup has two `.env` files for development and production respectively.
+
+Below is an example of how to name `.env` files:
+
+`.env.frederikshavn-med`
+For development use. This sets the environment used by the `npm run serve-frederikshavn-med` command.
+
+`.env.frederikshavn-med.production`
+For production use. This sets the environment used by `npm run build-frederikshavn-med` command.
 
 Check the [full documentation on setting environment variables.](https://cli.vuejs.org/guide/mode-and-env.html#modes)
 
@@ -26,7 +41,6 @@ Check the [full documentation on setting environment variables.](https://cli.vue
 * `VUE_APP_THEME_PATH` - local path to SCSS file containing custom theme variables. You can make a copy of [./src/assets/default-theme.scss](./src/assets/default-theme.scss) and edit it to create your own custom theme.
 * `VUE_APP_LOGO_PATH` - local or global path to image file you want as your application's branding image.
 * `VUE_APP_FAVICON_PATH` - local or global path to image file (usually `favicon.ico`) you want as your application's favicon.
-* `BUILD_DIST_FOLDER` - the output folder for your production build. These are the files that go on a server somewhere.
 
 
 ### Customizing build configuration
