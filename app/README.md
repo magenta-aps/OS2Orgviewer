@@ -1,24 +1,11 @@
-# OS2Orgviewer
+# Development and configuration
 
-This is a web application that displays a chart over an organization and its members.
-You can navigate the chart, display info on individual sections and people, and search for people or units within the organisation.
-It pulls organization information from OS2MO REST API.
-
-## Project setup
-Assuming you have [Node.js](https://nodejs.org/en/) installed, check out this code and install the build dependencies:
-```
-git clone git@git.magenta.dk:rammearkitektur/os2orgviewer.git
-cd os2orgviewer
-npm update
-npm install
-```
-
-### Start a development server with hot reload
+## Start a development server with hot reload
 ```
 npm run serve
 ```
 
-### Compile for production and deploy
+## Compile for production and deploy
 ```
 npm run build
 ```
@@ -47,14 +34,14 @@ Check the [full documentation on setting environment variables.](https://cli.vue
 For build configurations, refer to the [Vue-CLI configuration reference](https://cli.vuejs.org/config/).
 
 
-## System design considerations
+# System design considerations
 
-### Data store
+## Data store
 All org_units' data are stored in graph array.
 Every org_unit contains children and parent properties as lists of uuids
 Root org_unit and current org_unit are stored as different values
 
-### Data flow
+## Data flow
 
 Data flows between REST API, state graph, and tree view
 
