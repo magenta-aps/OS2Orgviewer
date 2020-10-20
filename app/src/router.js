@@ -16,8 +16,8 @@ const router = new Router({
             redirect: {
                 name: 'orgchart',
                 query: {
-                    root: process.env.VUE_APP_ROOT_UUID,
-                    org: process.env.VUE_APP_ROOT_UUID,
+                    root: GLOBAL_API_ROOT_UUID, // Defined in index.html
+                    org: GLOBAL_API_ROOT_UUID, // Defined in index.html
                     showchildren: 1
                 }
             }

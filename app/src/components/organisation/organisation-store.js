@@ -16,7 +16,7 @@ const mapTreeToGraph = function(branch, parent_uuid) {
 
 const state = {
     graph: {},
-    root_org_uuid: process.env.VUE_APP_ROOT_UUID,
+    root_org_uuid: GLOBAL_API_ROOT_UUID, // Defined in index.html
     global_organisations: null
 }
 

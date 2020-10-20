@@ -1,0 +1,108 @@
+/*
+
+    ==========================
+    Frederikshavns designguide
+    ==========================
+
+    Primær farve, mørkeblå: Pantone 548 / CMYK: 100 10 0 70 / RGB: 0, 71, 101 / #004765
+    Tyrkis: Pantone 632 / CMYK: 90 0 15 5 / RGB: 0, 169, 203 / #00A9CB
+    Lyseblå: Pantone 550 / CMYK 40 5 5 10 / RGB 150 187 210 / # 96BBD2
+
+    Lys gråblå: Pantone 7543 / CMYK 10 0 0 30 / RGB 170 180 188 / # AAB4BC
+    Pink-lilla: Pantone 158 / CMYK 40 100 0 0 / RGB 163 35 142 / # A3238E
+    Orange: Pantone 158 / CMYK 0 70 100 0 / RGB 243 112 33 / # F37021
+
+    Gul:  Pantone 108 / CMYK 0 5 100 0 / RGB 255 230 0 /# FFE600
+    Rød: Pantone 7426 / CMYK 15 100 60 25 / RGB 165 18 64 / # A51240
+    Støvet grøn: Pantone 5625 / CMYK 40 10 30 40 / RGB 111 130 124 / # 6F827C
+
+    Sandfarvet: Pantone 5807 / CMYK 10 5 25 5 / RGB 217 217 188 / # D9D9BC
+    Limegrøn: Pantone 383 / CMYK 40 0 100 0 / RGB 166 206 57 /# A6CE39
+    Mørk sandfarvet: Pantone 7536/ CMYK 5 5 20 30 / RGB 178 176 158 / # B2809E
+
+
+    SASS variables for CSS theme
+*/
+
+@use "sass:color";
+
+$color-1: #004765; // Primary branding color for high visibility elements
+$color-2: #00A9CB; // Used for higlights and accents
+
+$color-3: #96BBD2; // Light color for colored backgrounds
+$color-4: #D9D9BC; // Alternative light color for colored backgrounds
+
+$shade-lightest: #fff;
+$shade-lighter: lighten($color-3, 10%);
+$shade-light: $color-3;
+$shade-dark: darken($color-3, 10%);
+$shade-darker: darken($color-3, 30%);
+$shade-darkest: #000;
+
+$shadow-1: .25rem .25rem 0 hsla(0,0%,0%,.125);
+$shadow-2: -.5rem 0 0 hsla(0,0%,0%,.2);
+$shadow-3: 0 .5rem 0 hsla(0,0%,0%,.2);
+
+$font: 1em/1.4 Tahoma, Helvetica, sans-serif;
+
+@mixin branding {
+    padding: 0.8rem 1rem !important;
+
+    img {    
+            height: 1.5rem;
+            width: auto;
+    }
+}
+
+@mixin link {
+    text-decoration: none;
+    color: $color-1;
+    transition: padding .3s;
+}
+
+@mixin link-hover {
+    color: $shade-darkest;
+    background-color: $shade-light;
+    padding: 0 .5rem;
+}
+
+@mixin link-active {
+    background-color: $color-1;
+    color: $shade-lightest;
+}
+
+@mixin link-focus {
+    @include link-hover;
+    outline: none;
+}
+
+@mixin button {
+    display: block;
+    color: $color-1;
+    background-color: $shade-lightest;
+    padding: .25rem .5rem;
+    text-align: center;
+    border: none;
+    font-size: 1rem;
+    font-weight: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transition: all .3s;
+}
+
+@mixin button-hover {
+    color: $shade-darkest;
+    box-shadow: $shadow-1;
+    transform: translate(-.25rem, -.25rem);
+}
+
+@mixin button-active {
+    background-color: $color-1;
+    color: $shade-lightest;
+}
+
+@mixin button-focus {
+    @include button-hover;
+    outline: none;
+}

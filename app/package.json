@@ -3,8 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve --port 8652",
-    "build": "vue-cli-service build --modern --no-unsafe-inline"
+    "serve": "vue-cli-service serve --mode os2 --port 8652",
+    "serve-frederikshavn-med": "vue-cli-service serve --mode frederikshavn-med --port 8652",
+    "build": "vue-cli-service build --modern --mode os2.production --dest ../dist/default",
+    "build-frederikshavn-med": "vue-cli-service build --modern --mode frederikshavn-med.production --dest ../dist/frederikshavn-med"
   },
   "dependencies": {
     "core-js": "^3.6.5",
