@@ -10,10 +10,16 @@
             <h3 class="oc-search-results-header" tabindex="-1">{{ results.length }} søgeresultater</h3>
             <ul class="oc-search-list">
                 <li v-for="res in results" :key="res.uuid">
-                    <a v-if="res.givenname" href="#" @click.prevent="navToPerson(res.uuid)">{{ res.name }}</a>
+                    <router-link 
+                        v-if="res.givenname"
+                        :to="{ name: 'orgchart', query: { target: 'person', root: root_org_unit_uuid, org: res.uuid, orgopen: 1, showchildren: 1, person: res.uuid } }">
+                        <span class="label">Person</span><br>
+                        {{ res.name }}
+                    </router-link>
                     <router-link 
                         v-else
                         :to="{ name: 'orgchart', query: { target: 'orgunit', root: root_org_unit_uuid, org: res.uuid, orgopen: 1, showchildren: 1 } }">
+                        <span class="label">Enhed</span><br>
                         {{ res.name }}
                     </router-link>
                 </li>
@@ -62,7 +68,7 @@ export default {
         },
         search: function() {
             let search_res = []
-            ajax(`/service/o/${ this.organisation_uuid }/e/?query=${ this.query }`)
+            ajax(`/service/o/${ this.organisation_uuid }/e/?query=${ this.query }&associated=true`)
             .then(person_res => {
                 ajax(`/service/o/${ this.organisation_uuid }/ou/?query=${ this.query }`)
                 .then(org_res => {
@@ -76,26 +82,6 @@ export default {
                 })    
             })
             
-        },
-        navToPerson: function(person_uuid) {
-            this.$store.dispatch('fetchPersonAssociations', person_uuid)
-            .then(associations => {
-                if (!associations || associations.length < 1) {
-                    alert('Denne person er ikke tilknyttet nogen enhed i organisationen.')
-                    return
-                }
-                this.$router.push({
-                    name: 'orgchart',
-                    query: {
-                        target: 'person',
-                        root: this.root_org_unit_uuid,
-                        org: associations[0].org_unit.uuid,
-                        person: person_uuid,
-                        orgopen: 1,
-                        showchildren: 1
-                    }
-                })
-            })
         }
     },
     mounted: function() {
@@ -154,19 +140,41 @@ export default {
     padding: 0;
     overflow: auto;
     height: 100%;
-    column-count: 5;
-    column-width: 12rem;
-    column-gap: 2rem;
 }
 
 .oc-search-list > li {
     margin: 0 0 .5rem;
 }
 
+.oc-search .label {
+    //display: block;
+}
+
 @media screen and (min-width: 40rem) {
+
+    .oc-search-results-header { 
+        margin: 1rem 2rem 0;
+    }
     
-    .oc-search {
-        
+    .oc-search-list {
+        margin-top: 0;
+        padding: 2rem;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 1rem 2rem;
+    }
+}
+
+@media screen and (min-width: 60rem) {
+
+    .oc-search-results-header {
+        width: 56rem;
+        margin: 1rem auto 0;
+    }
+    
+    .oc-search-list {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        width: 60rem;
     }
 }
 </style>

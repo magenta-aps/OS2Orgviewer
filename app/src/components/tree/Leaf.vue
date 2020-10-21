@@ -87,13 +87,13 @@ export default {
         toggleBranch: function() {
             this.branch_open = !this.branch_open
             let route = {
-                name: 'orgchart', 
-                query: { 
+                name: 'orgchart',
+                query: {
                     root: this.root_org_unit_uuid, 
                     org: this.node_data.uuid,
                     orgopen: 0,
                     showchildren: this.branch_open ? 1 : 0
-                } 
+                }
             }
             this.$router.push(route)
         }

@@ -56,7 +56,6 @@ Every org_unit contains children and parent properties as lists of uuids
 Root org_unit and current org_unit are stored as different values
 
 ## Data flow
-
 Data flows between REST API, state graph, and tree view
 
 1. User actions update URL query
@@ -64,4 +63,9 @@ Data flows between REST API, state graph, and tree view
 3. State checks if data is available or fetches it via REST API
 4. Components ask state for data based on URL query
 
+### An overview of API requests for getting org unit info
+While getting org unit information from the REST API, it is nescessary to compile the output of several requests in order to get complete data.
+GET `/service/ou/[uuid]/` returns `parent` (OU object)
+GET `/service/ou/ancestor-tree?uuid=[uuid]` returns a list of OUs with `child_count` (number) OR `children` (array of OU objects)
+GET `/service/ou/[uuid]/children` returns a list of OUs with `child_count`
 

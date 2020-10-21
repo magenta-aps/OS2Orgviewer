@@ -31,20 +31,25 @@ function stopSpin() {
     }
 }
 
-function ajax(request) {
-    startSpin()
+function ajax(request, is_silent) {
+    if (!is_silent) {
+        startSpin() 
+    }
     return fetch(GLOBAL_API_URL + request, ajax_init)
     .then((response) => {
         return response.json()
     })
     .then((res) => {
-        stopSpin()
+        if (!is_silent) {
+            stopSpin()
+        }
         return res
     })
-    .catch(err => {
-        stopSpin()
+    .catch(() => {
+        if (!is_silent) {
+            stopSpin()
+        }
         router.push('/error')
-        //return err
     })
 }
 

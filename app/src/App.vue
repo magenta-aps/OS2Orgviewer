@@ -139,7 +139,8 @@ input[type="submit"].inverse:focus {
     background-color: darken($color-1, 10%);
 }
 
-dt {
+dt,
+.label {
     color: $shade-darker;
     font-size: smaller;
 }
