@@ -1,0 +1,29 @@
+# SPDX-FileCopyrightText: 2019-2020 Magenta ApS
+# SPDX-License-Identifier: MPL-2.0
+
+version: '3.4'
+services:
+  orgviewer:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    environment:
+      GLOBAL_API_URL: http://localhost:8083
+      # CUSTOMER: frederikshavn-med
+
+      # Required for SAML proxy-pass
+      # GLOBAL_API_URL should point to ourselves
+      SAML_TOKEN: "291036bf-df89-48ae-b6e4-119d32a2729a"
+      PROXY_PASS_TO: mo:5000
+
+      # To disable templating nginx templates (SAML)
+      # NGINX_ENVSUBST_TEMPLATE_DIR: /tmp/
+    ports:
+      - "8083:80"
+    networks:
+      - os2mo_default
+
+networks:
+  os2mo_default:
+    external:
+      name: "os2mo_default"

@@ -32,5 +32,7 @@ RUN chmod 775 /docker-entrypoint.d/25-symlink-html.sh
 COPY ./docker/30-sed-on-index-html.sh /docker-entrypoint.d/30-sed-on-index-html.sh
 RUN chmod 775 /docker-entrypoint.d/30-sed-on-index-html.sh
 
+COPY ./docker/default.conf.template /etc/nginx/templates/default.conf.template
+
 # Copy in os2orgviewer
 COPY --from=builder /code/dist /code/dist
