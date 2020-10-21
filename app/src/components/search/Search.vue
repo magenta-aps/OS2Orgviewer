@@ -10,12 +10,10 @@
             <h3 class="oc-search-results-header" tabindex="-1">{{ results.length }} søgeresultater</h3>
             <ul class="oc-search-list">
                 <li v-for="res in results" :key="res.uuid">
-                    <router-link 
-                        v-if="res.givenname"
-                        :to="{ name: 'orgchart', query: { target: 'person', root: root_org_unit_uuid, org: res.uuid, orgopen: 1, showchildren: 1, person: res.uuid } }">
+                    <a v-if="res.givenname" href="#" @click.prevent="navToPerson(res.uuid)">
                         <span class="label">Person</span><br>
                         {{ res.name }}
-                    </router-link>
+                    </a>
                     <router-link 
                         v-else
                         :to="{ name: 'orgchart', query: { target: 'orgunit', root: root_org_unit_uuid, org: res.uuid, orgopen: 1, showchildren: 1 } }">
@@ -82,6 +80,22 @@ export default {
                 })    
             })
             
+        },
+        navToPerson: function(person_uuid) {
+            this.$store.dispatch('fetchPersonAssociations', person_uuid)
+            .then(associations => {
+                this.$router.push({
+                    name: 'orgchart',
+                    query: {
+                        target: 'person',
+                        root: this.root_org_unit_uuid,
+                        org: associations[0].org_unit.uuid,
+                        person: person_uuid,
+                        orgopen: 1,
+                        showchildren: 1
+                    }
+                })
+            })
         }
     },
     mounted: function() {
