@@ -16,6 +16,6 @@ server {
     location /service/ {
         proxy_set_header Session "${SAML_TOKEN}";
 
-        proxy_pass http://${PROXY_PASS_TO};
+        proxy_pass ${PROXY_PASS_TO};
     }
 }
