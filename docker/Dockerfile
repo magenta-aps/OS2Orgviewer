@@ -23,7 +23,7 @@ FROM python:3 AS templater
 
 WORKDIR /code/
 
-RUN pip install j2cli
+RUN pip install j2cli==0.3.10
 
 COPY ./docker/default.conf.template.j2 /code/default.conf.template.j2
 COPY ./docker/whitelist.json.j2 /code/whitelist.json.j2
