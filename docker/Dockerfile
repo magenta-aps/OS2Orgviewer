@@ -19,6 +19,18 @@ COPY app ./
 RUN npm run build
 
 
+FROM python:3 AS templater
+
+WORKDIR /code/
+
+RUN pip install j2cli
+
+COPY ./docker/default.conf.template.j2 /code/default.conf.template.j2
+COPY ./docker/whitelist.json.j2 /code/whitelist.json.j2
+RUN j2 whitelist.json.j2 -o whitelist.json
+RUN j2 -f json default.conf.template.j2 whitelist.json -o default.conf.template
+
+
 FROM nginx:1-alpine AS dist
 LABEL org.opencontainers.image.title="OS2OrgViewer" \
       org.opencontainers.image.vendor="Magenta ApS" \
@@ -32,7 +44,8 @@ RUN chmod 775 /docker-entrypoint.d/25-symlink-html.sh
 COPY ./docker/30-sed-on-index-html.sh /docker-entrypoint.d/30-sed-on-index-html.sh
 RUN chmod 775 /docker-entrypoint.d/30-sed-on-index-html.sh
 
-COPY ./docker/default.conf.template /etc/nginx/templates/default.conf.template
+# Copy in nginx configuration
+COPY --from=templater ./code/default.conf.template /etc/nginx/templates/default.conf.template
 
 # Copy in os2orgviewer
-COPY --from=builder /code/dist /code/dist
+COPY --from=builder ./code/dist /code/dist

@@ -1,0 +1,18 @@
+{%- set uuid = "([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12})" -%}
+{
+    "url_whitelist": [
+        "\/service\/o\/",
+        "\/service\/o\/{{ uuid }}\/e\/",
+        "\/service\/o\/{{ uuid }}\/ou\/",
+        "\/service\/ou\/{{ uuid }}\/",
+        "\/service\/ou\/{{ uuid }}\/children",
+        "\/service\/ou\/{{ uuid }}\/details\/address",
+        "\/service\/ou\/{{ uuid }}\/details\/association",
+        "\/service\/ou\/ancestor-tree",
+        "\/service\/e\/{{ uuid }}\/",
+        "\/service\/e\/{{ uuid }}\/details\/association",
+        "\/service\/e\/{{ uuid }}\/details\/address",
+        "\/service\/e\/{{ uuid }}\/details\/engagement",
+        "\/service\/ou\/{{ uuid }}\/details\/manager"
+    ]
+}

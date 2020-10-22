@@ -15,9 +15,6 @@ services:
       # GLOBAL_API_URL should point to ourselves
       SAML_TOKEN: "291036bf-df89-48ae-b6e4-119d32a2729a"
       PROXY_PASS_TO: http://mo:5000
-
-      # To disable templating nginx templates (SAML)
-      # NGINX_ENVSUBST_TEMPLATE_DIR: /tmp/
     ports:
       - "8083:80"
     networks:

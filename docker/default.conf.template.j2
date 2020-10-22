@@ -13,7 +13,7 @@ server {
         root   /usr/share/nginx/html;
     }
 
-    location /service/ {
+    location @service {
         proxy_set_header Session "${SAML_TOKEN}";
 
         proxy_pass ${PROXY_PASS_TO};
@@ -23,4 +23,10 @@ server {
             deny all;
         }
     }
+
+{% for whitelist_url in url_whitelist %}
+    location "{{ whitelist_url }}" {
+        try_files /dev/null @service;
+    }
+{% endfor %}
 }
