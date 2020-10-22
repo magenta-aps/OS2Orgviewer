@@ -59,6 +59,7 @@ export default {
     display: flex;
     align-items: flex-start;
     flex-flow: column nowrap;
+    overflow: auto;
 }
 
 .oc-chart-root-nav {
@@ -68,7 +69,7 @@ export default {
 
 .oc-branch.oc-chart-root-branch {
     width: 100%;
-    padding-bottom: 2rem;
+    padding: 0 0 2rem 1rem;
 }
 
 .oc-chart-root-link {
@@ -94,7 +95,7 @@ export default {
 @media screen and (min-width: 40rem) {
 
     .oc-chart-root-branch {
-        padding: 0 0 2rem !important;
+        padding: 0 1rem 2rem !important;
         overflow: auto;
         height: 100%;
         width: 100%;
@@ -104,6 +105,7 @@ export default {
         display: flex;
         flex-flow: column nowrap;
         align-items: center;
+        margin-bottom: 1rem;
     }
 
     .oc-chart-root-leaf::before {

@@ -108,6 +108,7 @@ export default {
 .oc-person-body {
     padding: 0 1rem 1rem;
     flex-grow: 1;
+    overflow: auto;
 }
 
 .oc-person .svg-path {

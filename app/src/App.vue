@@ -174,7 +174,7 @@ hr {
 
 #oc-global-header {
     box-shadow: $shadow-3;
-    flex: 0 0 auto;
+    flex: 0 0 3rem;
 }
 
 a.oc-header-preaction {
@@ -215,7 +215,8 @@ a.oc-header-postaction:focus {
 }
 
 #oc-main {
-    flex: 1 1 auto;
+    height: calc(100% - 3rem);
+    flex: 1 0 auto;
 }
 
 .oc-fade-enter-active, 

@@ -6,7 +6,7 @@
             <input type="search" v-model="query" @input="considerSearching" id="search-input" placeholder="Indtast afdeling eller person">
             <input type="submit" value="Søg" class="inverse oc-search-submit">
         </form>
-        <div v-if="results && results.length > 0">
+        <div v-if="results && results.length > 0" class="oc-search-results">
             <h3 class="oc-search-results-header" tabindex="-1">{{ results.length }} søgeresultater</h3>
             <ul class="oc-search-list">
                 <li v-for="res in results" :key="res.uuid">
@@ -108,10 +108,13 @@ export default {
 
 .oc-search {
     margin: 0;
-    padding: 2rem 1rem;
+    padding: 2rem 0 0;
     background-color: $shade-lightest;
     height: 100%;
     width: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-flow: column nowrap;
 }
 
 .oc-search-title {
@@ -126,7 +129,7 @@ export default {
     flex-flow: row nowrap;
     justify-content: center;
     align-self: center;
-    padding: 0 0 1rem;
+    padding: 0 1rem 1rem;
 }
 
 #search-input {
@@ -143,6 +146,13 @@ export default {
     padding: .75rem 1rem !important;
 }
 
+.oc-search-results {
+    flex: 0 1 auto;
+    height: 100%;
+    overflow: auto;
+    padding: 0 1rem;
+}
+
 .oc-search-results-header {
     text-align: center;
     margin: 1rem auto 0;
@@ -152,16 +162,10 @@ export default {
     list-style: none;
     margin: 2rem auto;
     padding: 0;
-    overflow: auto;
-    height: 100%;
 }
 
 .oc-search-list > li {
     margin: 0 0 .5rem;
-}
-
-.oc-search .label {
-    //display: block;
 }
 
 @media screen and (min-width: 40rem) {
