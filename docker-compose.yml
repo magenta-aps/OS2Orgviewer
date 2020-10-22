@@ -9,6 +9,9 @@ services:
       dockerfile: docker/Dockerfile
     environment:
       GLOBAL_API_URL: http://localhost:8083
+      # GLOBAL_API_ROOT_UUID: "f06ee470-9f17-566f-acbe-e938112d46d9"
+      # Loenorganisation
+      GLOBAL_API_ROOT_UUID: "fb2d158f-114e-5f67-8365-2c520cf10b58"
       # CUSTOMER: frederikshavn-med
 
       # Required for SAML proxy-pass
