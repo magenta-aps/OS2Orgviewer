@@ -17,5 +17,10 @@ server {
         proxy_set_header Session "${SAML_TOKEN}";
 
         proxy_pass ${PROXY_PASS_TO};
+
+        # Only allow GET requests to come through
+        limit_except GET {
+            deny all;
+        }
     }
 }
