@@ -30,23 +30,8 @@ export default {
             return this.$store.getters.getOrgUnit(this.$route.query.root)
         }
     },
-    watch: {
-        $route: function(to) {
-            this.update(to.query.root)
-        }
-    },
-    methods: {
-        update: function(root_uuid) {
-            if (root_uuid) {
-                this.$store.dispatch('fetchOrgUnit', root_uuid)
-            }
-        }
-    },
     created: function() {
-        this.update(this.$route.query.root)
-        if (this.$route.query.org !== this.$route.query.root) {
-            this.$store.dispatch('fetchTree', this.$route.query.org)
-        }
+        this.$store.dispatch('initGraph', this.$route.query.org)
     }
 }
 </script>

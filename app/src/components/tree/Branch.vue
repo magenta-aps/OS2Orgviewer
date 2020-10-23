@@ -29,7 +29,7 @@ export default {
     methods: {
         update: function(uuid) {
             if (uuid) {
-                this.$store.dispatch('fetchOrgUnitChildren', uuid)
+                this.$store.dispatch('checkOrgChildren', uuid)
             }
         }
     },

@@ -45,9 +45,11 @@ const mutations = {
     updateNode: (state, node_data) => {
         if (!state.graph[node_data.uuid]) {
             Vue.set(state.graph, node_data.uuid, node_data)
-        } else {
-            let new_node = Object.assign({}, state.graph[node_data.uuid], node_data)
+        } else if (state.graph[node_data.uuid] !== node_data) {
+            let new_node = Object.assign({}, node_data, state.graph[node_data.uuid])
             Vue.set(state.graph, node_data.uuid, new_node)
+        } else {
+            return
         }
     },
     setRootOrgUuid: (state, uuid) => {
@@ -112,6 +114,12 @@ const actions = {
             let new_node = state.graph[uuid]
             new_node.address_data = addresses
             commit('updateNode', new_node)
+        })
+    },
+    initGraph: ({dispatch}, uuid) => {
+        dispatch('fetchTree', uuid)
+        .then(() => {
+            dispatch('fetchOrgUnitChildren', uuid)
         })
     }
 }
