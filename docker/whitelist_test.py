@@ -5,11 +5,13 @@ from parameterized import parameterized
 
 
 test_urls = [
+    ("service/configuration/", False),
     ("service/o/", True),
     ("service/o/3b866d97-0b1f-48e0-8078-686d96f430b3/", False),
     ("service/o/3b866d97-0b1f-48e0-8078-686d96f430b3/f/", False),
     ("service/o/3b866d97-0b1f-48e0-8078-686d96f430b3/e/", True),
     ("service/o/3b866d97-0b1f-48e0-8078-686d96f430b3/ou/", True),
+    ("service/ou/create", False),
     ("service/ou/f06ee470-9f17-566f-acbe-e938112d46d9/", True),
     ("service/ou/f06ee470-9f17-566f-acbe-e938112d46d9/children", True),
     ("service/ou/f06ee470-9f17-566f-acbe-e938112d46d9/details/address", True),
