@@ -25,7 +25,7 @@ server {
     }
 
 {% for whitelist_url in url_whitelist %}
-    location "{{ whitelist_url }}" {
+    location ~ "{{ whitelist_url }}" {
         try_files /dev/null @service;
     }
 {% endfor %}
