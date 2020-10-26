@@ -1,16 +1,33 @@
 import Vue from 'vue'
 import ajax from '../http/http.js'
 
-const mapTreeToGraph = function(branch, parent_uuid) {
-    for (let n in branch) {
-        branch[n].parent_uuid = parent_uuid
-        if (branch[n].children) {
-            branch[n].showchildren = true
-            mapTreeToGraph(branch[n].children, branch[n].uuid)
-        } else {
-            branch[n].showchildren = false
+const utils = {
+    mapTreeToGraph: function(branch, parent_uuid) {
+        for (let n in branch) {
+            branch[n].parent_uuid = parent_uuid
+            if (branch[n].children) {
+                branch[n].showchildren = true
+                branch[n].child_count = branch[n].children.length
+                branch[n].child_list = []
+                for (let c in branch[n].children) {
+                    branch[n].child_list.push(branch[n].children[c].uuid)
+                }
+                utils.mapTreeToGraph(branch[n].children, branch[n].uuid)
+            } else {
+                branch[n].showchildren = false
+            }
+            mutations.updateNode(state, branch[n])
         }
-        mutations.updateNode(state, branch[n])
+    },
+    mapChildrenToParent: function(parent_uuid, children) {
+        let root_node = state.graph[parent_uuid]
+        root_node.child_list = []
+        for (let c in children) {
+            children[c].parent_uuid = parent_uuid
+            mutations.updateNode(state, children[c])
+            root_node.child_list.push(children[c].uuid)
+        }
+        mutations.updateNode(state, root_node)
     }
 }
 
@@ -43,13 +60,12 @@ const getters = {
 }
 const mutations = {
     updateNode: (state, node_data) => {
+        
         if (!state.graph[node_data.uuid]) {
             Vue.set(state.graph, node_data.uuid, node_data)
-        } else if (state.graph[node_data.uuid] !== node_data) {
+        } else {
             let new_node = Object.assign({}, node_data, state.graph[node_data.uuid])
             Vue.set(state.graph, node_data.uuid, new_node)
-        } else {
-            return
         }
     },
     setRootOrgUuid: (state, uuid) => {
@@ -60,67 +76,63 @@ const mutations = {
     }
 }
 const actions = {
-    checkOrgChildren: ({state, dispatch}, org_uuid) => {
-        let org = state.graph[org_uuid]
-        if (org && !org.child_list) {
-            dispatch('fetchOrgUnitChildren', org_uuid)
-        }
-    },
-    fetchGlobalOrgs: ({commit}) => {
+    fetchGlobalOrgs: ({}) => {
         return ajax(`/service/o/`)
         .then(orgs => {
-            commit('setOrganisations', orgs)
             return orgs
         })
     },
     fetchTree: ({}, org_unit_uuid) => {
         return ajax(`/service/ou/ancestor-tree?uuid=${ org_unit_uuid }`)
         .then(tree => {
-            mapTreeToGraph(tree, false)
             return tree
         })
     },
-    fetchOrgUnit: ({commit, dispatch, state}, uuid) => {
+    fetchOrgUnit: ({}, uuid) => {
         return ajax(`/service/ou/${ uuid }/`)
         .then(org_unit => {
-            commit('updateNode', org_unit)
-            dispatch('fetchOrgUnitChildren', uuid)
-            return state.graph[uuid]
+            return org_unit
         })
     },
-    fetchOrgUnitChildren: ({commit, state}, uuid) => {
-        ajax(`/service/ou/${ uuid }/children`)
-        .then((ous) => {
-            let parent_node = state.graph[uuid]
-            if (!parent_node.child_list) {
-                parent_node.child_list = []
-            }
-            for (let ou in ous) {
-                commit('updateNode', ous[ou])
-                let existing = parent_node.child_list.findIndex(function(c) {
-                    return c === ous[ou].uuid
-                })
-                if (existing < 0) {
-                    parent_node.child_list.push(ous[ou].uuid)
-                }
-            }
-            parent_node.child_count = parent_node.child_list.length
-            commit('updateNode', parent_node)
+    fetchOrgUnitChildren: ({}, uuid) => {
+        return ajax(`/service/ou/${ uuid }/children`)
+        .then(ous => {
+            return ous
         })
     },
-    fetchOrgUnitAddresses: ({commit, state}, uuid) => {
-        ajax(`/service/ou/${ uuid }/details/address`)
-        .then((addresses) => {
-            let new_node = state.graph[uuid]
-            new_node.address_data = addresses
-            commit('updateNode', new_node)
+    fetchOrgUnitAddresses: ({}, uuid) => {
+        return ajax(`/service/ou/${ uuid }/details/address`)
+        .then(addresses => {
+            return addresses
         })
     },
-    initGraph: ({dispatch}, uuid) => {
+    getTree: ({dispatch}, uuid) => {
         dispatch('fetchTree', uuid)
-        .then(() => {
+        .then(tree => {
+            utils.mapTreeToGraph(tree, false)
             dispatch('fetchOrgUnitChildren', uuid)
+            .then(children => {
+                utils.mapChildrenToParent(uuid, children)
+            })
         })
+    },
+    getChildren: ({state, dispatch}, uuid) => {
+        if (!state.graph[uuid].child_list) {
+            dispatch('fetchOrgUnitChildren', uuid)
+            .then(children => {
+                utils.mapChildrenToParent(uuid, children)
+            })
+        }
+    },
+    getAddresses: ({state, dispatch, commit}, uuid) => {
+        if (!state.graph[uuid] || !state.graph[uuid].address_data) {
+            dispatch('fetchOrgUnitAddresses', uuid)
+            .then(addresses => {
+                let new_node = state.graph[uuid]
+                new_node.address_data = addresses
+                commit('updateNode', new_node)
+            })
+        }
     }
 }
 

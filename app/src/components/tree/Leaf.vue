@@ -16,6 +16,7 @@
                 class="oc-node-expand-btn inverse"
                 :class="branch_open ? 'close': 'open'"
                 :aria-expanded="branch_open ? 'true': 'false'"
+                :title="branch_open ? `Skjul ${ node_data.child_count } underenheder` : `Vis ${ node_data.child_count } underenheder`"
                 type="button" 
                 @click="toggleBranch">
                     <svg class="svg-toggle" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path class="svg-path" d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/></svg>
@@ -72,15 +73,13 @@ export default {
     watch: {
         showChildren: function(new_bool) {
             this.update(new_bool)
-        },
-        node_data: function(new_org_unit) {
-            this.update(this.showChildren)
         }
     },
     methods: {
         update: function(show_children_bool) {
+            console.log('updaing', show_children_bool)
             if (show_children_bool || this.query_showchildren_applies) {
-                this.$store.dispatch('checkOrgChildren', this.uuid)
+                this.$store.dispatch('getChildren', this.uuid)
                 this.branch_open = true
             }
         },
@@ -96,10 +95,15 @@ export default {
                 }
             }
             this.$router.push(route)
+            if (this.branch_open) {
+                this.$store.dispatch('getChildren', this.uuid)
+            }
         }
     },
-    created: function() {
-        this.update(this.showChildren)
+    created: function() { 
+        if (this.showChildren || this.query_showchildren_applies) { 
+            this.branch_open = true
+        }
     }
 }
 </script>

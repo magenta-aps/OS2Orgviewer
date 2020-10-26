@@ -44,9 +44,6 @@ export default {
 
 @media print {
     
-    .oc-org-link {
-                
-    }
 
 }
     

@@ -29,12 +29,9 @@ export default {
     methods: {
         update: function(uuid) {
             if (uuid) {
-                this.$store.dispatch('checkOrgChildren', uuid)
+                this.$store.dispatch('getChildren', uuid)
             }
         }
-    },
-    created: function() {
-        this.update(this.uuid)
     }
 }
 </script>

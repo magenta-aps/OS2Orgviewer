@@ -1,9 +1,9 @@
 <template>
     <div class="oc-chart" v-if="root_org_uuid" :class="{'oc-chart-orgopen': $route.query.orgopen == 1}">
-        <nav v-if="root_org_unit && root_org_unit.parent" class="oc-chart-root-nav">
+        <nav v-if="root_org_unit && root_org_unit.parent_uuid" class="oc-chart-root-nav">
             <router-link 
                 class="oc-chart-root-link btn inverse"
-                :to="{ name: 'orgchart', query: { root: root_org_unit.parent.uuid, org: root_org_uuid, showchildren: 1, orgopen: 0 } }">
+                :to="{ name: 'orgchart', query: { root: root_org_unit.parent_uuid, org: root_org_uuid, showchildren: 1, orgopen: 0 } }">
                 <svg class="svg-toggle" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path class="svg-path" d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/></svg>
                 Niveau op
                 <svg class="svg-toggle" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path class="svg-path" d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/></svg>
@@ -31,7 +31,7 @@ export default {
         }
     },
     created: function() {
-        this.$store.dispatch('initGraph', this.$route.query.org)
+        this.$store.dispatch('getTree', this.$route.query.org)
     }
 }
 </script>

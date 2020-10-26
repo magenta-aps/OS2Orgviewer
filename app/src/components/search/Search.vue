@@ -40,7 +40,11 @@ export default {
     },
     computed: {
         organisation_uuid: function() {
-            return this.$store.getters.getOrganisations[0].uuid
+            if (this.$store.getters.getOrganisations) {
+                return this.$store.getters.getOrganisations[0].uuid
+            } else {
+                return false
+            }
         },
         root_org_unit_uuid: function() {
             return this.$store.getters.getRootOrgUnitUuid
@@ -99,6 +103,12 @@ export default {
         }
     },
     mounted: function() {
+        if (!this.organisation_uuid) {
+            this.$store.dispatch('fetchGlobalOrgs')
+            .then(orgs => {
+                this.$store.commit('setOrganisations', orgs)
+            })
+        }
         document.getElementById('search-input').focus()
     }
 }

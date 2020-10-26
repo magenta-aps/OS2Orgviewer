@@ -40,10 +40,10 @@ export default {
     computed: {
         organisations: function() {
             return this.$store.getters.getOrganisations
+        },
+        graph: function() {
+            return this.$store.getters.getGraph
         }
-    },
-    created: function() {
-        this.$store.dispatch('fetchGlobalOrgs')        
     }
 }
 </script>

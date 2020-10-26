@@ -8,10 +8,7 @@ const ajax_init = {
     method: 'GET',
     headers: {
         'X-Requested-With': 'XMLHttpRequest',
-        'X-Client-Name': 'OS2mo-UI',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
-        'Access-Control-Allow-Methods': 'GET, POST, DELETE, PUT'
+        'X-Client-Name': 'OS2mo-UI'
     },
     credentials: 'same-origin',
     mode: 'cors'
@@ -31,8 +28,11 @@ function stopSpin() {
     }
 }
 
-function ajax(request, is_silent) {
-    if (!is_silent) {
+function ajax(request, options) {
+    if (!options) {
+        options = {}
+    }
+    if (!options.silent) {
         startSpin() 
     }
     return fetch(GLOBAL_API_URL + request, ajax_init)
@@ -40,13 +40,13 @@ function ajax(request, is_silent) {
         return response.json()
     })
     .then((res) => {
-        if (!is_silent) {
+        if (!options.silent) {
             stopSpin()
         }
         return res
     })
     .catch(() => {
-        if (!is_silent) {
+        if (!options.silent) {
             stopSpin()
         }
         router.push('/error')

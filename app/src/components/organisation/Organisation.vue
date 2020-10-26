@@ -21,7 +21,7 @@
                 <!-- Managers seem to be redundant as they also appear in personlist -->
                 <!-- <managers :uuid="org_data.uuid" /> -->
                 <person-list :uuid="org_data.uuid" />
-                <template v-if="org_data.address_data">
+                <template v-if="org_data && org_data.address_data">
                     <hr>
                     <address-list :list="org_data.address_data" />
                 </template>
@@ -62,7 +62,9 @@ export default {
     },
     watch: {
         $route: function(to) {
-            this.update(to.query.org)
+            if (to.query.orgopen == 1) {
+                this.update(to.query.org)
+            }
         },
         org_data: function(new_data) {
             Vue.nextTick(() => {
@@ -75,10 +77,7 @@ export default {
     methods: {
         update: function(org_uuid) {
             if (org_uuid) {
-                this.$store.dispatch('fetchOrgUnit', org_uuid)
-                .then(() => {
-                    this.$store.dispatch('fetchOrgUnitAddresses', org_uuid)
-                })
+                this.$store.dispatch('getAddresses', org_uuid)
             }
         }
     },
