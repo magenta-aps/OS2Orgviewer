@@ -111,6 +111,7 @@ export default {
         justify-content: flex-start;
         width: auto;
         margin: 1.25rem auto 0;
+        padding: 0;
     }
 
     .oc-branch.oc-branch-level-1 > .oc-node {
