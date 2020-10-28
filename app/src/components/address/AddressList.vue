@@ -9,6 +9,16 @@
                     :href="`mailto:${ address.name }`">
                     {{ address.name }}
                 </a>
+                <a 
+                    v-else-if="address.address_type.name === 'Webadresse' || address.address_type.name === 'Dokumentadresse'"
+                    :href="address.name">
+                    {{ address.name }}
+                </a>
+                <a 
+                    v-else-if="address.address_type.name === 'Telefon'"
+                    :href="`tel:${ address.name}`">
+                    {{ address.name }}
+                </a>                
                 <span v-else>
                     {{ address.name }}
                 </span>
