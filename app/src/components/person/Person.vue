@@ -20,6 +20,16 @@
                     
                     <dt>Tilknytning</dt>
                     <dd>{{ person_data.association_data[0].association_type.name }}</dd>
+
+                    <template v-if="person_data.association_data[0].substitute">
+                        <dt>Stedfortræder</dt>
+                        <dd>
+                            <router-link
+                                :to="{ name: 'orgchart', query: { target: 'person', root: root_org_uuid, org: org_unit_uuid, person: person_data.association_data[0].substitute.uuid ,orgopen: 1, showchildren: 1 } }">
+                                {{ person_data.association_data[0].substitute.name }}
+                            </router-link>
+                        </dd>
+                    </template>
                 </dl>
                 <address-list v-if="person_data.address_data" :list="person_data.address_data" />    
             </div>
