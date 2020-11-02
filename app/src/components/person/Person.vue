@@ -19,14 +19,14 @@
                     <dd>{{ person_data.name }}</dd>
                     
                     <dt>Tilknytning</dt>
-                    <dd>{{ person_data.association_data[0].association_type.name }}</dd>
+                    <dd>{{ association_context.association_type.name }}</dd>
 
-                    <template v-if="person_data.association_data[0].substitute">
+                    <template v-if="association_context.substitute">
                         <dt>Stedfortræder</dt>
                         <dd>
                             <router-link
-                                :to="{ name: 'orgchart', query: { target: 'person', root: root_org_uuid, org: org_unit_uuid, person: person_data.association_data[0].substitute.uuid ,orgopen: 1, showchildren: 1 } }">
-                                {{ person_data.association_data[0].substitute.name }}
+                                :to="{ name: 'orgchart', query: { target: 'person', root: root_org_uuid, org: org_unit_uuid, person: association_context.substitute.uuid ,orgopen: 1, showchildren: 1 } }">
+                                {{ association_context.substitute.name }}
                             </router-link>
                         </dd>
                     </template>
@@ -53,6 +53,11 @@ export default {
         },
         org_unit_uuid: function() {
             return this.$route.query.org
+        },
+        association_context: function() {
+            return this.person_data.association_data.find(asso => {
+                return asso.org_unit.uuid === this.org_unit_uuid
+            })
         },
         root_org_uuid: function() {
             return this.$route.query.root
