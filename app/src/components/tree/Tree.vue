@@ -155,6 +155,13 @@ export default {
 
 }
 
+@media screen and (min-width: 80rem) {
+    
+    .oc-org {
+        width: calc(100% - 35rem);
+    }
+}
+
 @media print {
 
     .oc-chart {

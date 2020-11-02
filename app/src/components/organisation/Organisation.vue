@@ -174,6 +174,13 @@ export default {
     }
 }
 
+@media screen and (min-width: 80rem) {
+    
+    .oc-org {
+        max-width: 35rem;
+    }
+}
+
 @media print {
     
     .oc-org {
