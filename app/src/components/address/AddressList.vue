@@ -11,9 +11,16 @@
                         {{ address.name }}
                     </a>
                     <a 
-                        v-else-if="address.address_type.name === 'Webadresse' || address.address_type.name === 'Dokumentadresse'"
-                        :href="address.name">
+                        v-else-if="address.address_type.name === 'Webadresse'"
+                        :href="address.name"
+                        target="_blank">
                         {{ address.name }}
+                    </a>
+                    <a 
+                        v-else-if="address.address_type.name === 'Dokumentadresse'"
+                        :href="address.name"
+                        target="_blank">
+                        Dokumenter
                     </a>
                     <a 
                         v-else-if="address.address_type.name === 'Telefon'"
