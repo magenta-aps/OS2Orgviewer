@@ -10,6 +10,17 @@
                     {{ data.person.name }}
                 </router-link>
             </dd>
+            <template v-if="data.substitute">
+                <dt>{{ data.association_type.name }}s stedfortræder</dt>
+                <dd>
+                    <router-link
+                        class="oc-person-open"
+                        :to="{ name: 'orgchart', query: { target: 'person', person: data.substitute.uuid, orgopen: 1, showchildren: 1 } }">
+                        <span class="sr-only">Vis detaljer for </span>
+                        {{ data.substitute.name }}
+                    </router-link>
+                </dd>
+            </template>
         </dl>
     </div>
 </template>

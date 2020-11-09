@@ -25,7 +25,7 @@
                         <dt>Stedfortræder</dt>
                         <dd>
                             <router-link
-                                :to="{ name: 'orgchart', query: { target: 'person', root: root_org_uuid, org: org_unit_uuid, person: association_context.substitute.uuid ,orgopen: 1, showchildren: 1 } }">
+                                :to="{ name: 'orgchart', query: { target: 'person', person: association_context.substitute.uuid ,orgopen: 1, showchildren: 1 } }">
                                 {{ association_context.substitute.name }}
                             </router-link>
                         </dd>
@@ -51,16 +51,29 @@ export default {
         person_data: function() {
             return this.$store.getters.getPerson(this.$route.query.person)
         },
-        org_unit_uuid: function() {
-            return this.$route.query.org
-        },
         association_context: function() {
             return this.person_data.association_data.find(asso => {
                 return asso.org_unit.uuid === this.org_unit_uuid
             })
         },
+        org_unit_uuid: function() {
+            if (this.$route.query.org) {
+                // If org unit data is in URL, use that
+                return this.$route.query.org
+            } else {
+                // else find org unit via person's association
+                return this.person_data.association_data[0].org_unit.uuid
+            }
+        },
         root_org_uuid: function() {
-            return this.$route.query.root
+            if (this.$route.query.org) {
+                // If root data is in URL, use that
+                return this.$route.query.root
+            } else {
+                // else use global default
+                return GLOBAL_API_ROOT_UUID
+            }
+            
         }
     },
     watch: {
