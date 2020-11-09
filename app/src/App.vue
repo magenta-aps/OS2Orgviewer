@@ -230,11 +230,25 @@ a.oc-header-postaction:focus {
 }
 
 @media print {
+
+    html,
+    body {
+        width: auto;
+        height: auto;
+    }
     
     body,
-    #app {
+    #app,
+    dt {
         background-color: #fff;
         color: #000;
+    }
+
+    #app,
+    #oc-main {
+        display: block;
+        width: auto;
+        height: auto;
     }
 
     a,

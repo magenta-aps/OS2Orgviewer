@@ -166,6 +166,9 @@ export default {
 
     .oc-chart {
         display: block !important;
+        overflow: visible;
+        width: auto;
+        height: auto;
     }
 
     .oc-chart-root-nav {
