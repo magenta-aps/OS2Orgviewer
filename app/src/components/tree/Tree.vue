@@ -169,10 +169,19 @@ export default {
         overflow: visible;
         width: auto;
         height: auto;
+        margin-top: 24pt;
     }
 
     .oc-chart-root-nav {
         display: none !important;
+    }
+
+    .oc-chart-root-branch {
+        padding: 0;
+    }
+
+    .oc-chart-root-branch > .oc-node > .oc-node-body::before {
+        content: none;
     }
 }
 </style>

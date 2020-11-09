@@ -223,40 +223,36 @@ a.oc-node-focus-btn.btn:focus {
 @media print {
 
     .oc-node {
-        padding: .5rem 0 0 0;
+        padding: 0;
+        border-left: solid 2pt black;
+        margin: 9pt 0;
     }
 
     .oc-node::before {
-        content: '';
-        display: block;
-        border-right: solid 1pt #000;
-        height: 100%;
-        width: 1pt;
-        position: absolute;
-        left: -2rem;
-        top: 0;
+        content: none;
     }
 
     .oc-node-body {
         background-color: #fff;
         box-shadow: none;
-        border: solid 1pt #000;        
+        border: solid 1pt #000;      
+        border-width: 1pt 1pt 2pt 0;
     }
 
     .oc-node-body::before {
         content: '';
         display: block;
-        border-top: solid 1pt #000;
-        height: 1pt;
-        width: 2rem;
+        border-top: solid 2pt #000;
+        height: 0;
+        width: 24pt;
         position: absolute;
-        left: -2rem;
-        top: 1.5rem;
+        left: -24pt;
+        top: 23pt;
     }
 
     .oc-node-title a {
         font-size: smaller !important;
-        padding: .5rem 1rem !important;
+        padding: 6pt 12pt !important;
     }
 
     .oc-node-expand-btn,

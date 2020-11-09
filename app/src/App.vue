@@ -236,6 +236,10 @@ a.oc-header-postaction:focus {
         width: auto;
         height: auto;
     }
+
+    body {
+        font-size: 10pt;
+    }
     
     body,
     #app,

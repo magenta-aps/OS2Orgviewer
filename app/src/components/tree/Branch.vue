@@ -45,4 +45,10 @@ export default {
     display: block;
     position: relative;
 }
+
+@media print {
+    .oc-branch {
+        padding: 0 0 0 22pt;
+    }
+}
 </style>
