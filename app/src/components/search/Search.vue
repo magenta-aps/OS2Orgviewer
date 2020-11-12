@@ -72,7 +72,7 @@ export default {
             let search_res = []
             ajax(`/service/o/${ this.organisation_uuid }/e/?query=${ this.query }&associated=true`)
             .then(person_res => {
-                ajax(`/service/o/${ this.organisation_uuid }/ou/?query=${ this.query }`)
+                ajax(`/service/o/${ this.organisation_uuid }/ou/?query=${ this.query }&root=${ this.root_org_unit_uuid }`)
                 .then(org_res => {
                     search_res = person_res.items.concat(org_res.items)
                     this.results = search_res.sort(function(a,b) {
