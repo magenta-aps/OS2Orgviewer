@@ -30,6 +30,13 @@
                             </router-link>
                         </dd>
                     </template>
+
+                    <template v-if="association_context.dynamic_classes">
+                        <template v-for="dclass in association_context.dynamic_classes">
+                            <dt :key="dclass.top_level_facet.uuid">{{ dclass.top_level_facet.description }}</dt>
+                            <dd :key="dclass.uuid">{{ dclass.full_name }}</dd>
+                        </template>
+                    </template>
                 </dl>
                 <address-list v-if="person_data.address_data" :list="person_data.address_data" />    
             </div>
