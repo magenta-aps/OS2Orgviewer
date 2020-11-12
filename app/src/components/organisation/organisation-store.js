@@ -20,7 +20,7 @@ const utils = {
         }
     },
     mapChildrenToParent: function(parent_uuid, children) {
-        let root_node = state.graph[parent_uuid]
+        let root_node = state.orgs[parent_uuid]
         root_node.child_list = []
         for (let c in children) {
             children[c].parent_uuid = parent_uuid
@@ -32,22 +32,22 @@ const utils = {
 }
 
 const state = {
-    graph: {},
+    orgs: {},
     root_org_uuid: GLOBAL_API_ROOT_UUID, // Defined in index.html
     global_organisations: null
 }
 
 const getters = {
     getGraph: state => {
-        return state.graph
+        return state.orgs
     }, 
     getOrgUnit: (state) => (org_unit_uuid) => {
-        return state.graph[org_unit_uuid]
+        return state.orgs[org_unit_uuid]
     },
     getChildren: (state) => (org_unit_uuid) => {
         let nodes = []
-        for (let c in state.graph[org_unit_uuid].child_list) {
-            nodes.push(state.graph[state.graph[org_unit_uuid].child_list[c]])
+        for (let c in state.orgs[org_unit_uuid].child_list) {
+            nodes.push(state.orgs[state.orgs[org_unit_uuid].child_list[c]])
         }
         return nodes
     },
@@ -60,13 +60,17 @@ const getters = {
 }
 const mutations = {
     updateNode: (state, node_data) => {
-        
-        if (!state.graph[node_data.uuid]) {
-            Vue.set(state.graph, node_data.uuid, node_data)
+        if (!state.orgs[node_data.uuid]) {
+            Vue.set(state.orgs, node_data.uuid, node_data)
         } else {
-            let new_node = Object.assign({}, node_data, state.graph[node_data.uuid])
-            Vue.set(state.graph, node_data.uuid, new_node)
+            let new_node = Object.assign({}, node_data, state.orgs[node_data.uuid])
+            Vue.set(state.orgs, node_data.uuid, new_node)
         }
+    },
+    setOrgUnitPeople: (state, payload) => {
+        let new_org = Object.assign({}, state.orgs[payload.org_uuid])
+        new_org.person_data = payload.persons
+        Vue.set(state.orgs, payload.org_uuid, new_org)
     },
     setRootOrgUuid: (state, uuid) => {
         state.root_org_uuid = uuid
@@ -117,7 +121,7 @@ const actions = {
         })
     },
     getChildren: ({state, dispatch}, uuid) => {
-        if (!state.graph[uuid].child_list) {
+        if (!state.orgs[uuid].child_list) {
             dispatch('fetchOrgUnitChildren', uuid)
             .then(children => {
                 utils.mapChildrenToParent(uuid, children)
@@ -125,10 +129,10 @@ const actions = {
         }
     },
     getAddresses: ({state, dispatch, commit}, uuid) => {
-        if (!state.graph[uuid] || !state.graph[uuid].address_data) {
+        if (!state.orgs[uuid] || !state.orgs[uuid].address_data) {
             dispatch('fetchOrgUnitAddresses', uuid)
             .then(addresses => {
-                let new_node = state.graph[uuid]
+                let new_node = state.orgs[uuid]
                 new_node.address_data = addresses
                 commit('updateNode', new_node)
             })

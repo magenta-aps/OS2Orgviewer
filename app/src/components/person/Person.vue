@@ -9,7 +9,7 @@
                         <svg class="svg-back" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path class="svg-path" d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
                         <span class="oc-person-title">{{ person_data.name }}</span>
                         <svg class="svg-close" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path class="svg-path" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
-                        <span class="sr-only">Tilbage til {{ person_data.association_data[0].org_unit.name }}</span>
+                        <span class="sr-only">Tilbage til enhedsoverblik</span>
                     </router-link>
                 </h3>
             </oc-header>
@@ -18,18 +18,25 @@
                     <dt>Navn</dt>
                     <dd>{{ person_data.name }}</dd>
                     
-                    <dt>Tilknytning</dt>
-                    <dd>{{ association_context.association_type.name }}</dd>
-
-                    <template v-if="association_context.substitute">
-                        <dt>Stedfortræder</dt>
-                        <dd>
-                            <router-link
-                                :to="{ name: 'orgchart', query: { target: 'person', person: association_context.substitute.uuid ,orgopen: 1, showchildren: 1 } }">
-                                {{ association_context.substitute.name }}
-                            </router-link>
-                        </dd>
+                    <template v-if="association && relation_type === 'association'">
+                        <dt>Tilknytning</dt>
+                        <dd>{{ association.association_type.name }}</dd>
+                        <template v-if="association.substitute">
+                            <dt>Stedfortræder</dt>
+                            <dd>
+                                <router-link
+                                    :to="{ name: 'orgchart', query: { target: 'person', person: association.substitute.uuid ,orgopen: 1, showchildren: 1 } }">
+                                    {{ association.substitute.name }}
+                                </router-link>
+                            </dd>
+                        </template>
                     </template>
+
+                    <template v-if="engagement && relation_type === 'engagement'">
+                        <dt>{{ engagement.engagement_type.name }}</dt>
+                        <dd>{{ engagement.job_function.name }}</dd>
+                    </template>
+
                 </dl>
                 <address-list v-if="person_data.address_data" :list="person_data.address_data" />    
             </div>
@@ -47,22 +54,45 @@ export default {
         OcHeader,
         AddressList
     },
+    data: function() {
+        return {
+            relation_type: GLOBAL_ORG_PERSON_RELATION
+        }
+    },
     computed: {
         person_data: function() {
             return this.$store.getters.getPerson(this.$route.query.person)
         },
-        association_context: function() {
-            return this.person_data.association_data.find(asso => {
-                return asso.org_unit.uuid === this.org_unit_uuid
-            })
-        },
         org_unit_uuid: function() {
-            if (this.$route.query.org) {
-                // If org unit data is in URL, use that
-                return this.$route.query.org
+            if (this.person_data) {
+                if (this.$route.query.org) {
+                    // If org unit data is in URL, use that
+                    return this.$route.query.org
+                } else if (this.association) {
+                    // else find org unit via person's association
+                    return this.association.org_unit.uuid
+                } else {
+                    // if that fails, find org unit via person's engagement
+                    return this.engagement.org_unit.uuid
+                }
+            }
+        },
+        association: function() {
+            if (this.person_data.association_data) {
+                return this.person_data.association_data.find(e => {
+                    return e.org_unit.uuid === this.org_unit_uuid
+                })
             } else {
-                // else find org unit via person's association
-                return this.person_data.association_data[0].org_unit.uuid
+                return false
+            }
+        },
+        engagement: function() {
+            if (this.person_data.engagement_data) {
+                return this.person_data.engagement_data.find(e => {
+                    return e.org_unit.uuid === this.org_unit_uuid
+                })
+            } else {
+                return false
             }
         },
         root_org_uuid: function() {
@@ -77,8 +107,10 @@ export default {
         }
     },
     watch: {
-        $route: function(to) {
-            this.update(to.query.person)
+        $route: function(to, from) {
+            if (to.query.person !== from.query.person) {
+                this.update(to.query.person)
+            }
         },
         person_data: function(new_data) {
             Vue.nextTick(() => {

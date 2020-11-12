@@ -1,7 +1,7 @@
 <template>
-    <ul class="people-list" v-if="people">
-        <li v-for="person in people" :key="person.uuid">
-            <person-lite :data="person" />
+    <ul class="people-list" v-if="people_list">
+        <li v-for="person in people_list">
+            <person-lite :person="allpersons[person]" :org-uuid="uuid" />
         </li>
     </ul>
 </template>
@@ -19,17 +19,28 @@ export default {
         'uuid'
     ],
     computed: {
-        people: function() {
+        allpersons: function() {
             return this.$store.getters.getPersons
+        },
+        people_list: function() {
+            return this.$store.getters.getOrgUnit(this.uuid).person_data
         }
     },
     watch: {
         uuid: function(new_uuid) {
-            this.$store.dispatch('fetchAssociatedPeople', new_uuid)
+            this.update(new_uuid)
+        }
+    },
+    methods: {
+        update: function(uuid) {
+            this.$store.dispatch('fetchPersons', {
+                org_uuid: this.uuid,
+                relation: GLOBAL_ORG_PERSON_RELATION
+            })
         }
     },
     created: function() {
-        this.$store.dispatch('fetchAssociatedPeople', this.uuid)
+        this.update(this.uuid)
     }
 }
 </script>
