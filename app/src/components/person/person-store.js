@@ -1,9 +1,8 @@
-import Vue from 'vue'
 import ajax from '../http/http.js'
 
 const state = {
     persons: {},
-    managers: null
+    queue: []
 }
 
 const getters = {
@@ -12,79 +11,93 @@ const getters = {
     },
     getPerson: state => uuid => {
         return state.persons[uuid]
-    },
-    getManagers: state => {
-        return state.managers
     }
 }
 const mutations = {
-    setPersons: (state, persons) => {
-        state.persons = persons
+    setPerson: (state, person) => {
+        state.persons[person.uuid] = person
     },
-    updatePerson: (state, person) => {
-        if (!state.persons[person.uuid]) {
-            Vue.set(state.persons, person.uuid, person)
-        } else {
-            let new_person = Object.assign({}, person, state.persons[person.uuid])
-            Vue.set(state.persons, person.uuid, new_person)
-        }
+    popLoadQueue: (state) => {
+        state.queue.pop()
     },
-    setManagers: (state, managers) => {
-        state.managers = managers
+    pushLoadQueue: (state) => {
+        state.queue.push(1)
     }
 }
 const actions = {
-    fetchAssociatedPeople: ({commit}, org_uuid) => {
-        commit('setPersons', {})
-        ajax(`/service/ou/${ org_uuid }/details/association`)
-        .then((people) => {
-            for (let p in people) {
-                commit('updatePerson', people[p])   
-            }
-        })
-    },
-    fetchPerson: ({state, commit, dispatch}, uuid) => {
-        if (!state.persons[uuid] || !state.persons[uuid].address_data) {
-            return dispatch('fetchPersonByHttp', uuid)
-            .then((person) => {
-                dispatch('fetchPersonAddresses', uuid)
-                .then(addresses => {
-                    person.address_data = addresses
-                    dispatch('fetchPersonAssociations', uuid)
-                    .then(associations => {
-                        person.association_data = associations
-                        commit('updatePerson', person)
-                    })
-                })
-                return person
+    fetchPersons: ({dispatch, rootState}, options) => {
+        if (!rootState.organisation.orgs[options.org_uuid].person_data) {        
+            let relation_type = options.relation ? options.relation : 'engagement'
+            ajax(`/service/ou/${ options.org_uuid }/details/${ relation_type }`)
+            .then(relations => {
+                let payload = {
+                    org_uuid: options.org_uuid,
+                    queue: relations.length,
+                    persons: []
+                }
+                for (let r in relations) {
+                    payload.persons.push(relations[r].person.uuid)
+                    dispatch('fetchPerson', relations[r].person.uuid)
+                }
+                dispatch('awaitPersonData', payload)
             })
-        } else {
-            return state.persons[uuid]
         }
     },
-    fetchPersonByHttp: ({}, uuid) => {
-        return ajax(`/service/e/${ uuid }/`)
-        .then((person) => {
-            return person
-        })
+    awaitPersonData: ({dispatch, state, commit}, payload) => {
+        setTimeout(() => {
+            if (state.queue.length > 0) {
+                dispatch('awaitPersonData', payload)
+            } else {
+                commit('setOrgUnitPeople', payload)
+            }
+        }, 500)
     },
-    fetchPersonAddresses: ({}, uuid) => {
-        return ajax(`/service/e/${ uuid }/details/address`)
-        .then((addresses) => {
-            return addresses
-        })
+    fetchPerson: ({state, commit, dispatch}, uuid) => {
+        if (!state.persons[uuid]) {
+
+            let responses = {
+                person: null,
+                address_data: null,
+                association_data: null,
+                engagement_data: null
+            }
+
+            commit('pushLoadQueue')
+
+            ajax(`/service/e/${ uuid }/`)
+            .then(person => {
+                responses.person = person
+            })
+            ajax(`/service/e/${ uuid }/details/address`)
+            .then(addresses => {
+                responses.address_data = addresses
+            })
+            ajax(`/service/e/${ uuid }/details/association`)
+            .then(associations => {
+                responses.association_data = associations
+            })
+            ajax(`/service/e/${ uuid }/details/engagement`)
+            .then(engagements => {
+                responses.engagement_data = engagements
+            })
+
+            dispatch('awaitPersonAPIresponses', responses)
+        }
     },
-    fetchPersonAssociations: ({}, uuid) => {
-        return ajax (`/service/e/${ uuid }/details/association`)
-        .then((associations) => {
-            return associations
-        })
-    },
-    fetchManagers: ({commit}, uuid) => {
-        ajax(`/service/ou/${ uuid }/details/manager`)
-        .then((managers) => {
-            commit('setManagers', managers)
-        })
+    awaitPersonAPIresponses: ({dispatch, commit}, res) => {
+        setTimeout(() => {
+            if (!res.person || !res.address_data || !res.association_data || !res.engagement_data) {
+                dispatch('awaitPersonAPIresponses', res)
+            } else { 
+                let person = res.person
+                person.address_data = res.address_data
+                person.association_data = res.association_data
+                person.engagement_data = res.engagement_data
+                
+                commit('setPerson', res.person)
+                commit('popLoadQueue')
+            }
+        }, 300)
     }
 }
 

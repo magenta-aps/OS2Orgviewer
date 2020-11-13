@@ -6,10 +6,6 @@ let loadstack = []
 
 const ajax_init = {
     method: 'GET',
-    headers: {
-        'X-Requested-With': 'XMLHttpRequest',
-        'X-Client-Name': 'OS2mo-UI'
-    },
     credentials: 'same-origin',
     mode: 'cors'
 }
