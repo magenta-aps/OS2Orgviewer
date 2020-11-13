@@ -77,7 +77,6 @@ export default {
     },
     methods: {
         update: function(show_children_bool) {
-            console.log('updaing', show_children_bool)
             if (show_children_bool || this.query_showchildren_applies) {
                 this.$store.dispatch('getChildren', this.uuid)
                 this.branch_open = true

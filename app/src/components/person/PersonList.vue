@@ -1,7 +1,7 @@
 <template>
     <ul class="people-list" v-if="people_list">
-        <li v-for="person in people_list">
-            <person-lite :person="allpersons[person]" :org-uuid="uuid" />
+        <li v-for="person in people_list" :key="person.uuid">
+            <person-lite :person="person" :org-uuid="uuid" />
         </li>
     </ul>
 </template>
@@ -23,7 +23,66 @@ export default {
             return this.$store.getters.getPersons
         },
         people_list: function() {
-            return this.$store.getters.getOrgUnit(this.uuid).person_data
+            let list = this.$store.getters.getOrgUnit(this.uuid).person_data
+            let unsorted_persons = [],
+                sorted_persons = []
+            
+            for (let p in list) {
+                let person = this.allpersons[list[p]]
+                
+                const association = person.association_data.find(a => {
+                    return a.org_unit.uuid === this.uuid
+                })
+
+                switch (association.association_type.name) {
+                    case 'Formand':
+                        person.weight = 10
+                    break
+                    case 'LR, formand':
+                        person.weight = 10
+                    break
+                    case 'LR':
+                        person.weight = 9
+                    break
+                    case 'FTR, næstformand':
+                        person.weight = 8
+                    break
+                    case 'TR, næstformand':
+                        person.weight = 8
+                    break
+                    case 'Medarb.rep, næstformand':
+                        person.weight = 8
+                    break
+                    case 'FTR':
+                        person.weight = 7
+                    break
+                    case 'TR':
+                        person.weight = 6
+                    break
+                    case 'Medarb.rep':
+                        person.weight = 5
+                    break
+                    case 'AMR, næstformand':
+                        person.weight = 4
+                    break
+                    case 'Næstformand':
+                        person.weight = 4
+                    break
+                    case 'AMR':
+                        person.weight = 3
+                    break
+                    default:
+                        person.weight = 0
+                }
+                
+                unsorted_persons.push(person)
+            }
+
+            sorted_persons = unsorted_persons.sort(function(a,b) {
+                return a.weight < b.weight
+            })
+
+            return sorted_persons
         }
     },
     watch: {
