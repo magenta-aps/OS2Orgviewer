@@ -4,6 +4,9 @@
         <template v-for="address in list">
             <template v-if="!address.visibility || address.visibility.name !== 'Hemmelig'">
                 <dt :key="address.address_type.uuid">
+                    <span v-if="address.address_type.name === 'Dokumentadresse'">
+                        Dokumenter
+                    </span>
                     <span v-if="address.address_type.name === 'Postadresse' && address.person">
                         Arbejdsadresse
                     </span>
@@ -27,7 +30,7 @@
                         v-else-if="address.address_type.name === 'Dokumentadresse'"
                         :href="address.name"
                         target="_blank">
-                        Dokumenter
+                        Vis enhedens dokumenter
                     </a>
                     <a 
                         v-else-if="address.address_type.name === 'Telefon'"
@@ -35,7 +38,7 @@
                         {{ address.name }}
                     </a>
                     <span v-else-if="address.address_type.name === 'Postadresse' && address.person">
-                        {{ work_address.name }}
+                        <template v-if="work_address">{{ work_address.name }}</template>
                     </span>
                     <span v-else>
                         {{ address.name }}

@@ -70,7 +70,11 @@ export default {
         },
         search: function() {
             let search_res = []
-            ajax(`/service/o/${ this.organisation_uuid }/e/?query=${ this.query }&associated=true`)
+            let search_associated = ''
+            if (GLOBAL_ORG_PERSON_RELATION === 'associated') {
+                search_associated = 'associated=true'
+            }
+            ajax(`/service/o/${ this.organisation_uuid }/e/?query=${ this.query }&${ search_associated }`)
             .then(person_res => {
                 ajax(`/service/o/${ this.organisation_uuid }/ou/?query=${ this.query }&root=${ this.root_org_unit_uuid }`)
                 .then(org_res => {
@@ -86,19 +90,21 @@ export default {
             
         },
         navToPerson: function(person_uuid) {
-            this.$store.dispatch('fetchPersonAssociations', person_uuid)
-            .then(associations => {
-                this.$router.push({
-                    name: 'orgchart',
-                    query: {
-                        target: 'person',
-                        root: this.root_org_unit_uuid,
-                        org: associations[0].org_unit.uuid,
-                        person: person_uuid,
-                        orgopen: 1,
-                        showchildren: 1
-                    }
-                })
+            const person = this.$store.getters.getPerson(person_uuid)
+            let org = person.engagement_data[0].org_unit.uuid
+            if (GLOBAL_ORG_PERSON_RELATION === 'association') {
+                org = person.association_data[0].org_unit.uuid
+            }
+            this.$router.push({
+                name: 'orgchart',
+                query: {
+                    target: 'person',
+                    root: this.root_org_unit_uuid,
+                    org: org,
+                    person: person_uuid,
+                    orgopen: 1,
+                    showchildren: 1
+                }
             })
         }
     },
