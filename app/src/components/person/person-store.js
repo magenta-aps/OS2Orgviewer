@@ -1,7 +1,9 @@
 import ajax from '../http/http.js'
+import Vue from 'vue'
 
 const state = {
     persons: {},
+    current_person_uuid: null,
     queue: []
 }
 
@@ -11,11 +13,17 @@ const getters = {
     },
     getPerson: state => uuid => {
         return state.persons[uuid]
+    },
+    getCurrentPerson: state => {
+        return state.persons[state.current_person_uuid] ? state.persons[state.current_person_uuid] : false
     }
 }
 const mutations = {
     setPerson: (state, person) => {
         state.persons[person.uuid] = person
+    },
+    setCurrentPersonUuid: (state, person_uuid) => {
+        state.current_person_uuid = person_uuid
     },
     popLoadQueue: (state) => {
         state.queue.pop()
@@ -84,7 +92,7 @@ const actions = {
             dispatch('awaitPersonAPIresponses', responses)
         }
     },
-    awaitPersonAPIresponses: ({dispatch, commit}, res) => {
+    awaitPersonAPIresponses: ({dispatch, commit, state}, res) => {
         setTimeout(() => {
             if (!res.person || !res.address_data || !res.association_data || !res.engagement_data) {
                 dispatch('awaitPersonAPIresponses', res)
@@ -94,7 +102,7 @@ const actions = {
                 person.association_data = res.association_data
                 person.engagement_data = res.engagement_data
                 
-                commit('setPerson', res.person)
+                Vue.set(state.persons, res.person.uuid, res.person)
                 commit('popLoadQueue')
             }
         }, 300)

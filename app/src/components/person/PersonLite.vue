@@ -14,7 +14,7 @@
             <dd>
                 <router-link
                     class="oc-person-open"
-                    :to="{ name: 'orgchart', query: { target: 'person', root: root_org_uuid, org: orgUuid, person: person.uuid, orgopen: 1, showchildren: 1 } }">
+                    :to="`/person/${ person.uuid }/${ orgUuid }`">
                     <span class="sr-only">Vis detaljer for </span>
                     {{ person.name }}
                 </router-link>
@@ -25,7 +25,7 @@
                 <dd>
                     <router-link
                         class="oc-person-open"
-                        :to="{ name: 'orgchart', query: { target: 'person', person: association.substitute.uuid, orgopen: 1, showchildren: 1 } }">
+                        :to="`/person/${ association.substitute.uuid }`">
                         <span class="sr-only">Vis detaljer for </span>
                         {{ association.substitute.name }}
                     </router-link>

@@ -1,10 +1,11 @@
 <template>
     <transition name="oc-fade">
-        <article v-if="person_data" class="oc-person">
+        <article v-if="person_data && $route.name === 'person'" class="oc-person">
             <oc-header>
                 <h3 slot="title">
                     <router-link 
-                        :to="{ name: 'orgchart', query: { target: 'orgunit', root: root_org_uuid, org: org_unit_uuid, orgopen: 1, showchildren: 1 } }"
+                        v-if="org_unit"
+                        :to="`/orgunit/${ org_unit.uuid }`"
                         id="persontitle">
                         <svg class="svg-back" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path class="svg-path" d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
                         <span class="oc-person-title">{{ person_data.name }}</span>
@@ -68,74 +69,38 @@ export default {
     },
     computed: {
         person_data: function() {
-            return this.$store.getters.getPerson(this.$route.query.person)
+            return this.$store.getters.getCurrentPerson
         },
-        org_unit_uuid: function() {
-            if (this.person_data) {
-                if (this.$route.query.org) {
-                    // If org unit data is in URL, use that
-                    return this.$route.query.org
-                } else if (this.association) {
-                    // else find org unit via person's association
-                    return this.association.org_unit.uuid
-                } else {
-                    // if that fails, find org unit via person's engagement
-                    return this.engagement.org_unit.uuid
-                }
-            }
+        org_unit: function() {
+            return this.$store.getters.getCurrentOrgUnit
         },
         association: function() {
-            if (this.person_data.association_data) {
+            if (this.person_data.association_data && this.org_unit) {
                 return this.person_data.association_data.find(e => {
-                    return e.org_unit.uuid === this.org_unit_uuid
+                    return e.org_unit.uuid === this.org_unit.uuid
                 })
             } else {
                 return false
             }
         },
         engagement: function() {
-            if (this.person_data.engagement_data) {
+            if (this.person_data.engagement_data && this.org_unit) {
                 return this.person_data.engagement_data.find(e => {
-                    return e.org_unit.uuid === this.org_unit_uuid
+                    return e.org_unit.uuid === this.org_unit.uuid
                 })
             } else {
                 return false
             }
-        },
-        root_org_uuid: function() {
-            if (this.$route.query.org) {
-                // If root data is in URL, use that
-                return this.$route.query.root
-            } else {
-                // else use global default
-                return GLOBAL_API_ROOT_UUID
-            }
-            
         }
     },
     watch: {
-        $route: function(to, from) {
-            if (to.query.person !== from.query.person) {
-                this.update(to.query.person)
-            }
-        },
         person_data: function(new_data) {
             Vue.nextTick(() => {
-                if (new_data && this.$route.query.target === 'person') {
+                if (new_data && this.$route.name === 'person' && this.org_unit) {
                     document.getElementById('persontitle').focus()
                 }
             })
         }
-    },
-    methods: {
-        update: function(person_uuid) {
-            if (person_uuid) {
-                this.$store.dispatch('fetchPerson', person_uuid)
-            }
-        }
-    },
-    created: function() {
-        this.update(this.$route.query.person)
     }
 }
 </script>

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
+import store from './store.js'
 import Search from './components/search/Search.vue'
 import Tree from './components/tree/Tree.vue'
 import Organisation from './components/organisation/Organisation.vue'
@@ -14,17 +15,30 @@ const router = new Router({
         {
             path: '/',
             redirect: {
-                name: 'orgchart',
-                query: {
-                    root: GLOBAL_API_ROOT_UUID, // Defined in index.html
-                    org: GLOBAL_API_ROOT_UUID, // Defined in index.html
-                    showchildren: 1
-                }
+                path: `/tree/${ GLOBAL_API_ROOT_UUID }`
             }
         },
         {
-            path: '/orgchart',
-            name: 'orgchart',
+            path: '/tree/:orgUnitId',
+            name: 'tree',
+            components: {
+                tree: Tree,
+                organisation: Organisation,
+                person: Person
+            }
+        },
+        {
+            path: '/orgunit/:orgUnitId',
+            name: 'orgunit',
+            components: {
+                tree: Tree,
+                organisation: Organisation,
+                person: Person
+            }
+        },
+        {
+            path: '/person/:personId/:orgUnitId?',
+            name: 'person',
             components: {
                 tree: Tree,
                 organisation: Organisation,
@@ -50,6 +64,21 @@ const router = new Router({
             redirect: '/error'
         }
     ]
+})
+
+router.beforeEach((to, from, next) => {
+    
+    if (to.params.orgUnitId && to.params.orgUnitId !== from.params.orgUnitId) {
+        store.commit('setCurrentOrgUnitUuid', to.params.orgUnitId)
+        store.dispatch('fetchOrgUnit', to.params.orgUnitId)
+    }
+
+    if (to.params.personId && to.params.personId !== from.params.personId) {
+        store.commit('setCurrentPersonUuid', to.params.personId)
+        store.dispatch('fetchPerson', to.params.personId)
+    }
+    
+    next()
 })
 
 export default router

@@ -24,11 +24,32 @@ export default {
         },
         people_list: function() {
             let list = this.$store.getters.getOrgUnit(this.uuid).person_data
+
+            if (GLOBAL_ORG_PERSON_RELATION === 'association') {
+                return this.processByAssociation(list)
+            } else {
+                return this.processByEngagement(list)
+            }
+        }
+    },
+    watch: {
+        uuid: function(new_uuid) {
+            this.update(new_uuid)
+        }
+    },
+    methods: {
+        update: function(uuid) {
+            this.$store.dispatch('fetchPersons', {
+                org_uuid: this.uuid,
+                relation: GLOBAL_ORG_PERSON_RELATION
+            })
+        },
+        processByAssociation: function(people_list) {
             let unsorted_persons = [],
                 sorted_persons = []
-            
-            for (let p in list) {
-                let person = this.allpersons[list[p]]
+
+            for (let p in people_list) {
+                let person = this.allpersons[people_list[p]]
                 
                 const association = person.association_data.find(a => {
                     return a.org_unit.uuid === this.uuid
@@ -74,28 +95,26 @@ export default {
                     default:
                         person.weight = 0
                 }
-                
                 unsorted_persons.push(person)
             }
-
             sorted_persons = unsorted_persons.sort(function(a,b) {
                 return a.weight < b.weight
             })
-
             return sorted_persons
-        }
-    },
-    watch: {
-        uuid: function(new_uuid) {
-            this.update(new_uuid)
-        }
-    },
-    methods: {
-        update: function(uuid) {
-            this.$store.dispatch('fetchPersons', {
-                org_uuid: this.uuid,
-                relation: GLOBAL_ORG_PERSON_RELATION
-            })
+        },
+        processByEngagement: function(people_list) {
+            let unsorted_persons = []
+
+            for (let p in people_list) {
+                let person = this.allpersons[people_list[p]]
+                
+                const association = person.engagement_data.find(a => {
+                    return a.org_unit.uuid === this.uuid
+                })
+
+                unsorted_persons.push(person)
+            }
+            return unsorted_persons
         }
     },
     created: function() {

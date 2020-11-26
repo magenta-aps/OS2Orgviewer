@@ -1,6 +1,6 @@
 <template>
     <router-link 
-        :to="{ name: 'orgchart', query: { target: 'orgunit', root: root_org_uuid, org: data.uuid, orgopen: 1 } }"
+        :to="`/orgunit/${ data.uuid }`"
         :id="`ou-${ data.uuid }`"
         class="oc-org-link btn">
         <span class="sr-only">Vis detaljer for </span>
@@ -15,15 +15,10 @@ export default {
     props: [
         'data'
     ],
-    computed: {
-        root_org_uuid: function() {
-            return this.$route.query.root
-        }
-    },
     watch: {
         $route: function(to) {
             Vue.nextTick(() => {
-                if (to.query.org === this.data.uuid && to.query.target === 'tree') {
+                if (to.params.orgUnitId === this.data.uuid && to.name === 'tree') {
                     document.getElementById(`ou-${ this.data.uuid }`).focus()
                 }
             })

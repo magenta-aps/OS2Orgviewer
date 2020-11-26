@@ -24,14 +24,14 @@ export default {
     },
     computed: {
         root_org_uuid: function() {
-            return this.$route.query.root
+            return this.$store.getters.getRootOrgUnitUuid
         },
         root_org_unit: function() {
-            return this.$store.getters.getOrgUnit(this.$route.query.root)
+            return this.$store.getters.getOrgUnit(this.root_org_uuid)
         }
     },
     created: function() {
-        this.$store.dispatch('getTree', this.$route.query.org)
+        this.$store.dispatch('getTree', GLOBAL_API_ROOT_UUID)
     }
 }
 </script>

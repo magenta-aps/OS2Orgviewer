@@ -2,14 +2,14 @@
     <transition name="oc-fade">
         <article 
             class="oc-org" 
-            :class="{'dim': $route.query.person}"
-            v-if="org_visible && org_data"
+            :class="{'dim': $route.name === 'person'}"
+            v-if="org_data && this.$route.name === 'orgunit' || this.$route.name === 'person'"
             :tabindex="$route.query.person ? -1 : 0">
             <oc-header>
                 <h2 slot="title">
                     <router-link
                         id="orgtitle"
-                        :to="{ name: 'orgchart', query: { target: 'tree', root: root_org_uuid, org: org_data.uuid, orgopen: 0, showchildren: 1 } }">
+                        :to="`/tree/${ org_data.uuid }`">
                         <svg class="svg-back" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path class="svg-path" d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
                         <span class="oc-org-title">{{ org_data.name }}</span>
                         <span class="sr-only">Luk visning af {{ org_data.name }}</span>
@@ -17,11 +17,9 @@
                     </router-link>
                 </h2>
             </oc-header>
-            <div class="oc-org-body">
-                <!-- Managers seem to be redundant as they also appear in personlist -->
-                <!-- <managers :uuid="org_data.uuid" /> -->
+            <div class="oc-org-body" v-if="org_data">
                 <person-list :uuid="org_data.uuid" />
-                <template v-if="org_data && org_data.address_data">
+                <template v-if="org_data.address_data">
                     <hr>
                     <address-list :list="org_data.address_data" />
                 </template>
@@ -46,26 +44,11 @@ export default {
         OcHeader
     },
     computed: {
-        org_visible: function() {
-            if (this.$route.query.orgopen == 1) {
-                return true
-            } else {
-                return false
-            }
-        },
         org_data: function() {
-            return this.$store.getters.getOrgUnit(this.$route.query.org)
-        },
-        root_org_uuid: function() {
-            return this.$route.query.root
+            return this.$store.getters.getCurrentOrgUnit
         }
     },
     watch: {
-        $route: function(to) {
-            if (to.query.orgopen == 1) {
-                this.update(to.query.org)
-            }
-        },
         org_data: function(new_data) {
             Vue.nextTick(() => {
                 if (new_data && this.$route.query.target === 'orgunit') {
@@ -73,16 +56,6 @@ export default {
                 }
             })
         }
-     },
-    methods: {
-        update: function(org_uuid) {
-            if (org_uuid) {
-                this.$store.dispatch('getAddresses', org_uuid)
-            }
-        }
-    },
-    created: function() {
-        this.update(this.$route.query.org)
     }
 }
 </script>

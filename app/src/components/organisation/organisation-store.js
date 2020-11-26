@@ -33,8 +33,7 @@ const utils = {
 
 const state = {
     orgs: {},
-    root_org_uuid: GLOBAL_API_ROOT_UUID, // Defined in index.html
-    global_organisations: null
+    current_org: null
 }
 
 const getters = {
@@ -44,18 +43,18 @@ const getters = {
     getOrgUnit: (state) => (org_unit_uuid) => {
         return state.orgs[org_unit_uuid]
     },
+    getCurrentOrgUnitUuid: (state) => {
+        return state.current_org
+    },
+    getCurrentOrgUnit: (state) => {
+        return state.orgs[state.current_org] ? state.orgs[state.current_org] : false
+    },
     getChildren: (state) => (org_unit_uuid) => {
         let nodes = []
         for (let c in state.orgs[org_unit_uuid].child_list) {
             nodes.push(state.orgs[state.orgs[org_unit_uuid].child_list[c]])
         }
         return nodes
-    },
-    getRootOrgUnitUuid: state => {
-        return state.root_org_uuid
-    },
-    getOrganisations: state => {
-        return state.global_organisations
     }
 }
 const mutations = {
@@ -72,26 +71,11 @@ const mutations = {
         new_org.person_data = payload.persons
         Vue.set(state.orgs, payload.org_uuid, new_org)
     },
-    setRootOrgUuid: (state, uuid) => {
-        state.root_org_uuid = uuid
-    },
-    setOrganisations: (state, orgs) => {
-        state.global_organisations = orgs
+    setCurrentOrgUnitUuid: (state, org_uuid) => {
+        state.current_org = org_uuid
     }
 }
 const actions = {
-    fetchGlobalOrgs: ({}) => {
-        return ajax(`/service/o/`)
-        .then(orgs => {
-            return orgs
-        })
-    },
-    fetchTree: ({}, org_unit_uuid) => {
-        return ajax(`/service/ou/ancestor-tree?uuid=${ org_unit_uuid }`)
-        .then(tree => {
-            return tree
-        })
-    },
     fetchOrgUnit: ({}, uuid) => {
         return ajax(`/service/ou/${ uuid }/`)
         .then(org_unit => {
