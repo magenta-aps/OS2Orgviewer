@@ -14,7 +14,7 @@
             <dd>
                 <router-link
                     class="oc-person-open"
-                    :to="`/person/${ person.uuid }/${ orgUuid }`">
+                    :to="`/person/${ person.uuid }`">
                     <span class="sr-only">Vis detaljer for </span>
                     {{ person.name }}
                 </router-link>

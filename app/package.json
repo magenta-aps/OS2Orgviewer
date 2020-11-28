@@ -6,7 +6,9 @@
     "serve": "vue-cli-service serve --mode os2 --port 8652",
     "serve-frederikshavn-med": "vue-cli-service serve --mode frederikshavn-med --port 8652",
     "build": "vue-cli-service build --modern --mode os2.production --dest ../dist/default && vue-cli-service build --modern --mode frederikshavn-med.production --dest ../dist/frederikshavn-med",
-    "build-frederikshavn-med": "vue-cli-service build --modern --mode frederikshavn-med.production --dest ../dist/frederikshavn-med"
+    "build-frederikshavn-med": "vue-cli-service build --modern --mode frederikshavn-med.production --dest ../dist/frederikshavn-med",
+    "test": "testcafe chrome tests/*.js",
+    "headlesstest": "testcafe chrome:headless tests/*.js"
   },
   "dependencies": {
     "core-js": "^3.6.5",
@@ -21,6 +23,7 @@
     "@vue/cli-service": "^4.5.4",
     "sass": "^1.26.10",
     "sass-loader": "^10.0.2",
+    "testcafe": "^1.9.4",
     "vue-template-compiler": "^2.6.11"
   },
   "browserslist": [

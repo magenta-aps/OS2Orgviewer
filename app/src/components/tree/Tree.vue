@@ -1,9 +1,9 @@
 <template>
-    <div class="oc-chart" v-if="root_org_uuid" :class="{'oc-chart-orgopen': $route.query.orgopen == 1}">
+    <div class="oc-chart" v-if="root_org_uuid" :class="{'oc-chart-orgopen': $route.name === 'orgunit'}">
         <nav v-if="root_org_unit && root_org_unit.parent_uuid" class="oc-chart-root-nav">
             <router-link 
                 class="oc-chart-root-link btn inverse"
-                :to="{ name: 'orgchart', query: { root: root_org_unit.parent_uuid, org: root_org_uuid, showchildren: 1, orgopen: 0 } }">
+                :to="`/tree/${ root_org_uuid }/${ root_org_unit.parent_uuid }/`">
                 <svg class="svg-toggle" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path class="svg-path" d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/></svg>
                 Niveau op
                 <svg class="svg-toggle" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path class="svg-path" d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/></svg>
@@ -30,8 +30,10 @@ export default {
             return this.$store.getters.getOrgUnit(this.root_org_uuid)
         }
     },
-    created: function() {
-        this.$store.dispatch('getTree', GLOBAL_API_ROOT_UUID)
+    $route: function(to, from) {
+        if (to.params.rootOrgUnitId) {
+            this.$store.commit('setRootOrgUnitUuid', to.params.rootOrgUnitId)
+        }
     }
 }
 </script>

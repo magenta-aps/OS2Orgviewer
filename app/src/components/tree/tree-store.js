@@ -14,7 +14,7 @@ const getters = {
     }
 }
 const mutations = {
-    setRootOrgUuid: (state, uuid) => {
+    setRootOrgUnitUuid: (state, uuid) => {
         state.root_org_uuid = uuid
     },
     setOrganisations: (state, orgs) => {

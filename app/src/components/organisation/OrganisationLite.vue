@@ -1,6 +1,6 @@
 <template>
     <router-link 
-        :to="`/orgunit/${ data.uuid }`"
+        :to="`/orgunit/${ data.uuid }/${ root_org_uuid ? root_org_uuid : null}`"
         :id="`ou-${ data.uuid }`"
         class="oc-org-link btn">
         <span class="sr-only">Vis detaljer for </span>
@@ -15,13 +15,23 @@ export default {
     props: [
         'data'
     ],
+    computed: {
+        root_org_uuid: function() {
+            return this.$store.getters.getRootOrgUnitUuid
+        }
+    },
     watch: {
-        $route: function(to) {
-            Vue.nextTick(() => {
-                if (to.params.orgUnitId === this.data.uuid && to.name === 'tree') {
-                    document.getElementById(`ou-${ this.data.uuid }`).focus()
+        $route: function(to, from) {
+            if (to.params.orgUnitId === this.data.uuid) {
+                Vue.nextTick(() => {
+                    if (to.name === 'orgunit') {
+                        document.getElementById(`ou-${ this.data.uuid }`).focus()
+                    }
+                })
+                if (to.params.orgUnitId !== from.params.orgUnitId) {
+                    this.$store.commit('setCurrentOrgUnitUuid', to.params.orgUnitId)
                 }
-            })
+            }
         }
     }
 }

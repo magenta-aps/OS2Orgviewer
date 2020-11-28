@@ -19,25 +19,22 @@ const router = new Router({
             }
         },
         {
-            path: '/tree/:orgUnitId',
+            path: '/tree/:orgUnitId/:rootOrgUnitId?',
             name: 'tree',
             components: {
-                tree: Tree,
-                organisation: Organisation,
-                person: Person
+                tree: Tree
             }
         },
         {
-            path: '/orgunit/:orgUnitId',
+            path: '/orgunit/:orgUnitId/:rootOrgUnitId?',
             name: 'orgunit',
             components: {
                 tree: Tree,
-                organisation: Organisation,
-                person: Person
+                organisation: Organisation
             }
         },
         {
-            path: '/person/:personId/:orgUnitId?',
+            path: '/person/:personId/:orgUnitId?/:rootOrgUnitId?',
             name: 'person',
             components: {
                 tree: Tree,
@@ -67,16 +64,8 @@ const router = new Router({
 })
 
 router.beforeEach((to, from, next) => {
-    
-    if (to.params.orgUnitId && to.params.orgUnitId !== from.params.orgUnitId) {
-        store.commit('setCurrentOrgUnitUuid', to.params.orgUnitId)
-        store.dispatch('fetchOrgUnit', to.params.orgUnitId)
-    }
 
-    if (to.params.personId && to.params.personId !== from.params.personId) {
-        store.commit('setCurrentPersonUuid', to.params.personId)
-        store.dispatch('fetchPerson', to.params.personId)
-    }
+    
     
     next()
 })

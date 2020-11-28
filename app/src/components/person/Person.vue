@@ -1,6 +1,6 @@
 <template>
     <transition name="oc-fade">
-        <article v-if="person_data && $route.name === 'person'" class="oc-person">
+        <article v-if="person && $route.name === 'person'" class="oc-person">
             <oc-header>
                 <h3 slot="title">
                     <router-link 
@@ -8,7 +8,7 @@
                         :to="`/orgunit/${ org_unit.uuid }`"
                         id="persontitle">
                         <svg class="svg-back" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path class="svg-path" d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
-                        <span class="oc-person-title">{{ person_data.name }}</span>
+                        <span class="oc-person-title">{{ person.name }}</span>
                         <svg class="svg-close" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path class="svg-path" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
                         <span class="sr-only">Tilbage til enhedsoverblik</span>
                     </router-link>
@@ -17,7 +17,7 @@
             <div class="oc-person-body">
                 <dl>
                     <dt>Navn</dt>
-                    <dd>{{ person_data.name }}</dd>
+                    <dd>{{ person.name }}</dd>
                     
                     <template v-if="association && relation_type === 'association'">
                         <dt>Tilknytning</dt>
@@ -46,7 +46,7 @@
                     </template>
 
                 </dl>
-                <address-list v-if="person_data.address_data" :list="person_data.address_data" />    
+                <address-list v-if="person.address_data" :list="person.address_data" />    
             </div>
         </article>
     </transition>
@@ -68,15 +68,15 @@ export default {
         }
     },
     computed: {
-        person_data: function() {
+        person: function() {
             return this.$store.getters.getCurrentPerson
         },
         org_unit: function() {
             return this.$store.getters.getCurrentOrgUnit
         },
         association: function() {
-            if (this.person_data.association_data && this.org_unit) {
-                return this.person_data.association_data.find(e => {
+            if (this.person.association_data && this.org_unit) {
+                return this.person.association_data.find(e => {
                     return e.org_unit.uuid === this.org_unit.uuid
                 })
             } else {
@@ -84,8 +84,8 @@ export default {
             }
         },
         engagement: function() {
-            if (this.person_data.engagement_data && this.org_unit) {
-                return this.person_data.engagement_data.find(e => {
+            if (this.person.engagement_data && this.org_unit) {
+                return this.person.engagement_data.find(e => {
                     return e.org_unit.uuid === this.org_unit.uuid
                 })
             } else {
@@ -94,13 +94,28 @@ export default {
         }
     },
     watch: {
-        person_data: function(new_data) {
+        person: function(new_data) {
             Vue.nextTick(() => {
                 if (new_data && this.$route.name === 'person' && this.org_unit) {
                     document.getElementById('persontitle').focus()
                 }
             })
+        },
+        $route: function(to, from) {
+            if (to.params.personId) {
+                Vue.nextTick(() => {
+                    if (to.name === 'person') {
+                        document.getElementById('persontitle').focus()
+                    }
+                })
+                if (to.params.personId !== from.params.personId) {
+                    this.$store.commit('setCurrentPersonUuid', to.params.personId)
+                }
+            }
         }
+    },
+    created: function() {
+        this.$store.commit('setCurrentPersonUuid', this.$route.params.personId)
     }
 }
 </script>
