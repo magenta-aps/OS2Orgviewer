@@ -34,6 +34,20 @@ export default {
         if (to.params.rootOrgUnitId) {
             this.$store.commit('setRootOrgUnitUuid', to.params.rootOrgUnitId)
         }
+    },
+    created: function() {
+
+        // Initialise tree view from URL params
+        if (this.$route.params.rootUrgUnitId) {
+            this.$store.commit('setRootOrgUnitUuid', this.$route.params.rootUrgUnitId)
+        }
+        
+        if (this.$route.params.orgUnitId) {
+            this.$store.dispatch('getTree', this.$route.params.orgUnitId)
+            this.$store.commit('setCurrentOrgUnitUuid', this.$route.params.orgUnitId)
+        } else {
+            this.$store.dispatch('getTree', GLOBAL_API_ROOT_UUID)
+        }
     }
 }
 </script>

@@ -91,21 +91,11 @@ export default {
         },
         navToPerson: function(person_uuid) {
             const person = this.$store.getters.getPerson(person_uuid)
-            let org = person.engagement_data[0].org_unit.uuid
+            let org_uuid = person.engagement_data[0].org_unit.uuid
             if (GLOBAL_ORG_PERSON_RELATION === 'association') {
-                org = person.association_data[0].org_unit.uuid
+                org_uuid = person.association_data[0].org_unit.uuid
             }
-            this.$router.push({
-                name: 'orgchart',
-                query: {
-                    target: 'person',
-                    root: this.root_org_unit_uuid,
-                    org: org,
-                    person: person_uuid,
-                    orgopen: 1,
-                    showchildren: 1
-                }
-            })
+            this.$router.push(`/person/${ person_uuid }/${ org_uuid }`)
         }
     },
     mounted: function() {

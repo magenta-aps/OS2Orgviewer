@@ -36,25 +36,6 @@ export default {
             title: process.env.VUE_APP_TITLE,
             logo_src: process.env.VUE_APP_LOGO_PATH
         }
-    },
-    created: function() {
-
-        // Initialise orgviewer from URL params
-        if (this.$route.params.rootUrgUnitId) {
-            this.$store.commit('setRootOrgUnitUuid', this.$route.params.rootUrgUnitId)
-        }
-        
-        if (this.$route.params.orgUnitId) {
-            this.$store.dispatch('getTree', this.$route.params.orgUnitId)
-            this.$store.commit('setCurrentOrgUnitUuid', this.$route.params.orgUnitId)   
-        } else {
-            this.$store.dispatch('getTree', GLOBAL_API_ROOT_UUID)
-        }
-
-        if (this.$route.params.personId) {
-            this.$store.dispatch('fetchPerson', this.$route.params.personId)
-            this.$store.commit('setCurrentPersonUuid', this.$route.params.personId)
-        }
     }
 }
 </script>

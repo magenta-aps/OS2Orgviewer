@@ -64,7 +64,8 @@ export default {
     },
     data: function() {
         return {
-            relation_type: GLOBAL_ORG_PERSON_RELATION
+            relation_type: GLOBAL_ORG_PERSON_RELATION,
+            await_determine_orgunit: false
         }
     },
     computed: {
@@ -100,6 +101,19 @@ export default {
                     document.getElementById('persontitle').focus()
                 }
             })
+
+            // If no org unit id was supplied, 
+            // set one using persons engagement or association info
+            if (this.await_determine_orgunit) {
+                let org_unit_uuid
+                if (this.relation_type === 'association') {
+                    org_unit_uuid = this.person.association_data[0].org_unit.uuid
+                } else {
+                    org_unit_uuid = this.person.engagement_data[0].org_unit.uuid
+                }
+                this.$store.commit('setCurrentOrgUnitUuid', org_unit_uuid)
+                this.await_determine_orgunit = false
+            }
         },
         $route: function(to, from) {
             if (to.params.personId) {
@@ -114,8 +128,20 @@ export default {
             }
         }
     },
+    methods: {
+        
+    },
     created: function() {
-        this.$store.commit('setCurrentPersonUuid', this.$route.params.personId)
+
+        // Initialise orgviewer from URL params
+        if (this.$route.params.personId) {
+            this.$store.dispatch('fetchPerson', this.$route.params.personId)
+            this.$store.commit('setCurrentPersonUuid', this.$route.params.personId)
+        }
+
+        if (!this.$route.params.orgUnitId) {
+            this.await_determine_orgunit = true
+        }
     }
 }
 </script>
