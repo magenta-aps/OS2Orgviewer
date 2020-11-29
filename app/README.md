@@ -18,6 +18,13 @@ This command creates a build for every customer specific setup and copies them i
 
 After compile, pick any build folder and serve `index.html` and its associated static resources. 
 
+## Run tests
+You can run Testcafe E2E tests from the command line.
+```
+npm run test
+# or
+npm run headlesstest 
+```
 
 ## Customization
 
@@ -48,22 +55,11 @@ Check the [full documentation on setting environment variables.](https://cli.vue
 For build configurations, refer to the [Vue-CLI configuration reference](https://cli.vuejs.org/config/).
 
 
-# System design considerations
+# REST API interfacing
 
-## Data store
-All org_units' data are stored in graph array.
-Every org_unit contains children and parent properties as lists of uuids
-Root org_unit and current org_unit are stored as different values
+orgviewer uses the OS2MO REST API 
 
-## Data flow
-Data flows between REST API, state graph, and tree view
-
-1. User actions update URL query
-2. Components watch for changes in URL query and dispatches state action to check for data
-3. State checks if data is available or fetches it via REST API
-4. Components ask state for data based on URL query
-
-### An overview of API requests for getting org unit info
+## An overview of API requests for getting org unit info
 While getting org unit information from the REST API, it is nescessary to compile the output of several requests in order to get complete data.
 GET `/service/ou/[uuid]/` returns `parent` (OU object)
 GET `/service/ou/ancestor-tree?uuid=[uuid]` returns a list of OUs with `child_count` (number) OR `children` (array of OU objects)
