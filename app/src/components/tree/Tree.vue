@@ -1,5 +1,5 @@
 <template>
-    <div class="oc-chart" v-if="root_org_uuid" :class="{'oc-chart-orgopen': $route.name === 'orgunit'}">
+    <div class="oc-chart" v-if="root_org_uuid" :class="{'oc-chart-orgopen': $route.name === 'orgunit' || $route.name === 'person'}">
         <nav v-if="root_org_unit && root_org_unit.parent_uuid" class="oc-chart-root-nav">
             <router-link 
                 class="oc-chart-root-link btn inverse"
@@ -30,16 +30,18 @@ export default {
             return this.$store.getters.getOrgUnit(this.root_org_uuid)
         }
     },
-    $route: function(to, from) {
-        if (to.params.rootOrgUnitId) {
-            this.$store.commit('setRootOrgUnitUuid', to.params.rootOrgUnitId)
+    watch: {
+        $route: function(to, from) {
+            if (to.params.rootOrgUnitId && to.params.rootOrgUnitId !== from.params.rootOrgUnitId) {
+                this.$store.commit('setRootOrgUnitUuid', to.params.rootOrgUnitId)
+            }
         }
     },
     created: function() {
 
         // Initialise tree view from URL params
-        if (this.$route.params.rootUrgUnitId) {
-            this.$store.commit('setRootOrgUnitUuid', this.$route.params.rootUrgUnitId)
+        if (this.$route.params.rootOrgUnitId) {
+            this.$store.commit('setRootOrgUnitUuid', this.$route.params.rootOrgUnitId)
         }
         
         if (this.$route.params.orgUnitId) {
@@ -173,7 +175,7 @@ export default {
 
 @media screen and (min-width: 80rem) {
     
-    .oc-org {
+    .oc-chart-orgopen {
         width: calc(100% - 35rem);
     }
 }

@@ -1,5 +1,5 @@
 <template>
-    <li class="oc-node" v-if="node_data">
+    <li :id="`node-${ node_data.uuid}`" class="oc-node" v-if="node_data">
         <div class="oc-node-body" :class="{'active': active_org_uuid === node_data.uuid}">
             <div class="oc-node-title">
                 <org-lite :data="node_data" />

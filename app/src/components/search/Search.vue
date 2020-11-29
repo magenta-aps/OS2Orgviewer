@@ -16,7 +16,7 @@
                     </a>
                     <router-link 
                         v-else
-                        :to="{ name: 'orgchart', query: { target: 'orgunit', root: root_org_unit_uuid, org: res.uuid, orgopen: 1, showchildren: 1 } }">
+                        :to="`/orgunit/${ res.uuid }`">
                         <span class="label">Enhed</span><br>
                         {{ res.name }}
                     </router-link>

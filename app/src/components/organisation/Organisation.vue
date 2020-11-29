@@ -55,6 +55,16 @@ export default {
                     document.getElementById('orgtitle').focus()
                 }
             })
+            if (new_data && !new_data.address_data) {
+                this.$store.dispatch('getAddresses', this.org_data.uuid)
+            }
+        }
+    },
+    created: function() {
+
+        // Initialise org view from URL params
+        if (this.$route.params.orgUnitId) {
+            this.$store.dispatch('getAddresses', this.$route.params.orgUnitId)
         }
     }
 }
