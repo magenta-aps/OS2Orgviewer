@@ -37,7 +37,7 @@ test.page('http://localhost:8652/#/tree/9b7b3dde-16c9-4f88-87cc-e03aa5b4e709')('
         .expect(Selector('#persontitle').exists).notOk()
 })
 
-test.only.page('http://localhost:8652/#/tree/fe2d2ff4-45f8-4b19-8e1b-72d1c4914360/fe2d2ff4-45f8-4b19-8e1b-72d1c4914360/')('Render info when sharing a tree URL with specific root', async t => {
+test.page('http://localhost:8652/#/tree/fe2d2ff4-45f8-4b19-8e1b-72d1c4914360/fe2d2ff4-45f8-4b19-8e1b-72d1c4914360/')('Render info when sharing a tree URL with specific root', async t => {
     await t
         .expect(Selector('.oc-chart-root-link').exists).ok()
         .expect(Selector('#node-fe2d2ff4-45f8-4b19-8e1b-72d1c4914360.oc-chart-root-leaf').exists).ok()

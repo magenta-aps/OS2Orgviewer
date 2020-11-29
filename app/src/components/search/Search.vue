@@ -10,10 +10,12 @@
             <h3 class="oc-search-results-header" tabindex="-1">{{ results.length }} søgeresultater</h3>
             <ul class="oc-search-list">
                 <li v-for="res in results" :key="res.uuid">
-                    <a v-if="res.givenname" href="#" @click.prevent="navToPerson(res.uuid)">
+                    <router-link 
+                        v-if="res.givenname"
+                        :to="`/person/${ res.uuid }`">
                         <span class="label">Person</span><br>
                         {{ res.name }}
-                    </a>
+                    </router-link>
                     <router-link 
                         v-else
                         :to="`/orgunit/${ res.uuid }`">
@@ -88,14 +90,6 @@ export default {
                 })    
             })
             
-        },
-        navToPerson: function(person_uuid) {
-            const person = this.$store.getters.getPerson(person_uuid)
-            let org_uuid = person.engagement_data[0].org_unit.uuid
-            if (GLOBAL_ORG_PERSON_RELATION === 'association') {
-                org_uuid = person.association_data[0].org_unit.uuid
-            }
-            this.$router.push(`/person/${ person_uuid }/${ org_uuid }`)
         }
     },
     mounted: function() {
