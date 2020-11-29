@@ -25,8 +25,7 @@
                         <template v-if="association.substitute">
                             <dt>Stedfortræder</dt>
                             <dd>
-                                <router-link
-                                    :to="{ name: 'orgchart', query: { target: 'person', person: association.substitute.uuid ,orgopen: 1, showchildren: 1 } }">
+                                <router-link :to="`/person/${ association.substitute.uuid }`">
                                     {{ association.substitute.name }}
                                 </router-link>
                             </dd>
