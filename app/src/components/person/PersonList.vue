@@ -45,62 +45,64 @@ export default {
             })
         },
         processByAssociation: function(people_list) {
-            let unsorted_persons = [],
-                sorted_persons = []
+            if (people_list) {
+                let unsorted_persons = [],
+                    sorted_persons = []
 
-            for (let p in people_list) {
-                let person = this.allpersons[people_list[p]]
-                
-                const association = person.association_data.find(a => {
-                    return a.org_unit.uuid === this.uuid
-                })
+                for (let p in people_list) {
+                    let person = this.allpersons[people_list[p]]
+                    
+                    const association = person.association_data.find(a => {
+                        return a.org_unit.uuid === this.uuid
+                    })
 
-                switch (association.association_type.name) {
-                    case 'Formand':
-                        person.weight = 10
-                    break
-                    case 'LR, formand':
-                        person.weight = 10
-                    break
-                    case 'LR':
-                        person.weight = 9
-                    break
-                    case 'FTR, næstformand':
-                        person.weight = 8
-                    break
-                    case 'TR, næstformand':
-                        person.weight = 8
-                    break
-                    case 'Medarb.rep, næstformand':
-                        person.weight = 8
-                    break
-                    case 'FTR':
-                        person.weight = 7
-                    break
-                    case 'TR':
-                        person.weight = 6
-                    break
-                    case 'Medarb.rep':
-                        person.weight = 5
-                    break
-                    case 'AMR, næstformand':
-                        person.weight = 4
-                    break
-                    case 'Næstformand':
-                        person.weight = 4
-                    break
-                    case 'AMR':
-                        person.weight = 3
-                    break
-                    default:
-                        person.weight = 0
+                    switch (association.association_type.name) {
+                        case 'Formand':
+                            person.weight = 10
+                        break
+                        case 'LR, formand':
+                            person.weight = 10
+                        break
+                        case 'LR':
+                            person.weight = 9
+                        break
+                        case 'FTR, næstformand':
+                            person.weight = 8
+                        break
+                        case 'TR, næstformand':
+                            person.weight = 8
+                        break
+                        case 'Medarb.rep, næstformand':
+                            person.weight = 8
+                        break
+                        case 'FTR':
+                            person.weight = 7
+                        break
+                        case 'TR':
+                            person.weight = 6
+                        break
+                        case 'Medarb.rep':
+                            person.weight = 5
+                        break
+                        case 'AMR, næstformand':
+                            person.weight = 4
+                        break
+                        case 'Næstformand':
+                            person.weight = 4
+                        break
+                        case 'AMR':
+                            person.weight = 3
+                        break
+                        default:
+                            person.weight = 0
+                    }
+                    unsorted_persons.push(person)
                 }
-                unsorted_persons.push(person)
+                sorted_persons = unsorted_persons.sort(function(a,b) {
+                    return b.weight - a.weight
+                })
+                return sorted_persons
             }
-            sorted_persons = unsorted_persons.sort(function(a,b) {
-                return a.weight < b.weight
-            })
-            return sorted_persons
         },
         processByEngagement: function(people_list) {
             let unsorted_persons = []

@@ -134,7 +134,7 @@ export default {
 @media screen and (min-width: 40rem) {
     
     .oc-org {
-        max-width: 23rem;
+        width: 23rem;
         box-shadow: $shadow-2;
 
         .svg-back {
@@ -154,14 +154,14 @@ export default {
 @media screen and (min-width: 60rem) {
     
     .oc-org {
-        max-width: 28rem;
+        width: 28rem;
     }
 }
 
 @media screen and (min-width: 80rem) {
     
     .oc-org {
-        max-width: 35rem;
+        width: 35rem;
     }
 }
 
