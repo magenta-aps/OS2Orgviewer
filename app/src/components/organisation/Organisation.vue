@@ -32,7 +32,6 @@
 import Vue from 'vue'
 import PersonList from '../person/PersonList.vue'
 import AddressList from '../address/AddressList.vue'
-import Managers from '../person/Managers.vue'
 import OcHeader from '../layout/Header.vue'
 import store from '../../store.js'
 
@@ -40,7 +39,6 @@ export default {
     components: {
         PersonList,
         AddressList,
-        Managers,
         OcHeader
     },
     computed: {

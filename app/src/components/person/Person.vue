@@ -36,11 +36,17 @@
                         <dt>{{ engagement.engagement_type.name }}</dt>
                         <dd>{{ engagement.job_function.name }}</dd>
                     </template>
+                    <template v-else>
+                        <dt>Afdeling</dt>
+                        <dd>
+                            <engagement-list :list="person.engagement_data" />
+                        </dd>
+                    </template>
 
                     <template v-if="association && association.dynamic_classes">
                         <template v-for="dclass in association.dynamic_classes">
-                            <dt :key="dclass.top_level_facet.uuid">{{ dclass.top_level_facet.description }}</dt>
-                            <dd :key="dclass.uuid">{{ dclass.full_name }}</dd>
+                            <dt :key="dclass.top_level_facet.uuid" class="oc-dynamic-class-title">{{ dclass.top_level_facet.description }}</dt>
+                            <dd :key="dclass.uuid" class="oc-dynamic-class-body">{{ dclass.full_name }}</dd>
                         </template>
                     </template>
 
@@ -55,11 +61,13 @@
 import Vue from 'vue'
 import OcHeader from '../layout/Header.vue'
 import AddressList from '../address/AddressList.vue'
+import EngagementList from './Engagements.vue'
 
 export default {
     components: {
         OcHeader,
-        AddressList
+        AddressList,
+        EngagementList
     },
     data: function() {
         return {
