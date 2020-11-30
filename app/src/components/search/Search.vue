@@ -10,15 +10,15 @@
             <h3 class="oc-search-results-header" tabindex="-1">{{ results.length }} søgeresultater</h3>
             <ul class="oc-search-list">
                 <li v-for="res in results" :key="res.uuid">
-                    <router-link 
+                    <router-link
                         v-if="res.givenname"
-                        :to="`/person/${ res.uuid }`">
+                        :to="{ name: 'person', params: { personId: res.uuid, rootOrgUnitId: global_root_uuid } }">
                         <span class="label">Person</span><br>
                         {{ res.name }}
                     </router-link>
                     <router-link 
                         v-else
-                        :to="`/orgunit/${ res.uuid }`">
+                        :to="`/orgunit/${ res.uuid }/${ global_root_uuid }`">
                         <span class="label">Enhed</span><br>
                         {{ res.name }}
                     </router-link>
@@ -37,7 +37,8 @@ export default {
         return {
             query: null,
             results: null,
-            timeout: null
+            timeout: null,
+            global_root_uuid: GLOBAL_API_ROOT_UUID
         }
     },
     computed: {
@@ -53,6 +54,9 @@ export default {
         }
     },
     methods: {
+        clearRoot: function() {
+            this.$store.commit('setRootOrgUnitUuid', GLOBAL_API_ROOT_UUID)
+        },
         debounce: function(func, wait) {
             return () => {
                 const context = this,
@@ -78,14 +82,16 @@ export default {
             }
             ajax(`/service/o/${ this.organisation_uuid }/e/?query=${ this.query }&${ search_associated }`)
             .then(person_res => {
-                ajax(`/service/o/${ this.organisation_uuid }/ou/?query=${ this.query }&root=${ this.root_org_unit_uuid }`)
+                ajax(`/service/o/${ this.organisation_uuid }/ou/?query=${ this.query }&root=${ GLOBAL_API_ROOT_UUID }`)
                 .then(org_res => {
                     search_res = person_res.items.concat(org_res.items)
                     this.results = search_res.sort(function(a,b) {
                         return a.name > b.name
                     })
                     Vue.nextTick(() => {
-                        document.querySelector('.oc-search-results-header').focus()
+                        if (search_res.length > 0) {
+                            document.querySelector('.oc-search-results-header').focus()
+                        }
                     })
                 })    
             })
