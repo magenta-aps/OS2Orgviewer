@@ -23,6 +23,7 @@
                     <hr>
                     <address-list :list="org_data.address_data" />
                 </template>
+                <manager-list v-if="relation_is_engagement" :uuid="org_data.uuid" />
             </div>
         </article>
     </transition>
@@ -30,6 +31,7 @@
 
 <script>
 import Vue from 'vue'
+import ManagerList from '../manager/ManagerList.vue'
 import PersonList from '../person/PersonList.vue'
 import AddressList from '../address/AddressList.vue'
 import OcHeader from '../layout/Header.vue'
@@ -37,9 +39,15 @@ import store from '../../store.js'
 
 export default {
     components: {
+        ManagerList,
         PersonList,
         AddressList,
         OcHeader
+    },
+    data: function() {
+        return {
+            relation_is_engagement: GLOBAL_ORG_PERSON_RELATION === 'engagement' ? true : false
+        }
     },
     computed: {
         org_data: function() {
@@ -66,6 +74,7 @@ export default {
         // Initialise org view from URL params
         if (this.$route.params.orgUnitId) {
             this.$store.dispatch('getAddresses', this.$route.params.orgUnitId)
+            this.$store.dispatch('getManagers', this.$route.params.orgUnitId)
         }
     }
 }
