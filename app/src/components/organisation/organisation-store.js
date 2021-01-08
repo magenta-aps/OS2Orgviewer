@@ -121,6 +121,16 @@ const actions = {
                 commit('updateNode', new_node)
             })
         }
+    },
+    getManagers: ({state, dispatch, commit}, uuid) => {
+        if (!state.orgs[uuid] || !state.orgs[uuid].manager_data) {
+            dispatch('fetchManagers', uuid)
+            .then(managers => {
+                let new_node = state.orgs[uuid]
+                new_node.manager_data = managers
+                commit('updateNode', new_node)
+            })
+        }
     }
 }
 
