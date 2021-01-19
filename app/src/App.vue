@@ -45,8 +45,8 @@ export default {
     },
     data: function() {
         return {
-            title: process.env.VUE_APP_TITLE,
-            logo_src: process.env.VUE_APP_LOGO_PATH
+            title: GLOBAL_APP_TITLE,
+            logo_src: GLOBAL_APP_LOGO_PATH
         }
     }
 }

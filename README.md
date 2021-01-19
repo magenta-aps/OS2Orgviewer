@@ -71,6 +71,10 @@ GLOBAL_API_URL // Corresponds to VUE_APP_API_BASEURL environment variable
 GLOBAL_API_ROOT_UUID // Corresponds to VUE_APP_ROOT_UUID environment variable
 
 GLOBAL_ORG_PERSON_RELATION  // Corresponds to VUE_APP_ORG_PERSON_RELATION environment variable
+
+GLOBAL_APP_LOGO_PATH  // Corresponds to VUE_APP_LOGO_PATH environment variable
+
+GLOBAL_APP_TITLE  // Corresponds to VUE_APP_TITLE environment variable
 ```
 
 

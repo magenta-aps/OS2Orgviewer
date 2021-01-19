@@ -3,15 +3,17 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="description" content="OS2Orgviewer version 2.0.1"> <!-- Bump version for every merge request-->
+        <meta name="description" content="OS2Orgviewer version 2.0.2"> <!-- Bump version for every merge request-->
         <meta name="viewport" content="width=device-width,initial-scale=1.0">
         <link rel="icon" href="<%= VUE_APP_FAVICON_PATH %>">
         <title><%= VUE_APP_TITLE %></title>
         <script>
             // Server specific settings
+            var GLOBAL_APP_TITLE = '<%= VUE_APP_TITLE %>'
             var GLOBAL_API_URL = '<%= VUE_APP_API_BASEURL %>'
             var GLOBAL_API_ROOT_UUID = '<%= VUE_APP_ROOT_UUID %>'
             var GLOBAL_ORG_PERSON_RELATION = '<%= VUE_APP_ORG_PERSON_RELATION %>'
+            var GLOBAL_APP_LOGO_PATH = '<%= VUE_APP_LOGO_PATH %>'
         </script>
     </head>
     <body>
