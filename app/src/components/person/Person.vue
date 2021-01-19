@@ -244,6 +244,7 @@ export default {
     
     .oc-person {
         position: relative;
+        margin-top: 24pt;
     }
 
     #persontitle {

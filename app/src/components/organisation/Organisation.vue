@@ -55,6 +55,9 @@ export default {
         },
         root_org_uuid: function() {
             return this.$store.getters.getRootOrgUnitUuid
+        },
+        is_loading: function() {
+            return this.$store.getters.isAjaxing
         }
     },
     watch: {
@@ -66,6 +69,17 @@ export default {
             })
             if (new_data && !new_data.address_data) {
                 this.$store.dispatch('getAddresses', this.org_data.uuid)
+            }
+        },
+        is_loading: function(it_is_loading) {
+            if (!it_is_loading) {
+                setTimeout(() => {
+                    document.querySelector(`#node-${this.org_data.uuid} > .oc-tt-node`).scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center',
+                        inline: 'center'
+                    })
+                }, 300)
             }
         }
     },
@@ -92,7 +106,7 @@ export default {
     z-index: 10;
     display: flex;
     flex-flow: column nowrap;
-    overflow: auto;
+    overflow: hidden;
 }
 
 .oc-org.dim > * {
@@ -178,6 +192,8 @@ export default {
     
     .oc-org {
         position: relative;
+        page-break-before: always;
+        margin-top: 24pt;
     }
 
     .oc-org.dim > * {

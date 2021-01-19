@@ -9,18 +9,18 @@
                 <svg class="svg-toggle" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path class="svg-path" d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/></svg>
             </router-link>
         </nav>
-        <ul class="oc-branch oc-chart-root-branch">
-            <leaf :uuid="root_org_uuid" :show-children="true" class="oc-chart-root-leaf" :level="0" />
-        </ul>
+        <div class="oc-tree-wrapper">
+            <tidy-tree />
+        </div>
     </div>
 </template>
 
 <script>
-import Leaf from './Leaf.vue'
+import TidyTree from './TidyTree.vue'
 
 export default {
     components: {
-        Leaf
+        TidyTree
     },
     computed: {
         root_org_uuid: function() {
@@ -38,17 +38,17 @@ export default {
         }
     },
     created: function() {
-
+        
         // Initialise tree view from URL params
         if (this.$route.params.rootOrgUnitId) {
             this.$store.commit('setRootOrgUnitUuid', this.$route.params.rootOrgUnitId)
         }
         
         if (this.$route.params.orgUnitId) {
-            this.$store.dispatch('getTree', this.$route.params.orgUnitId)
+            this.$store.dispatch('populateGraph', this.$route.params.orgUnitId)
             this.$store.commit('setCurrentOrgUnitUuid', this.$route.params.orgUnitId)
         } else {
-            this.$store.dispatch('getTree', GLOBAL_API_ROOT_UUID)
+            this.$store.dispatch('populateGraph', GLOBAL_API_ROOT_UUID)
         }
     }
 }
@@ -70,11 +70,6 @@ export default {
     width: 100%;
 }
 
-.oc-branch.oc-chart-root-branch {
-    width: 100%;
-    padding: 0 0 2rem 1rem;
-}
-
 .oc-chart-root-link {
     display: block !important;
     box-shadow: $shadow-1;
@@ -86,7 +81,7 @@ export default {
     }
 }
 
-@media screen and (max-width: 40rem) {
+@media screen and (max-width: 39.99rem) {
 
     .oc-chart {
         display: block;
@@ -97,68 +92,11 @@ export default {
 
 @media screen and (min-width: 40rem) {
 
-    .oc-chart-root-branch {
-        padding: 0 1rem 2rem !important;
+    .oc-tree-wrapper {
+        width: 100%;
         overflow: auto;
-        height: 100%;
-        width: 100%;
+        flex-grow: 1;
     }
-
-    .oc-chart-root-leaf {
-        display: flex;
-        flex-flow: column nowrap;
-        align-items: center;
-        margin-bottom: 1rem;
-    }
-
-    .oc-chart-root-leaf::before {
-        left: 50%;
-    }
-
-    .oc-chart-root-leaf > .oc-node-body::before {
-        top: auto;
-        bottom: -1.25rem;
-        height: 1.25rem;
-        width: 3px;
-        left: 50%;
-    }
-
-    .oc-branch.oc-branch-level-1 {
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: flex-start;
-        width: auto;
-        margin: 1.25rem auto 0;
-        padding: 0;
-    }
-
-    .oc-branch.oc-branch-level-1 > .oc-node {
-        padding: 1.25rem 1rem 0;
-    }
-
-    .oc-branch.oc-branch-level-1 > .oc-node::before {
-        height: 3px;
-        width: 100%;
-        top: 0;
-        left: 0;
-    }
-
-    .oc-branch.oc-branch-level-1 > .oc-node:first-child:before {
-        width: 100%;
-        left: 6rem;
-    }
-
-    .oc-branch.oc-branch-level-1 > .oc-node:last-child:before {
-        width: 6rem;
-    }
-
-    .oc-branch.oc-branch-level-1 > .oc-node > .oc-node-body::before {
-        width: 3px;
-        height: 1.25rem;
-        top: -1.25rem;
-        left: 50%;
-    }
-
     .oc-chart-orgopen {
         width: calc(100% - 23rem);
     }
@@ -188,18 +126,11 @@ export default {
         width: auto;
         height: auto;
         margin-top: 24pt;
+        page-break-after: always;
     }
 
     .oc-chart-root-nav {
         display: none !important;
-    }
-
-    .oc-chart-root-branch {
-        padding: 0;
-    }
-
-    .oc-chart-root-branch > .oc-node > .oc-node-body::before {
-        content: none;
     }
 }
 </style>

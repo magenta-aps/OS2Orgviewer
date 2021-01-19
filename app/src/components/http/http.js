@@ -1,6 +1,7 @@
 import 'whatwg-fetch'
 import spinner from '../spinner/Spinner.js'
 import router from '../../router.js'
+import store from '../../store.js'
 
 let loadstack = []
 
@@ -14,6 +15,7 @@ function startSpin() {
     loadstack.push(true)
     if (loadstack.length > 0) {
         spinner.spinOn()
+        store.commit('setAjaxing', true)
     }
 }
 
@@ -21,6 +23,7 @@ function stopSpin() {
     loadstack.pop()
     if (loadstack.length < 1) {
         spinner.spinOff()
+        store.commit('setAjaxing', false)
     }
 }
 
