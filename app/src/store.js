@@ -14,5 +14,18 @@ export default new Vuex.Store({
         manager,
         organisation,
         tree
+    }, 
+    state: {
+        ajaxing: false
+    },
+    getters: {
+        isAjaxing: state => {
+            return state.ajaxing
+        }
+    },
+    mutations: {
+        setAjaxing: (state, bool) => {
+            state.ajaxing = bool
+        }
     }
 })

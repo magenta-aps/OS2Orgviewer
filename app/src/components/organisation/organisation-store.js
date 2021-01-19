@@ -37,7 +37,7 @@ const state = {
 }
 
 const getters = {
-    getGraph: state => {
+    getOrgUnits: state => {
         return state.orgs
     }, 
     getOrgUnit: (state) => (org_unit_uuid) => {
@@ -94,13 +94,16 @@ const actions = {
             return addresses
         })
     },
-    getTree: ({dispatch}, uuid) => {
+    populateGraph: ({state, commit, dispatch}, uuid) => {
         dispatch('fetchTree', uuid)
         .then(tree => {
             utils.mapTreeToGraph(tree, false)
             dispatch('fetchOrgUnitChildren', uuid)
             .then(children => {
                 utils.mapChildrenToParent(uuid, children)
+                let root_node = state.orgs[uuid]
+                root_node.showchildren = true
+                commit('updateNode', root_node)
             })
         })
     },

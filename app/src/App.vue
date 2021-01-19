@@ -278,6 +278,10 @@ a.oc-header-postaction:focus {
         padding-left: 0 !important;
     }
 
+    hr {
+        border-color: black;
+    }
+
     .oc-header-postaction,
     .sr-only {
         display: none !important;

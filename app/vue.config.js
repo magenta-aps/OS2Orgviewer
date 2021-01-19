@@ -9,5 +9,8 @@ module.exports = {
         }
     },
     outputDir: 'dist',
-    productionSourceMap: false
+    productionSourceMap: false,
+    transpileDependencies: [
+        'non-layered-tidy-tree-layout'
+    ]
 }
