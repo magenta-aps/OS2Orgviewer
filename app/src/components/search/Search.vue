@@ -12,7 +12,7 @@
                 <li v-for="res in results" :key="res.uuid">
                     <router-link
                         v-if="res.givenname"
-                        :to="{ name: 'person', params: { personId: res.uuid, rootOrgUnitId: global_root_uuid } }">
+                        :to="`/person/${ res.uuid }/`">
                         <span class="label">Person</span><br>
                         {{ res.name }}
                     </router-link>
@@ -77,8 +77,10 @@ export default {
         search: function() {
             let search_res = []
             let search_associated = ''
-            if (GLOBAL_ORG_PERSON_RELATION === 'associated') {
+            if (GLOBAL_ORG_PERSON_RELATION === 'association') {
                 search_associated = 'associated=true'
+            } else {
+                search_associated = 'associated=false'
             }
             ajax(`/service/o/${ this.organisation_uuid }/e/?query=${ this.query }&${ search_associated }`)
             .then(person_res => {

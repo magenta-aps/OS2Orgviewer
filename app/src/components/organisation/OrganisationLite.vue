@@ -34,9 +34,6 @@ export default {
                         document.getElementById(`ou-${ this.uuid }`).focus()
                     }
                 })
-                if (to.params.orgUnitId !== from.params.orgUnitId) {
-                    this.$store.commit('setCurrentOrgUnitUuid', to.params.orgUnitId)
-                }
             }
         }
     }

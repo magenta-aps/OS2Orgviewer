@@ -115,25 +115,48 @@ const actions = {
             })
         }
     },
-    getAddresses: ({state, dispatch, commit}, uuid) => {
-        if (!state.orgs[uuid] || !state.orgs[uuid].address_data) {
-            dispatch('fetchOrgUnitAddresses', uuid)
-            .then(addresses => {
-                let new_node = state.orgs[uuid]
-                new_node.address_data = addresses
-                commit('updateNode', new_node)
-            })
+    checkOrgUnitData: ({state, commit, dispatch}, uuid) => {
+        let new_org = state[uuid]
+
+        const checkOrgUnitData = (org_data) => {
+            if (!state[uuid]) {
+                dispatch('fetchOrgUnit', uuid)
+                .then(org_unit => {
+                    org_data = org_unit
+                    checkAddressData(org_data)
+                })
+            } else {
+                checkAddressData(org_data)
+            }
+        } 
+
+        const checkAddressData = (org_data) => {
+            if (!org_data.address_data) {
+                dispatch('fetchOrgUnitAddresses', org_data.uuid)
+                .then(addresses => {
+                    org_data.address_data = addresses
+                    checkManagerData(org_data)
+                })
+            } else {
+                checkManagerData(org_data)
+
+            }  
         }
-    },
-    getManagers: ({state, dispatch, commit}, uuid) => {
-        if (!state.orgs[uuid] || !state.orgs[uuid].manager_data) {
-            dispatch('fetchManagers', uuid)
-            .then(managers => {
-                let new_node = state.orgs[uuid]
-                new_node.manager_data = managers
-                commit('updateNode', new_node)
-            })
+
+        const checkManagerData = (org_data) => {
+            if (GLOBAL_ORG_PERSON_RELATION === 'engagement' && !org_data.manager_data) {
+                dispatch('fetchManagers', org_data.uuid)
+                .then(managers => {
+                    org_data.manager_data = managers
+                    commit('updateNode', org_data)
+                })
+            } else {
+                commit('updateNode', org_data)
+            }
+            
         }
+
+        checkOrgUnitData(new_org)
     }
 }
 

@@ -3,7 +3,7 @@
         <article 
             class="oc-org" 
             :class="{'dim': $route.name === 'person'}"
-            v-if="org_data && this.$route.name === 'orgunit' || this.$route.name === 'person'"
+            v-if="org_data && this.$route.name.match(/[orgunit|person]/)"
             :tabindex="$route.query.person ? -1 : 0">
             <oc-header>
                 <h2 slot="title">
@@ -51,7 +51,11 @@ export default {
     },
     computed: {
         org_data: function() {
-            return this.$store.getters.getCurrentOrgUnit
+            if (this.$route.params.orgUnitId) {
+                return this.$store.getters.getOrgUnit(this.$route.params.orgUnitId)
+            } else {
+                return null
+            }
         },
         root_org_uuid: function() {
             return this.$store.getters.getRootOrgUnitUuid
@@ -67,12 +71,9 @@ export default {
                     document.getElementById('orgtitle').focus()
                 }
             })
-            if (new_data && !new_data.address_data) {
-                this.$store.dispatch('getAddresses', this.org_data.uuid)
-            }
         },
         is_loading: function(it_is_loading) {
-            if (!it_is_loading) {
+            if (!it_is_loading && this.org_data) {
                 setTimeout(() => {
                     document.querySelector(`#node-${this.org_data.uuid} > .oc-tt-node`).scrollIntoView({
                         behavior: 'smooth',
@@ -81,14 +82,22 @@ export default {
                     })
                 }, 300)
             }
+        },
+        $route: function(to, from) {
+            if (to.params.orgUnitId !== from.params.orgUnitId) {
+                this.update(to.params.orgUnitId)
+            }
+        }
+    },
+    methods: {
+        update: function(org_unit_uuid) {
+            this.$store.dispatch('checkOrgUnitData', this.$route.params.orgUnitId)
         }
     },
     created: function() {
-
         // Initialise org view from URL params
         if (this.$route.params.orgUnitId) {
-            this.$store.dispatch('getAddresses', this.$route.params.orgUnitId)
-            this.$store.dispatch('getManagers', this.$route.params.orgUnitId)
+            this.update(this.$route.params.orgUnitId)
         }
     }
 }
