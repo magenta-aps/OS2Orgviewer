@@ -16,16 +16,16 @@ export default new Vuex.Store({
         tree
     }, 
     state: {
-        ajaxing: false
+        loading: false
     },
     getters: {
-        isAjaxing: state => {
-            return state.ajaxing
+        isLoading: state => {
+            return state.loading
         }
     },
     mutations: {
-        setAjaxing: (state, bool) => {
-            state.ajaxing = bool
+        setLoading: (state, bool) => {
+            state.loading = bool
         }
     }
 })

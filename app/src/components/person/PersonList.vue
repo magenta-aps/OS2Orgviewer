@@ -33,8 +33,10 @@ export default {
         }
     },
     watch: {
-        uuid: function(new_uuid) {
-            this.update(new_uuid)
+        uuid: function(new_uuid, old_uuid) {
+            if (new_uuid !== old_uuid) {
+                this.update(new_uuid)
+            }   
         }
     },
     methods: {

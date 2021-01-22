@@ -15,11 +15,6 @@ export default {
     components: {
         TidyTreeItem
     },
-    data: function() {
-        return {
-
-        }
-    },
     computed: {
         root_org_uuid: function() {
             return this.$store.getters.getRootOrgUnitUuid
@@ -36,7 +31,7 @@ export default {
             }
         },
         is_loading: function() {
-            return this.$store.getters.isAjaxing
+            return this.$store.getters.isLoading
         }
     },
     watch: {

@@ -61,11 +61,11 @@ export default {
             return this.$store.getters.getRootOrgUnitUuid
         },
         is_loading: function() {
-            return this.$store.getters.isAjaxing
+            return this.$store.getters.isLoading
         }
     },
     watch: {
-        org_data: function(new_data) {
+        org_data: function(new_data, old_data) {
             Vue.nextTick(() => {
                 if (new_data && this.$route.query.target === 'orgunit') {
                     document.getElementById('orgtitle').focus()

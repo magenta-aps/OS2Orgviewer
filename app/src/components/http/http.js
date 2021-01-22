@@ -15,7 +15,7 @@ function startSpin() {
     loadstack.push(true)
     if (loadstack.length > 0) {
         spinner.spinOn()
-        store.commit('setAjaxing', true)
+        store.commit('setLoading', true)
     }
 }
 
@@ -23,7 +23,7 @@ function stopSpin() {
     loadstack.pop()
     if (loadstack.length < 1) {
         spinner.spinOff()
-        store.commit('setAjaxing', false)
+        store.commit('setLoading', false)
     }
 }
 

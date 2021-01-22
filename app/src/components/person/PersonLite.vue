@@ -17,7 +17,12 @@
                     :to="`/person/${ person.uuid }/${ orgUuid }/${ root_org_uuid ? root_org_uuid : null}`">
                     <span class="sr-only">Vis detaljer for </span>
                     {{ person.name }}
-                </router-link>
+                </router-link><br>
+                <span v-if="association && association.dynamic_classes && relation_type === 'association'" class="oc-person-asso-mainorg">
+                    <span v-for="dc in association.dynamic_classes" :key="dc.uuid">
+                        {{ dc.name }}
+                    </span>
+                </span>
             </dd>
 
             <template v-if="association && relation_type === 'association' && association.substitute">
@@ -77,6 +82,10 @@ export default {
 
 .oc-person-list-item {
     margin: 0 0 .5rem;
+}
+
+.oc-person-asso-mainorg {
+    font-size: smaller;
 }
 
 </style>
