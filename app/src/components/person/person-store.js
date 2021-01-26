@@ -13,17 +13,11 @@ const getters = {
     },
     getPerson: state => uuid => {
         return state.persons[uuid]
-    },
-    getCurrentPerson: state => {
-        return state.persons[state.current_person_uuid] ? state.persons[state.current_person_uuid] : false
     }
 }
 const mutations = {
     setPerson: (state, person) => {
         state.persons[person.uuid] = person
-    },
-    setCurrentPersonUuid: (state, person_uuid) => {
-        state.current_person_uuid = person_uuid
     },
     popLoadQueue: (state) => {
         state.queue.pop()

@@ -4,8 +4,8 @@
             <oc-header>
                 <h3 slot="title">
                     <router-link 
-                        v-if="org_unit"
-                        :to="`/orgunit/${ org_unit.uuid }/${ root_org_uuid ? root_org_uuid : null}`"
+                        v-if="$route.params.orgUnitId"
+                        :to="`/orgunit/${ $route.params.orgUnitId }/${ root_org_uuid ? root_org_uuid : null}`"
                         id="persontitle">
                         <svg class="svg-back" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path class="svg-path" d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
                         <span class="oc-person-title">{{ person.name }}</span>
@@ -71,30 +71,30 @@ export default {
     },
     data: function() {
         return {
-            relation_type: GLOBAL_ORG_PERSON_RELATION,
-            await_determine_orgunit: false
+            relation_type: GLOBAL_ORG_PERSON_RELATION
         }
     },
     computed: {
         person: function() {
-            return this.$store.getters.getCurrentPerson
-        },
-        org_unit: function() {
-            return this.$store.getters.getCurrentOrgUnit
+            if (this.$route.params.personId) {
+                return this.$store.getters.getPerson(this.$route.params.personId)
+            } else {
+                return null
+            }
         },
         association: function() {
-            if (this.person.association_data && this.org_unit) {
+            if (this.person.association_data && this.$route.params.orgUnitId) {
                 return this.person.association_data.find(e => {
-                    return e.org_unit.uuid === this.org_unit.uuid
+                    return e.org_unit.uuid === this.$route.params.orgUnitId
                 })
             } else {
                 return false
             }
         },
         engagement: function() {
-            if (this.person.engagement_data && this.org_unit) {
+            if (this.person.engagement_data && this.$route.params.orgUnitId) {
                 return this.person.engagement_data.find(e => {
-                    return e.org_unit.uuid === this.org_unit.uuid
+                    return e.org_unit.uuid === this.$route.params.orgUnitId
                 })
             } else {
                 return false
@@ -105,24 +105,23 @@ export default {
         }
     },
     watch: {
-        person: function(new_data) {
-            Vue.nextTick(() => {
-                if (new_data && this.$route.name === 'person' && this.org_unit) {
-                    document.getElementById('persontitle').focus()
-                }
-            })
-
-            // If no org unit id was supplied, 
-            // set one using persons engagement or association info
-            if (this.await_determine_orgunit) {
-                let org_unit_uuid
+        person: function(new_data, old_data) {
+            if (new_data !== old_data) {
+                Vue.nextTick(() => {
+                    if (new_data && this.$route.name === 'person' && this.$route.params.orgUnitId) {
+                        document.getElementById('persontitle').focus()
+                    }
+                })
+            }
+            // If no org unit id in route, set org unit from person's association/engagement data and reload
+            if (!this.$route.params.orgUnitId && new_data) {
+                let org_unit_uuid = null
                 if (this.relation_type === 'association') {
-                    org_unit_uuid = this.person.association_data[0].org_unit.uuid
+                    org_unit_uuid = new_data.association_data[0].org_unit.uuid
                 } else {
-                    org_unit_uuid = this.person.engagement_data[0].org_unit.uuid
+                    org_unit_uuid = new_data.engagement_data[0].org_unit.uuid
                 }
-                this.$store.commit('setCurrentOrgUnitUuid', org_unit_uuid)
-                this.await_determine_orgunit = false
+                this.$router.push(`/person/${ new_data.uuid }/${ org_unit_uuid }`)
             }
         },
         $route: function(to, from) {
@@ -133,24 +132,21 @@ export default {
                     }
                 })
                 if (to.params.personId !== from.params.personId) {
-                    this.$store.commit('setCurrentPersonUuid', to.params.personId)
+                    this.update(to.params)
                 }
             }
         }
     },
     methods: {
-        
+        update: function(params) {
+            // Initialise orgviewer from URL params
+            this.$store.dispatch('fetchPerson', params.personId)
+        }
     },
     created: function() {
 
-        // Initialise orgviewer from URL params
         if (this.$route.params.personId) {
-            this.$store.dispatch('fetchPerson', this.$route.params.personId)
-            this.$store.commit('setCurrentPersonUuid', this.$route.params.personId)
-        }
-
-        if (!this.$route.params.orgUnitId) {
-            this.await_determine_orgunit = true
+            this.update(this.$route.params)
         }
     }
 }

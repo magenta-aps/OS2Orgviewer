@@ -10,12 +10,13 @@
             <h3 class="oc-search-results-header" tabindex="-1">{{ results.length }} søgeresultater</h3>
             <ul class="oc-search-list">
                 <li v-for="res in results" :key="res.uuid">
-                    <router-link
+                    <a
                         v-if="res.givenname"
-                        :to="`/person/${ res.uuid }/`">
+                        href="#"
+                        @click.prevent="navigateToPerson(res.uuid)">
                         <span class="label">Person</span><br>
                         {{ res.name }}
-                    </router-link>
+                    </a>
                     <router-link 
                         v-else
                         :to="`/orgunit/${ res.uuid }/${ global_root_uuid }`">
@@ -98,6 +99,28 @@ export default {
                 })    
             })
             
+        },
+        navigateToPerson: function(person_uuid) {
+            this.$store.dispatch('fetchPerson', person_uuid)
+            this.awaitPersonData(person_uuid)    
+        },
+        awaitPersonData: function(person_uuid) {
+            setTimeout(() => {
+                let person_data = this.$store.getters.getPerson(person_uuid)
+                let org_unit_uuid = null
+                if (!person_data) {
+                    this.awaitPersonData(person_uuid)
+                } else {
+                    // Set org unit from person's association/engagement data
+                    if (GLOBAL_ORG_PERSON_RELATION === 'association') {
+                        org_unit_uuid = person_data.association_data[0].org_unit.uuid
+                    } else {
+                        org_unit_uuid = person_data.engagement_data[0].org_unit.uuid
+                    }
+                    this.$router.push(`/person/${ person_uuid }/${ org_unit_uuid }`)
+                    return
+                }
+            }, 400)
         }
     },
     mounted: function() {

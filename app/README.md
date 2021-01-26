@@ -62,6 +62,6 @@ orgviewer uses the OS2MO REST API
 ## An overview of API requests for getting org unit info
 While getting org unit information from the REST API, it is nescessary to compile the output of several requests in order to get complete data.
 GET `/service/ou/[uuid]/` returns `parent` (OU object)
-GET `/service/ou/ancestor-tree?uuid=[uuid]` returns a list of OUs with `child_count` (number) OR `children` (array of OU objects)
-GET `/service/ou/[uuid]/children` returns a list of OUs with `child_count`
+GET `/service/ou/ancestor-tree?uuid=[uuid]` returns a list of OUs with properties `child_count` (number) OR `children` (array of OU objects)
+GET `/service/ou/[uuid]/children` returns a list of OUs with property `child_count`
 
