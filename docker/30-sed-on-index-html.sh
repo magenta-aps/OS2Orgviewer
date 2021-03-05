@@ -37,8 +37,19 @@ replace_global_app_title() {
   fi
 }
 
+replace_org_person_relation() {
+  local index_file="/usr/share/nginx/html/index.html"
+
+  if [ ! -f $index_file ]; then
+    echo >&3 "$ME: ERROR: $index_file does not exist"
+    exit 1
+  fi
+  sed "s#var GLOBAL_ORG_PERSON_RELATION = '.*'#var GLOBAL_ORG_PERSON_RELATION = '${GLOBAL_ORG_PERSON_RELATION}'#g" -i $index_file
+}
+
 replace_global_url
 replace_global_root_uuid
 replace_global_app_title
+replace_global_replace_org_person_relation
 
 exit 0
