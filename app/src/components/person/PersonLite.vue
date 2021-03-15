@@ -20,7 +20,7 @@
                 </router-link><br>
                 <span v-if="association && association.dynamic_classes && relation_type === 'association'" class="oc-person-asso-mainorg">
                     <span v-for="dc in association.dynamic_classes" :key="dc.uuid">
-                        {{ dc.name }}
+                        {{ dc.full_name }}
                     </span>
                 </span>
             </dd>
