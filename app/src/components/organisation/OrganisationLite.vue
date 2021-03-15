@@ -4,9 +4,16 @@
         :to="`/orgunit/${ org_data.uuid }/${ root_org_uuid ? root_org_uuid : null}`"
         :id="`ou-${ org_data.uuid }`"
         class="oc-org-link btn">
-        <svg class="svg-point" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path class="svg-path" d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/></svg>
-        <span class="sr-only">Vis detaljer for </span>
-        {{ org_data.name }}
+        <p class="oc-org-link-title">
+            <svg class="svg-point" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path class="svg-path" d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/></svg>
+            <span class="sr-only">Vis detaljer for </span>
+            {{ org_data.name }}
+        </p>
+        <p class="oc-org-link-count"> 
+            xx
+            <span v-if="relation === 'engagement'">ansatte</span>
+            <span v-if="relation === 'association'">tilknyttede</span>
+        </p>
     </router-link>
 
 </template>
@@ -18,6 +25,11 @@ export default {
     props: [
         'uuid'
     ],
+    data: function() {
+        return {
+            relation: GLOBAL_ORG_PERSON_RELATION
+        }
+    },
     computed: {
         root_org_uuid: function() {
             return this.$store.getters.getRootOrgUnitUuid
@@ -47,13 +59,27 @@ export default {
 .oc-org-link:visited {
     text-align: left !important;
     white-space: normal !important;
+    display: block;
+    padding: .5rem .75rem !important;
+}
+
+.oc-org-link > p {
+    margin: 0;
+    padding: 0;
+}
+
+.oc-org-link-title {
     display: flex !important;
     flex-flow: row nowrap !important;
     align-items: center !important;
-    padding: .5rem .75rem !important;
-}   
+}
 
-.oc-org-link .svg-point {
+.oc-org-link-count {
+    font-size: .8em;
+    opacity: .66;
+}
+
+.oc-org-link-title .svg-point {
     display: none;
     transform: translate(-.25rem, 0) scale(1.5) rotate(270deg);
 
@@ -63,7 +89,7 @@ export default {
 }
 
 @media print {
-    .oc-org-link .svg-point {
+    .oc-org-link-title .svg-point {
         display: none !important;
     }
 }
