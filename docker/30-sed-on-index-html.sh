@@ -50,6 +50,6 @@ replace_org_person_relation() {
 replace_global_url
 replace_global_root_uuid
 replace_global_app_title
-replace_global_replace_org_person_relation
+replace_org_person_relation
 
 exit 0
