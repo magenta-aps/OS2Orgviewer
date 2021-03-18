@@ -1,5 +1,8 @@
 <template>
     <div id="app">
+        <transition name="ls-fade">
+            <load-screen v-if="first_load" text="Vent et øjeblik mens vi henter data" />
+        </transition>
         <oc-header id="oc-global-header">
             <router-link slot="preaction" to="/" class="oc-header-preaction btn" :title="`Vis øverste niveau i ${ title }`">
                 <img :src="logo_src" alt="">
@@ -37,17 +40,39 @@
 
 <script>
 import OcHeader from './components/layout/Header.vue'
+import LoadScreen from './components/spinner/Loadscreen.vue'
 
 export default {
     name: 'App',
     components: {
-        OcHeader
+        OcHeader,
+        LoadScreen
     },
     data: function() {
         return {
             title: GLOBAL_APP_TITLE,
-            logo_src: GLOBAL_APP_LOGO_PATH
+            logo_src: GLOBAL_APP_LOGO_PATH,
+            first_load: true
         }
+    },
+    computed: {
+        is_loading: function() {
+            return this.$store.getters.isLoading
+        }
+    },
+    methods: {
+        checkFirstLoad: function() {
+            setTimeout(() => {
+                if (this.is_loading) {
+                    this.checkFirstLoad()
+                } else {
+                    this.first_load = false
+                }
+            }, 3000)
+        }
+    },
+    mounted: function() {
+        this.checkFirstLoad()
     }
 }
 </script>
@@ -231,6 +256,16 @@ a.oc-header-postaction:focus {
 .oc-fade-enter, 
 .oc-fade-leave-to {
     transform: translateX(100%);
+}
+
+//.ls-fade-enter-active, 
+.ls-fade-leave-active {
+    clip-path: circle(100%);
+    transition: clip-path .5s;
+}
+//.ls-fade-enter, 
+.ls-fade-leave-to {
+    clip-path: circle(1%);
 }
 
 @media print {

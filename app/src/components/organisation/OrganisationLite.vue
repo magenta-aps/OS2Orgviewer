@@ -10,9 +10,9 @@
             {{ org_data.name }}
         </p>
         <p class="oc-org-link-count"> 
-            xx
-            <span v-if="relation === 'engagement'">ansatte</span>
-            <span v-if="relation === 'association'">tilknyttede</span>
+            {{ org_data[`${relation_type}_count`] }}
+            <span v-if="relation_type === 'engagement'">ansatte</span>
+            <span v-if="relation_type === 'association'">tilknyttede</span>
         </p>
     </router-link>
 
@@ -27,7 +27,7 @@ export default {
     ],
     data: function() {
         return {
-            relation: GLOBAL_ORG_PERSON_RELATION
+            relation_type: GLOBAL_ORG_PERSON_RELATION
         }
     },
     computed: {

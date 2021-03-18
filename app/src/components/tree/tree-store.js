@@ -18,6 +18,7 @@ const orgIterator = function(orgs, node_uuid) {
 
 const state = {
     root_org_uuid: GLOBAL_API_ROOT_UUID, // Defined in index.html
+    relation_type: GLOBAL_ORG_PERSON_RELATION, // Defined in index.html
     global_organisations: null,
     tree_data: null
 }
@@ -57,7 +58,7 @@ const actions = {
             return orgs
         })
     },
-    fetchTree: ({}, org_unit_uuid) => {
+    fetchTree: ({state}, org_unit_uuid) => {
         return ajax(`/service/ou/ancestor-tree?uuid=${ org_unit_uuid }`)
         .then(tree => {
             return tree

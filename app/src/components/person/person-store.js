@@ -28,7 +28,7 @@ const mutations = {
 }
 const actions = {
     fetchPersons: ({dispatch, rootState}, options) => {
-        if (!rootState.organisation.orgs[options.org_uuid].person_data) {        
+        if (!rootState.organisation.orgs[options.org_uuid].person_data) {
             let relation_type = options.relation ? options.relation : 'engagement'
             ajax(`/service/ou/${ options.org_uuid }/details/${ relation_type }`)
             .then(relations => {
