@@ -9,7 +9,7 @@
             <span class="sr-only">Vis detaljer for </span>
             {{ org_data.name }}
         </p>
-        <p class="oc-org-link-count"> 
+        <p class="oc-org-link-count" v-if="org_data[`${relation_type}_count`]">
             {{ org_data[`${relation_type}_count`] }}
             <span v-if="relation_type === 'engagement'">ansatte</span>
             <span v-if="relation_type === 'association'">tilknyttede</span>
