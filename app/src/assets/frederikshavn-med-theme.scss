@@ -1,5 +1,4 @@
 /*
-
     ==========================
     Frederikshavns designguide
     ==========================
@@ -19,9 +18,12 @@
     Sandfarvet: Pantone 5807 / CMYK 10 5 25 5 / RGB 217 217 188 / # D9D9BC
     Limegrøn: Pantone 383 / CMYK 40 0 100 0 / RGB 166 206 57 /# A6CE39
     Mørk sandfarvet: Pantone 7536/ CMYK 5 5 20 30 / RGB 178 176 158 / # B2809E
+*/
 
-
-    SASS variables for CSS theme
+/* 
+    ========================= 
+    SASS variables and mixins
+    ========================= 
 */
 
 @use "sass:color";
@@ -105,4 +107,13 @@ $font: 1em/1.4 Tahoma, Helvetica, sans-serif;
 @mixin button-focus {
     @include button-hover;
     outline: none;
+}
+
+
+/*
+    Custom styles
+*/
+
+.oc-org-link {
+    font-size: .9em !important;
 }

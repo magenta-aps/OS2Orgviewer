@@ -44,7 +44,7 @@ Check the [full documentation on setting environment variables.](https://cli.vue
 
 * `VUE_APP_API_BASEURL` - the hostname and/or port of the OS2MO REST API you want the application to pull data from.
 * `VUE_APP_TITLE` - the application title. It will appear in the UI header and in the HTML document title.
-* `VUE_APP_ROOT_UUID` - and UUID representing whatever organisation unit you want as the default root org. unit.
+* `VUE_APP_ROOT_UUID` - a UUID representing whatever organisation unit you want as the default root org. unit.
 * `VUE_APP_THEME_PATH` - local path to SCSS file containing custom theme variables. You can make a copy of [./src/assets/default-theme.scss](./src/assets/default-theme.scss) and edit it to create your own custom theme.
 * `VUE_APP_LOGO_PATH` - local or global path to image file you want as your application's branding image.
 * `VUE_APP_FAVICON_PATH` - local or global path to image file (usually `favicon.ico`) you want as your application's favicon.
@@ -57,11 +57,10 @@ For build configurations, refer to the [Vue-CLI configuration reference](https:/
 
 # REST API interfacing
 
-orgviewer uses the OS2MO REST API 
+orgviewer uses the [OS2MO REST API.](https://os2mo.readthedocs.io/en/development/api/rest.html)
 
 ## An overview of API requests for getting org unit info
 While getting org unit information from the REST API, it is nescessary to compile the output of several requests in order to get complete data.
 GET `/service/ou/[uuid]/` returns `parent` (OU object)
 GET `/service/ou/ancestor-tree?uuid=[uuid]` returns a list of OUs with properties `child_count` (number) OR `children` (array of OU objects)
 GET `/service/ou/[uuid]/children` returns a list of OUs with property `child_count`
-
