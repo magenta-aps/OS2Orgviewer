@@ -54,7 +54,7 @@ replace_tree_layout() {
     echo >&3 "$ME: ERROR: $index_file does not exist"
     exit 1
   fi
-  sed "s#var GLOBAL_APP_TREE_LAYOUT = '.*'#var GLOBAL_APP_TREE_LAYOUT = '${GLOBAL_APP_TREE_LAYOUT}'#g" -i $index_file
+  sed "s#var VUE_APP_TREE_LAYOUT = '.*'#var VUE_APP_TREE_LAYOUT = '${VUE_APP_TREE_LAYOUT}'#g" -i $index_file
 }
 
 replace_global_url

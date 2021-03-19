@@ -24,7 +24,7 @@ export default {
     },
     data: function() {
         return {
-            tree_layout_class: GLOBAL_APP_TREE_LAYOUT ? `oc-layout-${ GLOBAL_APP_TREE_LAYOUT}` : 'oc-layout-horizontal'
+            tree_layout_class: VUE_APP_TREE_LAYOUT ? `oc-layout-${ VUE_APP_TREE_LAYOUT}` : 'oc-layout-horizontal'
         }
     },
     computed: {
