@@ -9,12 +9,12 @@
         <title><%= VUE_APP_TITLE %></title>
         <script>
             // Server specific settings
-            var GLOBAL_APP_TITLE = '<%= VUE_APP_TITLE %>'
-            var GLOBAL_API_URL = '<%= VUE_APP_API_BASEURL %>'
+            var GLOBAL_APP_TITLE = '<%= VUE_APP_TITLE %>' !== '' ? '<%= VUE_APP_TITLE %>' : 'Organization chart demo'
+            var GLOBAL_API_URL = '<%= VUE_APP_API_BASEURL %>' !== '' ? '<%= VUE_APP_API_BASEURL %>' : 'https://moratest.magenta.dk'
             var GLOBAL_API_ROOT_UUID = '<%= VUE_APP_ROOT_UUID %>'
-            var GLOBAL_ORG_PERSON_RELATION = '<%= VUE_APP_ORG_PERSON_RELATION %>'
+            var GLOBAL_ORG_PERSON_RELATION = '<%= VUE_APP_ORG_PERSON_RELATION %>' !== '' ? '<%= VUE_APP_ORG_PERSON_RELATION %>' : 'engagement'
             var GLOBAL_APP_LOGO_PATH = '<%= VUE_APP_LOGO_PATH %>'
-            var GLOBAL_APP_TREE_LAYOUT = '<%= VUE_APP_TREE_LAYOUT %>'
+            var GLOBAL_APP_TREE_LAYOUT = '<%= VUE_APP_TREE_LAYOUT %>' ? '<%= VUE_APP_TREE_LAYOUT %>' : 'horizontal'
         </script>
     </head>
     <body>

@@ -5,6 +5,8 @@ import store from '../../store.js'
 
 let loadstack = []
 
+const api_url = GLOBAL_API_URL ? GLOBAL_API_URL : 'https://moratest.magenta.dk'
+
 const ajax_init = {
     method: 'GET',
     credentials: 'same-origin',
@@ -34,7 +36,7 @@ function ajax(request, options) {
     if (!options.silent) {
         startSpin() 
     }
-    return fetch(GLOBAL_API_URL + request, ajax_init)
+    return fetch(api_url + request, ajax_init)
     .then((response) => {
         return response.json()
     })
