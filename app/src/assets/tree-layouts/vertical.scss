@@ -91,7 +91,50 @@
     @media screen and (max-width: 39.99rem) {
 
         
+    }
 
-        
+    @media screen and (min-width: 40rem) {
+
+        .oc-tt-ul {
+            margin-top: 0;
+        } 
+
+        .oc-tt-item {
+            display: flex;
+            flex-flow: row nowrap;
+            margin-bottom: 1rem;
+
+            &:first-child::before {
+                top: 1.125rem;
+            }
+
+            &:first-child:last-child::before {
+                display: none;
+            }
+
+            &:first-child > .oc-tt-line {
+                display: block;
+                position: absolute;
+                top: 1.125rem !important;
+                left: -2rem !important;
+                right: auto !important;
+                width: 2rem;
+                height: 3px;
+                background-color: $shade-lightest;
+            }
+        }
+
+        .oc-tt-node {
+            flex: 0 0 auto;
+        }
+
+        .svg-toggle {
+            transform: rotate(270deg);
+            transition: transform 0.3s;
+        }
+
+        .oc-node-expand-btn.close .svg-toggle {
+            transform: rotate(90deg);
+        }
     }
 }

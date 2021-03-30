@@ -46,7 +46,7 @@ export default {
                 setTimeout(() => {
                     document.querySelector(`#node-${this.$route.params.orgUnitId} > .oc-tt-node`).scrollIntoView({
                         behavior: 'smooth',
-                        block: 'center',
+                        block: 'nearest',
                         inline: 'center'
                     })
                 }, 300)

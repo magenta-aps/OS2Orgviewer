@@ -80,7 +80,7 @@ export default {
                 setTimeout(() => {
                     document.querySelector(`#node-${this.org_data.uuid} > .oc-tt-node`).scrollIntoView({
                         behavior: 'smooth',
-                        block: 'center',
+                        block: 'nearest',
                         inline: 'center'
                     })
                 }, 300)
