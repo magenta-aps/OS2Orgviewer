@@ -18,12 +18,15 @@
                 </h2>
             </oc-header>
             <div class="oc-org-body" v-if="org_data">
-                <person-list :uuid="org_data.uuid" />
                 <template v-if="org_data.address_data">
-                    <hr>
                     <address-list :list="org_data.address_data" />
                 </template>
-                <manager-list v-if="relation_is_engagement" :uuid="org_data.uuid" />
+                <template v-if="relation_is_engagement">
+                    <hr>
+                    <manager-list :uuid="org_data.uuid" />
+                </template>
+                <hr>
+                <person-list :uuid="org_data.uuid" />
             </div>
         </article>
     </transition>
