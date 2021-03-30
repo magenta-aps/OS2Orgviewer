@@ -135,7 +135,16 @@
             z-index: 2;
     
             .oc-tt-node-body {
-                height: 4rem;
+                min-height: 3.5rem;
+                max-height: 4.5rem;
+            }
+        }
+
+        .oc-org-link {
+            &,
+            &:link,
+            &:visited {
+                align-items: flex-start !important;
             }
         }
     
