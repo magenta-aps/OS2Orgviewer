@@ -21,7 +21,7 @@ export default {
     ],
     computed: {
         org_data: function() {
-            return this.$store.getters.getCurrentOrgUnit
+            return this.$store.getters.getOrgUnit(this.uuid)
         },
         root_org_uuid: function() {
             return this.$store.getters.getRootOrgUnitUuid

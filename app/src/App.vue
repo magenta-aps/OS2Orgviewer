@@ -157,7 +157,7 @@ dd {
 hr {
     border: solid 1px $shade-lighter;
     border-width: 1px 0 0 0;
-    margin: 2rem 1rem;
+    margin: 1.5rem 1rem;
 }
 
 .sr-only {
