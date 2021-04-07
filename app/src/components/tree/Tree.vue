@@ -9,7 +9,7 @@
                 <svg class="svg-toggle" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path class="svg-path" d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/></svg>
             </router-link>
         </nav>
-        <div class="oc-tree-wrapper">
+        <div :class="`oc-tree-wrapper ${ tree_layout_class }`">
             <tidy-tree />
         </div>
     </div>
@@ -21,6 +21,11 @@ import TidyTree from './TidyTree.vue'
 export default {
     components: {
         TidyTree
+    },
+    data: function() {
+        return {
+            tree_layout_class: VUE_APP_TREE_LAYOUT ? `oc-layout-${ VUE_APP_TREE_LAYOUT}` : 'oc-layout-horizontal'
+        }
     },
     computed: {
         root_org_uuid: function() {

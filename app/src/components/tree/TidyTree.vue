@@ -46,7 +46,7 @@ export default {
                 setTimeout(() => {
                     document.querySelector(`#node-${this.$route.params.orgUnitId} > .oc-tt-node`).scrollIntoView({
                         behavior: 'smooth',
-                        block: 'center',
+                        block: 'nearest',
                         inline: 'center'
                     })
                 }, 300)
@@ -67,45 +67,6 @@ export default {
 </script>
 
 <style lang="scss">
-
-.oc-tt-ul {
-    padding: 0;
-}
-
-.oc-tt-ul-root {
-    list-style: none;
-    margin: 2rem 0;
-}
-
-@media screen and (max-width: 39.99rem) {
-
-    .oc-tt-ul-root {
-        padding: 0 0 0 1rem;
-        width: auto !important;
-        height: auto !important;
-
-        & > .oc-tt-item::before {
-            display: none;
-        }
-    }
-
-    .oc-tt-ul {
-        padding: 0 0 0 2rem;
-    }
-}
-
-@media screen and (min-width: 40rem) {
-    .oc-tt-ul-root {
-        padding: 0;
-        position: relative;
-        margin: 2rem auto;
-    }
-
-    .oc-tt-ul-root > .oc-tt-item > .oc-tt-line,
-    .oc-tt-ul-root > .oc-tt-item > .oc-tt-node > .oc-tt-node-head {
-        display: none;
-    }
-}
 
 @media print {
     

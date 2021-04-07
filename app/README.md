@@ -28,40 +28,64 @@ npm run headlesstest
 
 ## Customization
 
-Inside the [app](/app) folder, you'll find `.env` files containing the environment variables you need to set to customize the application for specific uses. Every custom setup has two `.env` files for development and production respectively.
+Configurations can be defined in environment variables prior to running a build and after.
 
-Below is an example of how to name `.env` files:
+Refer to [./app/.env.default](./app/.env.default) for an example of configurations you can make prior to building the Node/VueJS application. 
 
-`.env.frederikshavn-med`
-For development use. This sets the environment used by the `npm run serve-frederikshavn-med` command.
-
-`.env.frederikshavn-med.production`
-For production use. This sets the environment used by `npm run build-frederikshavn-med` command.
-
-Check the [full documentation on setting environment variables.](https://cli.vuejs.org/guide/mode-and-env.html#modes)
-
-### Environment variables
-
-* `VUE_APP_API_BASEURL` - the hostname and/or port of the OS2MO REST API you want the application to pull data from.
-* `VUE_APP_TITLE` - the application title. It will appear in the UI header and in the HTML document title.
-* `VUE_APP_ROOT_UUID` - and UUID representing whatever organisation unit you want as the default root org. unit.
-* `VUE_APP_THEME_PATH` - local path to SCSS file containing custom theme variables. You can make a copy of [./src/assets/default-theme.scss](./src/assets/default-theme.scss) and edit it to create your own custom theme.
-* `VUE_APP_LOGO_PATH` - local or global path to image file you want as your application's branding image.
-* `VUE_APP_FAVICON_PATH` - local or global path to image file (usually `favicon.ico`) you want as your application's favicon.
+Check the [full documentation on setting environment variables for VueJS applications.](https://cli.vuejs.org/guide/mode-and-env.html#modes)
 
 
-### Customizing build configuration
+### Environment variables in .env.default
+```
+# NODE_ENV
+# Sets production or development environment.
+# Default: NODE_ENV=development
 
-For build configurations, refer to the [Vue-CLI configuration reference](https://cli.vuejs.org/config/).
+# VUE_APP_API_BASEURL
+# Sets the hostname and/or port of the OS2MO REST API you want the application to pull data from
+# Default: VUE_APP_API_BASEURL=https://moratest.magenta.dk
+
+# VUE_APP_ROOT_UUID
+# Set a UUID representing whatever organisation unit you want as the default root org
+# Default: none
+
+# VUE_APP_ORG_PERSON_RELATION
+# Set type of relation between people and organisations [engagement|association]
+# The UI will display people in organisations based on their engagement or association.
+# Default: VUE_APP_ORG_PERSON_RELATION=engagement
+
+# VUE_APP_TITLE
+# Set the application title. It will appear in the UI header and in the HTML document title.
+# Default: VUE_APP_TITLE=Organization chart demo
+
+# VUE_APP_THEME_SCSS
+# Set local path to SCSS file containing custom theme and SASS variables. 
+# You can make a copy of `src/assets/default-theme.scss` and edit it to create your own custom theme.
+# Default: VUE_APP_THEME_SCSS=/src/assets/default-theme.scss
+
+# VUE_APP_TREE_LAYOUT
+# Set organization tree layout style [horizontal|vertical|hybrid]
+# Default: VUE_APP_TREE_LAYOUT=horizontal
+
+# VUE_APP_LOGO_PATH
+# Set local or global path to image file you want as your application's branding image
+# Default: none
+
+# VUE_APP_FAVICON_PATH
+# Set local or global path to image file (usually `favicon.ico`) you want as your application's favicon.
+# Default: none
+```
+
+For build configurations in VueJS, Babel, or Webpack, refer to the [Vue-CLI configuration reference](https://cli.vuejs.org/config/).
 
 
 # REST API interfacing
 
-orgviewer uses the OS2MO REST API 
+orgviewer uses the [OS2MO REST API.](https://os2mo.readthedocs.io/en/development/api/rest.html)
 
 ## An overview of API requests for getting org unit info
+
 While getting org unit information from the REST API, it is nescessary to compile the output of several requests in order to get complete data.
 GET `/service/ou/[uuid]/` returns `parent` (OU object)
 GET `/service/ou/ancestor-tree?uuid=[uuid]` returns a list of OUs with properties `child_count` (number) OR `children` (array of OU objects)
 GET `/service/ou/[uuid]/children` returns a list of OUs with property `child_count`
-

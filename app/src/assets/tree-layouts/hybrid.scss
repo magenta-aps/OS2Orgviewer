@@ -1,0 +1,184 @@
+/* 
+    ==================
+    Hybrid tree layout
+    ================== 
+
+    Tree layout is vertical on smaller screens.
+    On bigger screens, the first 2 levels are horizontal 
+    and all sublevels are vertical.
+*/
+
+.oc-layout-hybrid {
+
+    .oc-tt-ul-root,
+    .oc-tt-ul {
+        list-style: none;
+    }
+
+    .oc-tt-ul-root {
+        width: auto !important;
+        height: auto !important;
+        margin-top: 2rem;
+    }
+
+    .oc-tt-item {
+        position: relative;
+    }
+
+    .oc-tt-node {
+        position: static;
+        height: auto !important;
+        display: inline-block;
+
+        & .oc-tt-node-body {
+            height: auto;
+            display: flex;
+            flex-flow: row nowrap;
+        }
+    }
+
+    .oc-tt-node-head {
+        display: block;
+        position: absolute;
+        left: -1rem;
+        height: 3px;
+        width: 1rem;
+        top: 1.125rem;
+        background-color: $shade-lightest;
+    }
+
+    .oc-org-link {
+        flex: 1 0 auto;
+    }
+
+    .oc-tt-item::before {
+        content: '';
+        display: block;
+        position: absolute;
+        left: -1rem;
+        top: -1.125rem;
+        bottom: 0;
+        height: auto;
+        width: 3px;
+        background-color: $shade-lightest;
+    }
+
+    .oc-tt-item:last-child::before {
+        bottom: auto;
+        height: 2.25rem;
+        
+    }
+
+    .oc-tt-ul {
+        margin: 1rem 0;
+        padding: 0 0 0 2rem;
+    }
+
+    .oc-tt-node-tail {
+        display: none;
+    }
+
+    .oc-tt-line {
+        display: none;
+    }
+
+    @media screen and (max-width: 39.99rem) {
+    
+        .oc-tt-node {
+            width: auto !important;
+            min-width: 10rem;
+        }
+
+        .oc-tt-ul-root > .oc-tt-item::before, 
+        .oc-tt-ul-root > .oc-tt-item > .oc-tt-node > .oc-tt-node-head {
+            display: none;
+        }
+    }
+
+    @media screen and (min-width: 40rem) {
+
+        & {
+            text-align: center;
+        }
+
+        .oc-tt-item {
+            text-align: left;
+        }
+
+        .oc-tt-node-body {
+            width: 10rem;
+
+            .oc-org-link {
+                flex: 1 1 auto;
+            }
+        }
+
+        .oc-tt-ul-root {
+            display: inline-block;
+            margin: 2rem auto;
+            
+            & > .oc-tt-item {
+                text-align: center;
+
+                &::before {
+                    display: none;
+                }
+
+                & > .oc-tt-node {
+                    text-align: left;
+                    margin: 0 auto 1.25rem;
+                    position: relative;
+                    top: auto !important;
+                    left: auto !important;
+                    height: auto;
+
+                    & .oc-tt-node-head {
+                        display: none;
+                    }
+
+                    & .oc-tt-node-tail {
+                        display: block;
+                        position: absolute;
+                        bottom: -1rem;
+                        top: auto;
+                        left: 50%;
+                        height: 1rem;
+                        width: 3px;
+                        background-color: $shade-lightest;
+                    }
+                }
+
+                & > .oc-tt-ul {
+                    display: flex;
+                    flex-flow: row nowrap;
+                    justify-content: flex-start;
+                    padding: 0;
+
+                    & > .oc-tt-item {
+                        padding: 0 1rem;
+
+                        &::before {
+                            height: 1.125rem;
+                            left: 6rem;
+                        }
+
+                        & > .oc-tt-node .oc-tt-node-head {
+                            width: auto;
+                            top: -1.25rem;
+                            left: 0;
+                            right: 0;
+                        }
+
+                        &:first-child > .oc-tt-node .oc-tt-node-head {
+                            left: 6rem;
+                        }
+
+                        &:last-child > .oc-tt-node .oc-tt-node-head {
+                            right: calc(100% - 6.125rem);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
