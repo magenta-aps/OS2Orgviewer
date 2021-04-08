@@ -10,9 +10,7 @@
             {{ org_data.name }}
         </p>
         <p class="oc-org-link-count" v-if="org_data[`${relation_type}_count`]">
-            {{ org_data[`${relation_type}_count`] }}
-            <span v-if="relation_type === 'engagement'">ansatte</span>
-            <span v-if="relation_type === 'association'">tilknyttede</span>
+            {{ displayPersonCount(org_data[`${relation_type}_count`], relation_type) }}
         </p>
     </router-link>
 
@@ -47,6 +45,23 @@ export default {
                     }
                 })
             }
+        }
+    },
+    methods: {
+        displayPersonCount: function(count, relation) {
+            let str = ''
+            if (relation === 'association' && count === 1) {
+                str = 'tilknyttet'
+            } else if (relation === 'association' && count > 1) {
+                str = 'tilknyttede'
+            } else if (relation === 'engagement' && count === 1) {
+                str = 'ansat'
+            } else if (relation === 'engagement' && count > 1) {
+                str = 'ansatte'
+            } else {
+                return ''
+            }
+            return `${ count } ${ str }`
         }
     }
 }

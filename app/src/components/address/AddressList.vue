@@ -1,6 +1,6 @@
 <template>
 
-    <dl class="oc-address-list">
+    <dl class="oc-address-list" v-if="list && list.length > 0">
         <template v-for="address in list">
             <template v-if="!address.visibility || address.visibility.name !== 'Hemmelig'">
                 <dt :key="address.address_type.uuid">
@@ -47,6 +47,7 @@
             </template>
         </template>
     </dl>
+    <p class="oc-address-list" v-else>Ingen detaljer fundet</p>
     
 </template>
 

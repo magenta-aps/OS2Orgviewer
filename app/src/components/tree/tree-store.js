@@ -59,7 +59,7 @@ const actions = {
         })
     },
     fetchTree: ({state}, org_unit_uuid) => {
-        return ajax(`/service/ou/ancestor-tree?uuid=${ org_unit_uuid }`)
+        return ajax(`/service/ou/ancestor-tree?uuid=${ org_unit_uuid }&count=${ state.relation_type }`)
         .then(tree => {
             return tree
         })

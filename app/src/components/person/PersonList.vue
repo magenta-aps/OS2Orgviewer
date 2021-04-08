@@ -1,9 +1,14 @@
 <template>
-    <ul class="people-list" v-if="people_list">
-        <li v-for="person in people_list" :key="person.uuid">
-            <person-lite :person="person" :org-uuid="uuid" />
-        </li>
-    </ul>
+    <div class="people-list-wrapper" v-if="people_list">
+        <ul class="people-list" v-if="people_list.length > 0">
+            <li v-for="person in people_list" :key="person.uuid">
+                <person-lite :person="person" :org-uuid="uuid" />
+            </li>
+        </ul>
+        <p class="people-list-empty" v-if="!is_loading && people_list.length === 0">
+            Ingen <span v-if="relation_type === 'association'">tilknyttede</span><span v-else>ansatte</span> fundet
+        </p>
+    </div>
 </template>
 
 <script>
@@ -14,6 +19,11 @@ export default {
     components: {
         PersonLite,
         Person
+    },
+    data: function() {
+        return {
+            relation_type: GLOBAL_ORG_PERSON_RELATION
+        }
     },
     props: [
         'uuid'
@@ -30,6 +40,9 @@ export default {
             } else {
                 return this.processByEngagement(list)
             }
+        },
+        is_loading: function() {
+            return this.$store.getters.isLoading
         }
     },
     watch: {
@@ -127,12 +140,23 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+
+    .people-list-wrapper {
+        margin: 1.5rem 0 0;
+        padding: 1.5rem 0 0;
+        border-top: solid 1px $shade-lighter;
+    }
 
     .people-list {
         list-style: none;
         margin: 0;
         padding: 0;
+    }
+
+    .people-list-empty {
+        padding: 0;
+        margin: 0;
     }
 
 </style>
