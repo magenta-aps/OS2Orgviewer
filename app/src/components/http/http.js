@@ -5,7 +5,7 @@ import store from '../../store.js'
 
 let loadstack = []
 
-const api_url = GLOBAL_API_URL ? GLOBAL_API_URL : 'https://moratest.magenta.dk'
+const api_url = OC_GLOBAL_CONF.VUE_APP_API_BASEURL ? OC_GLOBAL_CONF.VUE_APP_API_BASEURL : 'https://moratest.magenta.dk'
 
 const ajax_init = {
     method: 'GET',

@@ -71,7 +71,7 @@ export default {
     },
     data: function() {
         return {
-            relation_type: GLOBAL_ORG_PERSON_RELATION
+            relation_type: this.$store.state.relation_type
         }
     },
     computed: {

@@ -16,11 +16,19 @@ export default new Vuex.Store({
         tree
     }, 
     state: {
-        loading: false
+        loading: false,
+        relation_type: OC_GLOBAL_CONF.VUE_APP_ORG_PERSON_RELATION ? OC_GLOBAL_CONF.VUE_APP_ORG_PERSON_RELATION : 'engagement',
+        global_root_uuid: OC_GLOBAL_CONF.VUE_APP_ROOT_UUID ? OC_GLOBAL_CONF.VUE_APP_ROOT_UUID : false
     },
     getters: {
         isLoading: state => {
             return state.loading
+        },
+        getPersonRelation: state => {
+            return state.relation_type
+        },
+        getGlobalRootUuid: state => {
+            return state.global_root_uuid
         }
     },
     mutations: {

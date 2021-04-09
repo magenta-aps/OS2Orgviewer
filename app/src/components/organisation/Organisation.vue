@@ -22,10 +22,8 @@
                     <address-list :list="org_data.address_data" />
                 </template>
                 <template v-if="relation_is_engagement">
-                    <hr>
                     <manager-list :uuid="org_data.uuid" />
                 </template>
-                <hr>
                 <person-list :uuid="org_data.uuid" />
             </div>
         </article>
@@ -49,7 +47,7 @@ export default {
     },
     data: function() {
         return {
-            relation_is_engagement: GLOBAL_ORG_PERSON_RELATION === 'engagement' ? true : false
+            relation_is_engagement: this.$store.state.relation_type === 'engagement' ? true : false
         }
     },
     computed: {

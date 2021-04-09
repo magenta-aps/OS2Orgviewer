@@ -82,8 +82,8 @@ const actions = {
             return org_unit
         })
     },
-    fetchOrgUnitChildren: ({}, uuid) => {
-        return ajax(`/service/ou/${ uuid }/children`)
+    fetchOrgUnitChildren: ({rootState}, uuid) => {
+        return ajax(`/service/ou/${ uuid }/children?count=${ rootState.relation_type }`)
         .then(ous => {
             return ous
         })
@@ -115,7 +115,7 @@ const actions = {
             })
         }
     },
-    checkOrgUnitData: ({state, commit, dispatch}, uuid) => {
+    checkOrgUnitData: ({state, rootState, commit, dispatch}, uuid) => {
         let new_org = state[uuid]
 
         const checkOrgUnitData = (org_data) => {
@@ -144,7 +144,7 @@ const actions = {
         }
 
         const checkManagerData = (org_data) => {
-            if (GLOBAL_ORG_PERSON_RELATION === 'engagement' && !org_data.manager_data) {
+            if (rootState.relation_type === 'engagement' && !org_data.manager_data) {
                 dispatch('fetchManagers', org_data.uuid)
                 .then(managers => {
                     org_data.manager_data = managers

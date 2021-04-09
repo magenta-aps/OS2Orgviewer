@@ -1,5 +1,5 @@
 <template>
-    <dl class="oc-managers">
+    <dl class="oc-managers" v-if="org_data.manager_data && org_data.manager_data.length > 0">
         <template v-for="m in org_data.manager_data">
             <dt :key="m.manager_type.uuid">{{ m.manager_type.name }}</dt>
             <dd :key="m.uuid">
@@ -30,6 +30,12 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+
+    .oc-managers {
+        margin: 1.5rem 0 0;
+        padding-top: 1.5rem;
+        border-top: solid 1px $shade-lighter;
+    }
 
 </style>
