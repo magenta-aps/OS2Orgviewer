@@ -17,8 +17,7 @@ const orgIterator = function(orgs, node_uuid) {
 }
 
 const state = {
-    root_org_uuid: GLOBAL_API_ROOT_UUID, // Defined in index.html
-    relation_type: GLOBAL_ORG_PERSON_RELATION, // Defined in index.html
+    root_org_uuid: OC_GLOBAL_CONF.VUE_APP_ROOT_UUID,
     global_organisations: null,
     tree_data: null
 }
@@ -53,13 +52,13 @@ const mutations = {
 }
 const actions = {
     fetchGlobalOrgs: ({}) => {
-        return ajax(`/service/o/`)
+        return ajax('/service/o/')
         .then(orgs => {
             return orgs
         })
     },
-    fetchTree: ({state}, org_unit_uuid) => {
-        return ajax(`/service/ou/ancestor-tree?uuid=${ org_unit_uuid }&count=${ state.relation_type }`)
+    fetchTree: ({rootState}, org_unit_uuid) => {
+        return ajax(`/service/ou/ancestor-tree?uuid=${ org_unit_uuid }&count=${ rootState.relation_type }`)
         .then(tree => {
             return tree
         })

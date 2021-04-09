@@ -47,7 +47,7 @@ export default {
     },
     data: function() {
         return {
-            relation_is_engagement: GLOBAL_ORG_PERSON_RELATION === 'engagement' ? true : false
+            relation_is_engagement: this.$store.state.relation_type === 'engagement' ? true : false
         }
     },
     computed: {

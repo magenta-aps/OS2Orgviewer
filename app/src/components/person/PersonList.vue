@@ -22,7 +22,7 @@ export default {
     },
     data: function() {
         return {
-            relation_type: GLOBAL_ORG_PERSON_RELATION
+            relation_type: this.$store.state.relation_type
         }
     },
     props: [
@@ -35,7 +35,7 @@ export default {
         people_list: function() {
             let list = this.$store.getters.getOrgUnit(this.uuid).person_data
 
-            if (GLOBAL_ORG_PERSON_RELATION === 'association') {
+            if (this.relation_type === 'association') {
                 return this.processByAssociation(list)
             } else {
                 return this.processByEngagement(list)
@@ -56,7 +56,7 @@ export default {
         update: function(uuid) {
             this.$store.dispatch('fetchPersons', {
                 org_uuid: this.uuid,
-                relation: GLOBAL_ORG_PERSON_RELATION
+                relation: this.relation_type
             })
         },
         processByAssociation: function(people_list) {

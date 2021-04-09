@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve --mode default --port 8652",
-    "build": "vue-cli-service build --mode default.production --dest ../dist/default",
+    "serve": "vue-cli-service serve --port 8652 --mode default",
+    "build": "vue-cli-service build --dest ../dist/default",
     "test": "testcafe chrome tests/*.js",
     "headlesstest": "testcafe chrome:headless tests/*.js"
   },
@@ -21,7 +21,7 @@
     "@vue/cli-plugin-babel": "^4.5.6",
     "@vue/cli-service": "^4.5.4",
     "sass": "^1.26.10",
-    "sass-loader": "^10.0.2",
+    "sass-loader": "^10.0.1",
     "testcafe": "^1.9.4",
     "vue-template-compiler": "^2.6.11"
   },

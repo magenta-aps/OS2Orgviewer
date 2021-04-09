@@ -39,7 +39,7 @@ export default {
             query: null,
             results: null,
             timeout: null,
-            global_root_uuid: GLOBAL_API_ROOT_UUID
+            relation_type: this.$store.state.relation_type
         }
     },
     computed: {
@@ -52,11 +52,14 @@ export default {
         },
         root_org_unit_uuid: function() {
             return this.$store.getters.getRootOrgUnitUuid
+        },
+        global_root_uuid: function() {
+            return this.$store.getters.getGlobalRootUuid
         }
     },
     methods: {
         clearRoot: function() {
-            this.$store.commit('setRootOrgUnitUuid', GLOBAL_API_ROOT_UUID)
+            this.$store.commit('setRootOrgUnitUuid', this.global_root_uuid)
         },
         debounce: function(func, wait) {
             return () => {
@@ -78,14 +81,14 @@ export default {
         search: function() {
             let search_res = []
             let search_associated = ''
-            if (GLOBAL_ORG_PERSON_RELATION === 'association') {
+            if (this.relation_type === 'association') {
                 search_associated = 'associated=true'
             } else {
                 search_associated = 'associated=false'
             }
             ajax(`/service/o/${ this.organisation_uuid }/e/?query=${ this.query }&${ search_associated }`)
             .then(person_res => {
-                ajax(`/service/o/${ this.organisation_uuid }/ou/?query=${ this.query }&root=${ GLOBAL_API_ROOT_UUID }`)
+                ajax(`/service/o/${ this.organisation_uuid }/ou/?query=${ this.query }&root=${ this.global_root_uuid }`)
                 .then(org_res => {
                     search_res = person_res.items.concat(org_res.items)
                     this.results = search_res.sort(function(a,b) {
@@ -112,7 +115,7 @@ export default {
                     this.awaitPersonData(person_uuid)
                 } else {
                     // Set org unit from person's association/engagement data
-                    if (GLOBAL_ORG_PERSON_RELATION === 'association') {
+                    if (this.relation_type === 'association') {
                         org_unit_uuid = person_data.association_data[0].org_unit.uuid
                     } else {
                         org_unit_uuid = person_data.engagement_data[0].org_unit.uuid

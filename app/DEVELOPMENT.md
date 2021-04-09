@@ -1,4 +1,4 @@
-# Development and configuration
+# Development
 
 Refer to the [the general README](../README.md) for setup instructions.
 
@@ -14,7 +14,7 @@ npm run serve-frederikshavn-med (with customer-specific theme and setup)
 ```
 npm run build
 ```
-This command creates a build for every customer specific setup and copies them into individual directories inside the `/dist` folder. The default build resides in the the `dist/default` folder.
+This command creates a build for every customer specific setup and copies them into individual directories inside the generated `/dist` folder. The default build resides in the the `dist/default` folder.
 
 After compile, pick any build folder and serve `index.html` and its associated static resources. 
 
@@ -26,9 +26,9 @@ npm run test
 npm run headlesstest 
 ```
 
-## Customization
+## Configuration
 
-See [CONFIGURATION.md] for details on configuration.
+See [the configuration section](./app/CONFIGURATION.md) for details on configuration.
 
 
 # REST API interfacing

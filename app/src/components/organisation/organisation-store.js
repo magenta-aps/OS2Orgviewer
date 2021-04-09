@@ -33,8 +33,7 @@ const utils = {
 
 const state = {
     orgs: {},
-    current_org: null,
-    relation_type: GLOBAL_ORG_PERSON_RELATION // Defined in index.html
+    current_org: null
 }
 
 const getters = {
@@ -83,8 +82,8 @@ const actions = {
             return org_unit
         })
     },
-    fetchOrgUnitChildren: ({state}, uuid) => {
-        return ajax(`/service/ou/${ uuid }/children?count=${ state.relation_type }`)
+    fetchOrgUnitChildren: ({rootState}, uuid) => {
+        return ajax(`/service/ou/${ uuid }/children?count=${ rootState.relation_type }`)
         .then(ous => {
             return ous
         })
@@ -116,7 +115,7 @@ const actions = {
             })
         }
     },
-    checkOrgUnitData: ({state, commit, dispatch}, uuid) => {
+    checkOrgUnitData: ({state, rootState, commit, dispatch}, uuid) => {
         let new_org = state[uuid]
 
         const checkOrgUnitData = (org_data) => {
@@ -145,7 +144,7 @@ const actions = {
         }
 
         const checkManagerData = (org_data) => {
-            if (state.relation_type === 'engagement' && !org_data.manager_data) {
+            if (rootState.relation_type === 'engagement' && !org_data.manager_data) {
                 dispatch('fetchManagers', org_data.uuid)
                 .then(managers => {
                     org_data.manager_data = managers

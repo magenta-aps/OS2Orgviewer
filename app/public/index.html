@@ -5,21 +5,23 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="description" content="OS2Orgviewer version 2.2.2"> <!-- Bump version for every merge request-->
         <meta name="viewport" content="width=device-width,initial-scale=1.0">
-        <link rel="icon" href="<%= VUE_APP_FAVICON_PATH %>">
-        <title><%= VUE_APP_TITLE %></title>
+        <link rel="icon" href="<%= process.env.VUE_APP_FAVICON_PATH %>">
+        <title><%= process.env.VUE_APP_TITLE %></title>
         <script>
-            // Server specific settings
-            var GLOBAL_APP_TITLE = '<%= VUE_APP_TITLE %>' !== '' ? '<%= VUE_APP_TITLE %>' : 'Organization chart demo'
-            var GLOBAL_API_URL = '<%= VUE_APP_API_BASEURL %>' !== '' ? '<%= VUE_APP_API_BASEURL %>' : 'https://moratest.magenta.dk'
-            var GLOBAL_API_ROOT_UUID = '<%= VUE_APP_ROOT_UUID %>'
-            var GLOBAL_ORG_PERSON_RELATION = '<%= VUE_APP_ORG_PERSON_RELATION %>' !== '' ? '<%= VUE_APP_ORG_PERSON_RELATION %>' : 'engagement'
-            var GLOBAL_APP_LOGO_PATH = '<%= VUE_APP_LOGO_PATH %>'
-            var VUE_APP_TREE_LAYOUT = '<%= VUE_APP_TREE_LAYOUT %>' ? '<%= VUE_APP_TREE_LAYOUT %>' : 'vertical'
+            // Configuration
+            var OC_GLOBAL_CONF = {
+                VUE_APP_TITLE: '<%= process.env.VUE_APP_TITLE %>',
+                VUE_APP_API_BASEURL: '<%= process.env.VUE_APP_API_BASEURL %>',
+                VUE_APP_ORG_PERSON_RELATION: '<%= process.env.VUE_APP_ORG_PERSON_RELATION %>',
+                VUE_APP_LOGO_PATH: '<%= process.env.VUE_APP_LOGO_PATH %>',
+                VUE_APP_TREE_LAYOUT: '<%= process.env.VUE_APP_TREE_LAYOUT %>',
+                VUE_APP_ROOT_UUID: '<%= process.env.VUE_APP_ROOT_UUID %>'
+            }
         </script>
     </head>
     <body>
         <noscript>
-            <strong>Beklager, men <%= VUE_APP_TITLE %> virker ikke uden JavaScript. Slå Javascript til for at fortsætte.</strong>
+            <strong>Beklager, men <%= process.env.VUE_APP_TITLE %> virker ikke uden JavaScript. Slå Javascript til for at fortsætte.</strong>
         </noscript>
         <div id="app"></div>
         <!-- built files will be auto injected -->

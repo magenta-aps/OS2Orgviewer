@@ -24,7 +24,7 @@ export default {
     },
     data: function() {
         return {
-            tree_layout_class: VUE_APP_TREE_LAYOUT ? `oc-layout-${ VUE_APP_TREE_LAYOUT}` : 'oc-layout-horizontal'
+            tree_layout_class: OC_GLOBAL_CONF.VUE_APP_TREE_LAYOUT ? `oc-layout-${ OC_GLOBAL_CONF.VUE_APP_TREE_LAYOUT}` : 'oc-layout-vertical'
         }
     },
     computed: {
@@ -33,6 +33,9 @@ export default {
         },
         root_org_unit: function() {
             return this.$store.getters.getOrgUnit(this.root_org_uuid)
+        },
+        global_root_uuid: function() {
+            return this.$store.getters.getGlobalRootUuid
         }
     },
     watch: {
@@ -53,7 +56,7 @@ export default {
             this.$store.dispatch('populateGraph', this.$route.params.orgUnitId)
             this.$store.commit('setCurrentOrgUnitUuid', this.$route.params.orgUnitId)
         } else {
-            this.$store.dispatch('populateGraph', GLOBAL_API_ROOT_UUID)
+            this.$store.dispatch('populateGraph', this.global_root_uuid)
         }
     }
 }

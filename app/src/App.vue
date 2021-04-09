@@ -4,17 +4,18 @@
             <load-screen v-if="first_load" text="Vent et øjeblik mens vi henter data" />
         </transition>
         <oc-header id="oc-global-header">
-            <router-link slot="preaction" to="/" class="oc-header-preaction btn" :title="`Vis øverste niveau i ${ title }`">
-                <img :src="logo_src" alt="">
-                <span class="sr-only">Vis øverste niveau i {{ title }}</span>
+            <router-link slot="preaction" to="/" class="oc-header-preaction btn" :title="`Vis første niveau i ${ title }`">
+                <img v-if="logo_src" :src="logo_src" alt="">
+                <svg class="oc-home-img" v-else xmlns="http://www.w3.org/2000/svg" height="100%" viewBox="0 0 24 24" width="100%"><path d="M0 0h24v24H0z" fill="none"/><path d="M22 11V3h-7v3H9V3H2v8h7V8h2v10h4v3h7v-8h-7v3h-2V8h2v3z"/></svg>
+                <span class="sr-only">Vis første niveau i {{ title }}</span>
             </router-link>
-            <h1 slot="title" class="oc-header-title">
+            <h1 v-if="title" slot="title" class="oc-header-title">
                 {{ title }}
             </h1>
             <router-link 
                 v-if="$route.name !== 'search'"
-                slot="postaction" 
-                :to="'/search'" 
+                slot="postaction"
+                :to="'/search'"
                 class="oc-header-postaction btn">
                 <svg class="oc-search-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black" width="18px" height="18px"><path d="M0 0h24v24H0z" fill="none"/><path class="oc-search-svg-path" d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
                 <span class="sr-only">Åben søgefunktion</span>
@@ -50,14 +51,17 @@ export default {
     },
     data: function() {
         return {
-            title: GLOBAL_APP_TITLE,
-            logo_src: GLOBAL_APP_LOGO_PATH,
+            title: OC_GLOBAL_CONF.VUE_APP_TITLE,
+            logo_src: OC_GLOBAL_CONF.VUE_APP_LOGO_PATH,
             first_load: true
         }
     },
     computed: {
         is_loading: function() {
             return this.$store.getters.isLoading
+        },
+        global_root_uuid: function() {
+            return this.$store.getters.getGlobalRootUuid
         }
     },
     methods: {
@@ -69,9 +73,20 @@ export default {
                     this.first_load = false
                 }
             }, 3000)
+        },
+        checkRootOrgUuid: function (root_uuid) {
+            try {
+                if (!root_uuid) {
+                    throw new Error('Missing VUE_APP_ROOT_UUID value')
+                }
+            }
+            catch(err) {
+                console.log(err)
+            }
         }
     },
     mounted: function() {
+        this.checkRootOrgUuid(this.global_root_uuid)
         this.checkFirstLoad()
     }
 }
@@ -212,7 +227,14 @@ a.oc-header-preaction {
     flex-flow: column nowrap;
     justify-content: center;
     align-items: center;
+    padding-right: 1rem;
     @include branding;
+}
+
+.oc-home-img {
+    height: 2rem;
+    width: auto;
+    fill: $color-1;
 }
 
 .oc-header-title {
@@ -221,6 +243,7 @@ a.oc-header-preaction {
     white-space: nowrap;
     text-overflow: ellipsis;
     margin: 0;
+    padding: 0;
 }
 
 a.oc-header-postaction {

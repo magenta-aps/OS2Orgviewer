@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import store from './store.js'
 import Search from './components/search/Search.vue'
 import Tree from './components/tree/Tree.vue'
 import Organisation from './components/organisation/Organisation.vue'
@@ -15,7 +14,7 @@ const router = new Router({
         {
             path: '/',
             redirect: {
-                path: `/tree/${ GLOBAL_API_ROOT_UUID }`
+                path: `/tree/${ OC_GLOBAL_CONF.VUE_APP_ROOT_UUID }`
             }
         },
         {
