@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --port 8652 --mode default",
-    "build": "vue-cli-service build --dest ../dist/default",
+    "build": "vue-cli-service build --mode default.production --dest ../dist/default && vue-cli-service build --mode frederikshavn.production --dest ../dist/frederikshavn-med",
     "test": "testcafe chrome tests/*.js",
     "headlesstest": "testcafe chrome:headless tests/*.js"
   },

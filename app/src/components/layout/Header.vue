@@ -15,6 +15,7 @@
     flex-flow: row nowrap;
     align-items: center;
     width: 100%;
+    justify-content: space-between;
 }
 
 .oc-header h1,

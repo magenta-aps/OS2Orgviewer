@@ -13,22 +13,7 @@ services:
       # Loenorganisation
       GLOBAL_API_ROOT_UUID: "fb2d158f-114e-5f67-8365-2c520cf10b58"
       # CUSTOMER: frederikshavn-med
-      #
-      # Example confs:
-      #
-      # Frederikshavn Kommune Loenorganisation
-      # VUE_APP_ORG_PERSON_RELATION: 'engagement'
-      # VUE_APP_TITLE: 'Frederikshavn Kommune'
-      # VUE_APP_API_BASEURL: http://localhost:8083
-      #
-      # Frederikshavn Kommune MED-organisation
-      # VUE_APP_ORG_PERSON_RELATION: 'association'
-      # VUE_APP_TITLE: 'Frederikshavn Kommune MED-organisation'
-      # VUE_APP_API_BASEURL: http://localhost:8083
-      #
-      VUE_APP_TREE_LAYOUT: "hybrid"
-      VUE_APP_FAVICON_PATH: "https://frederikshavn.dk/Resources/images/favicon.ico"
-      VUE_APP_THEME_SCSS: "/src/assets/frederikshavn-med-theme.scss"
+
       # Required for SAML proxy-pass
       # GLOBAL_API_URL should point to ourselves
       SAML_TOKEN: "291036bf-df89-48ae-b6e4-119d32a2729a"
