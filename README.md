@@ -14,14 +14,12 @@ npm install
 ```
 
 ### Build and deploy quick start
-Inside [os2orgviewer/app](./app) directory, run any of the customized build scripts
+Inside [os2orgviewer/app](./app) directory, run the build script
 ```
 npm run build (default setup)
-OR 
-npm run build-frederikshavn-med (example custom setup)
 ```
 
-A new directory will be created in the [app/dist](./app/dist) folder with your custom build (example: `app/dist/frederikshavn-med`). Hook it up to a server, and you'll be good to go.
+New directories will be created in the [app/dist](./app/dist) folder with your build (example: `app/dist/default/`). Hook it up to a server, and you'll be good to go.
 
 ## Configuration
 
