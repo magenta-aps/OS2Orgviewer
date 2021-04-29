@@ -27,8 +27,7 @@ RUN pip install --no-cache-dir j2cli==0.3.10
 
 COPY ./docker/default.conf.template.j2 /code/default.conf.template.j2
 COPY ./docker/whitelist.json.j2 /code/whitelist.json.j2
-RUN j2 whitelist.json.j2 -o whitelist.json
-RUN j2 -f json default.conf.template.j2 whitelist.json -o default.conf.template
+RUN j2 whitelist.json.j2 -o whitelist.json && j2 -f json default.conf.template.j2 whitelist.json -o default.conf.template
 
 
 FROM nginx:1-alpine AS dist
