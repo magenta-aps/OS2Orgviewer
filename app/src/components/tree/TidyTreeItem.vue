@@ -1,5 +1,5 @@
 <template>
-    <li :id="`node-${ itemData.id }`" class="oc-tt-item" :class="{'active': active_org_uuid === itemData.id}">
+    <li :id="`node-${ itemData.id }`" class="oc-tt-item" :class="{'active': $route.params.orgUnitId === itemData.id}">
         <span class="oc-tt-line" :style="displayItemConnector(itemData, parentPos)"></span>
         <span class="oc-tt-node" :style="displayItemPos(itemData)">
             <span class="oc-tt-node-head"></span>
