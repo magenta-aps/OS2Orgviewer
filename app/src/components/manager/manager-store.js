@@ -18,7 +18,7 @@ const mutations = {
 
 const actions = {
     fetchManagers: ({}, ou_uuid) => {
-        return ajax(`/service/ou/${ ou_uuid }/details/manager`)
+        return ajax(`/service/ou/${ ou_uuid }/details/manager?inherit_manager=1`)
         .then(managers => {
             return managers
         })
