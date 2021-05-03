@@ -10,9 +10,11 @@ FROM node:14 AS builder
 
 WORKDIR /code/frontend
 
-# Install packages
-COPY app/package*.json ./
-RUN npm install
+# Install packages using pnpm
+RUN npm install -g pnpm@6
+COPY app/package.json ./
+COPY app/pnpm-lock.yaml ./
+RUN pnpm install
 
 # Copy in and build source
 COPY app ./
