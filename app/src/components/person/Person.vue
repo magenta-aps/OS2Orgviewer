@@ -164,7 +164,7 @@ export default {
     display: flex;
     flex-flow: column nowrap;
     overflow: auto;
-    background-color: $shade-lightest;
+    background-color: var(--shade-lightest);
 }
 
 .oc-person .oc-header h3 {
@@ -191,7 +191,7 @@ export default {
 }
 
 .oc-person .svg-path {
-    fill: $color-1;
+    fill: var(--color-1);
 }
 
 @media screen and (max-width: 40rem) {
@@ -212,7 +212,7 @@ export default {
 
     .oc-person {
         max-width: 18rem;
-        box-shadow: $shadow-2;
+        box-shadow: var(--shadow-2);
 
         .svg-back {
             display: none;

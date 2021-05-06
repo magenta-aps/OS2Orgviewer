@@ -74,13 +74,13 @@ export default {
 }
 
 .oc-chart-root-nav {
-    background-color: $shade-lightest;
+    background-color: var(--shade-lightest);
     width: 100%;
 }
 
 .oc-chart-root-link {
     display: block !important;
-    box-shadow: $shadow-1;
+    box-shadow: var(--shadow-1);
     padding: 0 1.5rem .75rem !important;
     margin: 0 auto;
 

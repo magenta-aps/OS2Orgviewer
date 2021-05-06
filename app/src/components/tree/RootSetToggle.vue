@@ -41,7 +41,7 @@ a.oc-node-focus-btn.btn:visited  {
     }
 
     .svg-path {
-        fill: $color-1;
+        fill: var(--color-1);
     }
 }
 
@@ -49,7 +49,7 @@ a.oc-node-focus-btn.btn:hover,
 a.oc-node-focus-btn.btn:active,
 a.oc-node-focus-btn.btn:focus {
     .svg-path {
-        fill: $shade-darkest;
+        fill: var(--shade-darkest);
     }
 }
 

@@ -39,7 +39,7 @@
             bottom: 0;
             height: auto;
             width: 3px;
-            background-color: $shade-lightest;
+            background-color: var(--shade-lightest);
         }
     
         &:last-child:before {
@@ -62,7 +62,7 @@
             height: 3px;
             width: 1rem;
             top: 1.125rem;
-            background-color: $shade-lightest;
+            background-color: var(--shade-lightest);
         }
     
         .oc-tt-node-body {
@@ -116,7 +116,7 @@
                 right: auto !important;
                 width: 2rem;
                 height: 3px;
-                background-color: $shade-lightest;
+                background-color: var(--shade-lightest);
             }
         }
 

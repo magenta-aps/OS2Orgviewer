@@ -77,6 +77,16 @@ replace_favicon_path() {
   sed "s#link rel=\"icon\" href=\".*\"#link rel=\"icon\" href=\"${VUE_APP_FAVICON_PATH}\"#g" -i $index_file
 }
 
+replace_css_path() {
+  local index_file="/usr/share/nginx/html/index.html"
+
+  if [ ! -f $index_file ]; then
+    echo >&3 "$ME: ERROR: $index_file does not exist"
+    exit 1
+  fi
+  sed "s#link rel=\"stylesheet\" href=\".*\"#link rel=\"stylesheet\" href=\"${VUE_APP_THEME_CSS}\"#g" -i $index_file
+}
+
 replace_global_url
 replace_global_root_uuid
 replace_global_app_title
@@ -84,5 +94,6 @@ replace_global_replace_org_person_relation
 replace_tree_layout
 replace_logo_path
 replace_favicon_path
+replace_css_path
 
 exit 0

@@ -57,7 +57,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style>
 
 .oc-node-expand-btn {
     width: 100%;
@@ -74,7 +74,7 @@ export default {
 }
 
 .svg-toggle .svg-path {
-    fill: $shade-lightest;
+    fill: var(--shade-lightest);
 }
 
 .oc-node-expand-btn.close .svg-toggle {

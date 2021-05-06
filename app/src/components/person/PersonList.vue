@@ -145,7 +145,7 @@ export default {
     .people-list-wrapper {
         margin: 1.5rem 0 0;
         padding: 1.5rem 0 0;
-        border-top: solid 1px $shade-lighter;
+        border-top: solid 1px var(--shade-lighter);
     }
 
     .people-list {

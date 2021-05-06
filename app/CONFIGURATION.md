@@ -33,10 +33,10 @@ VUE_APP_ORG_PERSON_RELATION=engagement
 # Default: Organization chart demo
 VUE_APP_TITLE=Organization chart demo
 
-# Set local path to SCSS file containing custom theme and SASS variables. 
-# You can make a copy of `src/assets/default-theme.scss` and edit it to create your own custom theme.
-# Default: /src/assets/default-theme.scss
-VUE_APP_THEME_SCSS=/src/assets/default-theme.scss
+# Set local path to CSS file containing custom theme styles. 
+# You can make a copy of `src/assets/default-theme.sss` and edit it to create your own custom theme.
+# Default: Default styling
+VUE_APP_THEME_CSS=my-custom-style.css
 
 # Set organization tree layout style [horizontal|vertical|hybrid]
 # Default: vertical
@@ -44,30 +44,15 @@ VUE_APP_TREE_LAYOUT=vertical
 
 # Set local or global path to image file you want as your application's branding image
 # Default: none
-VUE_APP_LOGO_PATH=https://frederikshavn.dk/Resources/images/frk_logo_blue.svg
+VUE_APP_LOGO_PATH=path-to-logo/logo.svg
 
 # Set local or global path to image file (usually `favicon.ico`) you want as your application's favicon.
 # Default: none
-VUE_APP_FAVICON_PATH=https://www.magenta.dk/favicon.ico
+VUE_APP_FAVICON_PATH=path-to-favicon/favicon.ico
 ```
 
 ## 2. Post-build configuration
 
-If you are unable to configure the application before the build process, you may manipulate the `index.html` for the specific `/dist` that you want to serve. In `index.html` you can set specific Javascript variables that corresponds to configuration options for the application.
+If you are unable to configure the application before the build process, you may manipulate the `index.html` for the specific `/dist` that you want to serve. In `index.html` you can set specific Javascript variables that correspond to configuration options for the application.
 
 Refer to [public/index.html](./public/index.html) for an example of configurations you can make when the application has been built.
-
-### Javascript variables
-```
-var VUE_APP_API_BASEURL = '' // Corresponds to VUE_APP_API_BASEURL environment variable
-
-var VUE_APP_ROOT_UUID = '' // Corresponds to VUE_APP_ROOT_UUID environment variable
-
-var VUE_APP_ORG_PERSON_RELATION = '' // Corresponds to VUE_APP_ORG_PERSON_RELATION environment variable
-
-var VUE_APP_LOGO_PATH = '' // Corresponds to VUE_APP_LOGO_PATH environment variable
-
-var VUE_APP_TITLE = '' // Corresponds to VUE_APP_TITLE environment variable
-
-var VUE_APP_TREE_LAYOUT = '' // Corresponds to VUE_APP_TREE_LAYOUT environment variable
-```

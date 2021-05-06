@@ -25,7 +25,7 @@
                 slot="postaction" 
                 @click="$router.go(-1)"
                 class="oc-header-postaction btn">
-                <svg class="svg-close" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path class="svg-path" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                <svg class="svg-close" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path class="oc-search-svg-path" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
                 <span class="sr-only">Luk søgefunktion</span>
             </button>
         </oc-header>
@@ -106,11 +106,11 @@ body {
 }
 
 body {
-    background-color: $color-3;
-    color: $shade-darker;
+    background-color: var(--color-3);
+    color: var(--shade-darker);
     padding: 0;
     margin: 0;
-    font: $font;
+    font: var(--font);
 }
 
 h1,
@@ -122,19 +122,27 @@ h3 {
 a,
 a:link,
 a:visited {
-    @include link;
+    text-decoration: none;
+    color: var(--color-1);
+    transition: padding .3s;
 }
 
 a:hover {
-    @include link-hover;
+    color: var(--shade-darkest);
+    background-color: var(--shade-lighter);
+    padding: 0 .5rem;
 }
 
 a:active{
-    @include link-active;
+    background-color: var(--color-1);
+    color: var(--shade-lightest);
 }
 
 a:focus {
-    @include link-focus;
+    color: var(--shade-darkest);
+    background-color: var(--shade-light);
+    padding: 0 .5rem;
+    outline: none;
 }
 
 button,
@@ -142,25 +150,42 @@ a.btn,
 a.btn:link,
 a.btn:visited,
 input[type="submit"] {
-    @include button;
+    display: block;
+    color: var(--color-1);
+    background-color: var(--shade-lightest);
+    padding: .25rem .5rem;
+    text-align: center;
+    border: none;
+    font-size: 1rem;
+    font-weight: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transition: all .3s;
 }
 
 button:hover,
 a.btn:hover,
 input[type="submit"]:hover {
-    @include button-hover;
+    color: var(--shade-darkest);
+    box-shadow: var(--shadow-1);
+    transform: translate(-.25rem, -.25rem);
 }
 
 button:active,
 a.btn:active,
 input[type="submit"]:active {
-    @include button-active;
+    background-color: var(--color-1);
+    color: var(--shade-lightest);
 }
 
 button:focus,
 a.btn:focus,
 input[type="submit"]:focus {
-    @include button-focus;
+    color: var(--shade-darkest);
+    box-shadow: var(--shadow-1);
+    transform: translate(-.25rem, -.25rem);
+    outline: none;
 }
 
 button.inverse,
@@ -168,8 +193,8 @@ a.btn.inverse,
 a.btn.inverse:link,
 a.btn.inverse:visited,
 input[type="submit"].inverse {
-    background-color: $color-1;
-    color: $shade-lightest;
+    background-color: var(--color-1);
+    color: var(--shade-lightest);
 }
 
 button.inverse:hover,
@@ -181,12 +206,12 @@ a.btn.inverse:focus,
 input[type="submit"].inverse:hover,
 input[type="submit"].inverse:active,
 input[type="submit"].inverse:focus {
-    background-color: darken($color-1, 10%);
+    background-color: var(--shade-darker);
 }
 
 dt,
 .label {
-    color: $shade-darker;
+    color: var(--shade-darker);
     font-size: smaller;
 }
 
@@ -196,7 +221,7 @@ dd {
 }
 
 hr {
-    border: solid 1px $shade-lighter;
+    border: solid 1px var(--shade-lighter);
     border-width: 1px 0 0 0;
     margin: 1.5rem 1rem;
 }
@@ -218,8 +243,9 @@ hr {
 }
 
 #oc-global-header {
-    box-shadow: $shadow-3;
+    box-shadow: var(--shadow-3);
     flex: 0 0 3rem;
+    z-index: 5;
 }
 
 a.oc-header-preaction {
@@ -228,14 +254,18 @@ a.oc-header-preaction {
     flex-flow: column nowrap;
     justify-content: center;
     align-items: center;
-    padding-right: 1rem;
-    @include branding;
+    padding: .5rem 1rem;
+}
+
+a.oc-header-preaction img {
+    height: 1.75rem;
+    width: auto;
 }
 
 .oc-home-img {
     height: 2rem;
     width: auto;
-    fill: $color-1;
+    fill: var(--color-1);
 }
 
 .oc-header-title {
@@ -247,23 +277,23 @@ a.oc-header-preaction {
     padding: 0;
 }
 
-a.oc-header-postaction {
+.oc-header-postaction {
     flex: 0 0 auto;
-    align-self: flex-end;
+    //align-self: flex-end;
     font-size: 1.5rem !important;
     padding: 0.75rem 1rem !important;
     line-height: 1;
 
     .oc-search-svg-path {
-        fill: $color-1;
+        fill: var(--color-1);
     }
 }
 
-a.oc-header-postaction:hover,
-a.oc-header-postaction:active,
-a.oc-header-postaction:focus {
+.oc-header-postaction:hover,
+.oc-header-postaction:active,
+.oc-header-postaction:focus {
     .oc-search-svg-path {
-        fill: $shade-darkest;
+        fill: var(--shade-darkest);
     }
 }
 

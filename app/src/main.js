@@ -1,4 +1,5 @@
 // Import SASS styles
+import './assets/default-theme.css';
 import './assets/tree-layouts/vertical.scss';
 import './assets/tree-layouts/horizontal.scss';
 import './assets/tree-layouts/hybrid.scss';
@@ -8,6 +9,10 @@ import Vue from 'vue'
 import App from './App.vue'
 import Store from './store.js'
 import Router from './router.js'
+
+// Conditional load of ie11-custom-properties
+import getIECP from './components/ie11/ie11.js'
+getIECP()
 
 Vue.config.productionTip = false
 
