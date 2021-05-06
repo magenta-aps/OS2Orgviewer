@@ -112,7 +112,7 @@ export default {
     bottom: 0;
     right: 0;
     width: 100%;
-    background-color: $shade-lightest;
+    background-color: var(--shade-lightest);
     z-index: 10;
     display: flex;
     flex-flow: column nowrap;
@@ -147,7 +147,7 @@ export default {
 }
 
 .oc-org .svg-path {
-    fill: $color-1;
+    fill: var(--color-1);
 }
 
 @media screen and (max-width: 40rem) {
@@ -168,7 +168,7 @@ export default {
     
     .oc-org {
         width: 23rem;
-        box-shadow: $shadow-2;
+        box-shadow: var(--shadow-2);
 
         .svg-back {
             display: none;

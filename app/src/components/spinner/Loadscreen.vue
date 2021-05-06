@@ -45,8 +45,8 @@ export default {
         flex-flow: column nowrap; 
         align-items: center; 
         justify-content: center; 
-        background-color: $shade-dark;
-        color: $shade-lightest;
+        background-color: var(--shade-dark);
+        color: var(--shade-lightest);
     }
     .la-txt {
         font-size: 1.75em; 
@@ -65,16 +65,16 @@ export default {
         transform-origin: 0 100%; 
     }
     .la-body-inner, .la-paw-inner {
-        fill: $shade-lightest
+        fill: var(--shade-lightest);
     }
     .la-head, .la-paw-outline, .la-body-outline {
-        fill: $shade-light;
+        fill: var(--shade-light);
     }
     .la-face {
-        fill: $shade-darker;
+        fill: var(--shade-darker);
     }
     .la-moon {
-        fill: $shade-lightest; 
+        fill: var(--shade-lightest); 
         animation: moon 2s ease-in-out;
         animation-iteration-count: infinite; 
         transform-origin: 45% 45%; 

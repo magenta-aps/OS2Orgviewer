@@ -143,7 +143,7 @@ export default {
 .oc-search {
     margin: 0;
     padding: 2rem 0 0;
-    background-color: $shade-lightest;
+    background-color: var(--shade-lightest);
     height: 100%;
     width: 100%;
     overflow: hidden;
@@ -170,8 +170,15 @@ export default {
     padding: .5rem .75rem;
     flex: 1 0 auto;
     max-width: 20rem;
-    border: solid 1px $shade-lighter;
+    border: solid 1px var(--shade-lighter);
     font-size: smaller;
+    transition: all .3s ease-in-out;
+}
+
+#search-input:focus {
+    border: solid 1px var(--color-1);
+    box-shadow: var(--shadow-1);
+    outline: none;
 }
 
 .oc-search-submit {

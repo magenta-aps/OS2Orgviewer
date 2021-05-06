@@ -44,7 +44,7 @@
         height: 3px;
         width: 1rem;
         top: 1.125rem;
-        background-color: $shade-lightest;
+        background-color: var(--shade-lightest);
     }
 
     .oc-org-link {
@@ -60,7 +60,7 @@
         bottom: 0;
         height: auto;
         width: 3px;
-        background-color: $shade-lightest;
+        background-color: var(--shade-lightest);
     }
 
     .oc-tt-item:last-child::before {
@@ -144,7 +144,7 @@
                         left: 50%;
                         height: 1rem;
                         width: 3px;
-                        background-color: $shade-lightest;
+                        background-color: var(--shade-lightest);
                     }
                 }
 

@@ -4,12 +4,13 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --port 8652 --mode default",
-    "build": "vue-cli-service build --mode default.production --dest ../dist/default && vue-cli-service build --mode frederikshavn.production --dest ../dist/frederikshavn-med",
+    "build": "vue-cli-service build --mode default.production --dest ../dist/",
     "test": "testcafe chrome tests/*.js",
     "headlesstest": "testcafe chrome:headless tests/*.js --selector-timeout 30000 --assertion-timeout 30000"
   },
   "dependencies": {
     "core-js": "^3.6.5",
+    "ie11-custom-properties": "^4.1.0",
     "non-layered-tidy-tree-layout": "^2.0.2",
     "vue": "^2.6.11",
     "vue-router": "^3.4.3",

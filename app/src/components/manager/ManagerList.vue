@@ -30,12 +30,12 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style>
 
     .oc-managers {
         margin: 1.5rem 0 0;
         padding-top: 1.5rem;
-        border-top: solid 1px $shade-lighter;
+        border-top: solid 1px var(--shade-lighter);
     }
 
 </style>

@@ -15,14 +15,14 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style>
 
 .oc-broken {
-    background-color: $shade-lightest;
+    background-color: var(--shade-lightest);
     padding: 2rem;
     margin: 2rem auto;
     width: 30rem;
-    box-shadow: $shadow-1;
+    box-shadow: var(--shadow-1);
     text-align: center;
 }
 </style>

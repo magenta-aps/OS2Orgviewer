@@ -6,11 +6,11 @@
     </header>
 </template>
 
-<style lang="scss">
+<style>
 
 .oc-header {
-    background-color: $shade-lightest;
-    color: $shade-darkest;
+    background-color: var(--shade-lightest);
+    color: var(--shade-darkest);
     display: flex;
     flex-flow: row nowrap;
     align-items: center;

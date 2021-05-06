@@ -66,7 +66,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style>
 
 @media print {
     
