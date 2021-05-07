@@ -8,7 +8,7 @@ Also, check the [full documentation on setting environment variables for VueJS a
 
 ## 1. Pre-build configuration
 
-Refer to [.env.default](./.env.default) for an example of environment variables you can set prior to building the Node/VueJS application. 
+Refer to [.env.default](./.env.default) for an example of environment variables you can set prior to building the Node/VueJS application.
 
 ### Pre-build Environment variables
 ```
