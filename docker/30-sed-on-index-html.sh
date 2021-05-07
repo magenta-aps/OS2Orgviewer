@@ -84,7 +84,7 @@ replace_css_path() {
     echo >&3 "$ME: ERROR: $index_file does not exist"
     exit 1
   fi
-  sed "s#link id=\"oc-custom-style\" href=\".*\"#link rel=\"stylesheet\" href=\"${VUE_APP_THEME_CSS}\"#g" -i $index_file
+  sed "s#link id=\"oc-custom-style\" href=\".*\" rel=\"stylesheet\"#link id=\"oc-custom-style\" href=\"${VUE_APP_THEME_CSS}\" rel=\"stylesheet\"#g" -i $index_file
 }
 
 replace_global_url
