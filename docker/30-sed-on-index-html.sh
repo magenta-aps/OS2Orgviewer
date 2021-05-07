@@ -34,7 +34,9 @@ replace_global_app_title() {
   # Check if variable is set, regardless of empty or not
   if [ ! -z "${GLOBAL_APP_TITLE+x}" ]; then
     sed "s#VUE_APP_TITLE: '.*'#VUE_APP_TITLE: '${GLOBAL_APP_TITLE}'#g" -i $index_file
+    sed "s#<title>.*</title>#<title>${GLOBAL_APP_TITLE}</title>#g" -i $index_file
   fi
+
 }
 
 replace_global_replace_org_person_relation() {
