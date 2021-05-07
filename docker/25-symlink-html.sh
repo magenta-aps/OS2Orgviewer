@@ -11,7 +11,7 @@ symlink_html() {
     echo >&3 "$ME: WARNING: \$CUSTOMER should be one of: $CUSTOMER_OPTIONS"
     CUSTOMER="default"
   fi
-  CUSTOMER_FOLDER=/code/dist/$CUSTOMER
+  CUSTOMER_FOLDER=/code/dist
   if [ ! -d "$CUSTOMER_FOLDER" ]; then
     echo >&3 "$ME: ERROR: $CUSTOMER_FOLDER does not exist!"
     echo >&3 "$ME: ERROR: \$CUSTOMER should be one of: $CUSTOMER_OPTIONS"
