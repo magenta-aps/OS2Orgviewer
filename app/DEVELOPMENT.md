@@ -5,14 +5,12 @@ Refer to the [the general README](../README.md) for setup instructions.
 
 ## Start a development server with hot reload
 ```
-npm run serve (default)
-OR
-npm run serve-frederikshavn-med (with customer-specific theme and setup)
+pnpm run serve
 ```
 
 ## Compile for production and deploy
 ```
-npm run build
+pnpm run build
 ```
 This command creates a build for every customer specific setup and copies them into individual directories inside the generated `/dist` folder. The default build resides in the the `dist/default` folder.
 
@@ -21,9 +19,9 @@ After compile, pick any build folder and serve `index.html` and its associated s
 ## Run tests
 You can run Testcafe E2E tests from the command line.
 ```
-npm run test
+pnpm run test
 # or
-npm run headlesstest 
+pnpm run headlesstest 
 ```
 
 ## Configuration
