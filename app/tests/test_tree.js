@@ -14,7 +14,7 @@ test('Default treeview', async t => {
 test('Expand/collapse node', async t => {
     await t
         .click(expand_btn)
-        .expect(Selector('#ou-1f06ed67-aa6e-4bbc-96d9-2f262b9202b5').exists).ok()
+        .expect(Selector('#ou-9b7b3dde-16c9-4f88-87cc-e03aa5b4e709').exists).ok()
         .click(expand_btn)
         .expect(expand_btn.withAttribute('aria-expanded', 'false').exists).ok()
 })
