@@ -44,3 +44,11 @@ test.page('http://localhost:8652/#/tree/fe2d2ff4-45f8-4b19-8e1b-72d1c4914360/fe2
         .click('.oc-chart-root-link')
         .expect(Selector('.oc-tt-ul-root > #node-23a2ace2-52ca-458d-bead-d1a42080579f').exists).ok()
 })
+
+test.page('http://localhost:8652/#/tree/fe2d2ff4-45f8-4b19-8e1b-72d1c4914360/fe2d2ff4-45f8-4b19-8e1b-72d1c4914360/')('Reset all when click on branding link', async t => {
+    await t
+        .expect(Selector('.oc-chart-root-link').exists).ok()
+        .click('#oc-global-header > .oc-header-preaction')
+        .expect(Selector('#node-f06ee470-9f17-566f-acbe-e938112d46d9').hasAttribute('class', 'active')).ok()
+        .expect(Selector('.oc-chart-root-link').exists).notOk()
+})
