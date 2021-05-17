@@ -1,7 +1,7 @@
 import { Selector } from 'testcafe';
 
-fixture `Test tree`
-    .page `http://localhost:8652`
+fixture('Test tree')
+    .page('http://localhost:8652')
 
 const expand_btn = Selector('#branch-f06ee470-9f17-566f-acbe-e938112d46d9 > .oc-tt-item:first-child > .oc-tt-node > .oc-node-expand-btn')
 
@@ -24,6 +24,7 @@ test('Change tree root', async t => {
         .click('#node-23a2ace2-52ca-458d-bead-d1a42080579f > .oc-tt-node > .oc-tt-node-body > .oc-node-focus-btn')
         .expect(Selector('#node-f06ee470-9f17-566f-acbe-e938112d46d9').exists).notOk()
         .expect(Selector('.oc-tt-ul-root > #node-23a2ace2-52ca-458d-bead-d1a42080579f').exists).ok()
+        .expect(Selector('#node-cf4daae1-4812-41f1-8c47-63a99e26aadf').exists).ok()
         .expect(Selector('.oc-chart-root-link').exists).ok()
         .click('.oc-chart-root-link')
         .expect(Selector('.oc-chart-root-link').exists).notOk()

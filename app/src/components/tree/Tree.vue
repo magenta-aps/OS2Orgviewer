@@ -42,6 +42,7 @@ export default {
         $route: function(to, from) {
             if (to.params.rootOrgUnitId && to.params.rootOrgUnitId !== from.params.rootOrgUnitId) {
                 this.$store.commit('setRootOrgUnitUuid', to.params.rootOrgUnitId)
+                this.$store.dispatch('populateGraph', to.params.rootOrgUnitId)
             }
         }
     },
