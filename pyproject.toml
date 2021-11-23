@@ -1,0 +1,19 @@
+# SPDX-FileCopyrightText: 2019-2020 Magenta ApS
+# SPDX-License-Identifier: MPL-2.0
+[tool.poetry]
+name = "OS2mo"
+version = "0.9.0"
+authors = ["Magenta ApS <info@magenta.dk>"]
+description = "OS2orgviewer"
+license = "MPL-2.0"
+readme = "README.md"
+homepage = "https://magenta.dk/"
+repository = "https://git.magenta.dk/rammearkitektur/os2orgviewer"
+keywords = ["os2orgviewer"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
