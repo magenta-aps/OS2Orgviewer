@@ -25,15 +25,12 @@ variables:
 
   IMAGE_SHA: ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHA}
 
-  IMAGE_LATEST: ${RELEASE_REGISTRY_IMAGE}:latest
-  IMAGE_VERSION: ${RELEASE_REGISTRY_IMAGE}
-
 include:
   - project: 'labs/salt-automation'
-    ref: 'feature/46450_os2mo_gitlab_ci_template'
+    ref: 'master'
     file: '/gitlab-ci-templates/common/autopub.v1.yml'
   - project: 'labs/salt-automation'
-    ref: 'feature/46450_os2mo_gitlab_ci_template'
+    ref: 'master'
     file: '/gitlab-ci-templates/common/docker-release.v1.yml'
 
 .manual-rules: &master-rules
