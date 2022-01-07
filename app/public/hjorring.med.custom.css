@@ -1,0 +1,32 @@
+/*
+    =====================================================================
+    Custom CSS variables and styles for Hjørring Kommune MED organisation
+    =====================================================================
+*/
+
+:root {
+    --color-1: #263333 !important; /* Primary branding color for high visibility elements */
+    --color-2: #A4C942 !important; /* Used for higlights and accents */
+
+    --color-3: #5BA364 !important; /* Light color for dark backgrounds */ 
+    --color-4: #B1D2BB !important; /* Alternative light color for dark backgrounds */
+
+    --shade-lightest: #fff !important;
+    --shade-lighter: #B1D2BB !important;
+    --shade-light: #99C493 !important;
+    --shade-dark: #5BA364 !important;
+    --shade-darker: #263333 !important;
+    --shade-darkest: #000 !important;
+
+    --shadow-1: .25rem .25rem 0 hsla(0,0%,0%,.125) !important;
+    --shadow-2: -.5rem 0 0 hsla(0,0%,0%,.2) !important;
+    --shadow-3: 0 .5rem 0 hsla(0,0%,0%,.2) !important;
+
+    --font: 1em/1.4 Arial,sans-serif !important;
+}
+
+.oc-header-preaction img {    
+    height: 2rem !important;
+    width: auto !important;
+    margin-left: .5rem;
+}
