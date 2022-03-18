@@ -3,28 +3,27 @@
         <article 
             class="oc-org" 
             :class="{'dim': $route.name === 'person'}"
-            v-if="org_data && this.$route.name.match(/[orgunit|person]/)"
+            v-if="org_unit_data && this.$route.name.match(/[orgunit|person]/)"
             :tabindex="$route.query.person ? -1 : 0">
             <oc-header>
                 <h2 slot="title">
                     <router-link
                         id="orgtitle"
-                        :to="`/tree/${ org_data.uuid }/${ root_org_uuid ? root_org_uuid : null}`">
+                        :to="`/tree/${ org_unit_data.uuid }/${ root_uuid }`">
                         <svg class="svg-back" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path class="svg-path" d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
-                        <span class="oc-org-title">{{ org_data.name }}</span>
-                        <span class="sr-only">Luk visning af {{ org_data.name }}</span>
+                        <span class="oc-org-title">{{ org_unit_data.name }}</span>
+                        <span class="sr-only">Luk visning af {{ org_unit_data.name }}</span>
                         <svg class="svg-close" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path class="svg-path" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
                     </router-link>
                 </h2>
             </oc-header>
-            <div class="oc-org-body" v-if="org_data">
-                <template v-if="org_data.address_data">
-                    <address-list :list="org_data.address_data" />
-                </template>
+            <div class="oc-org-body">
+                <address-list :addresses="org_unit_data.addresses" />
                 <template v-if="relation_is_engagement">
-                    <manager-list :uuid="org_data.uuid" />
+                    <manager-list :managers="org_unit_data.managers" />
+                    <person-list :people="org_unit_data.engagements" />
                 </template>
-                <person-list :uuid="org_data.uuid" />
+                <person-list v-else :people="org_unit_data.associations" />
             </div>
         </article>
     </transition>
@@ -36,7 +35,6 @@ import ManagerList from '../manager/ManagerList.vue'
 import PersonList from '../person/PersonList.vue'
 import AddressList from '../address/AddressList.vue'
 import OcHeader from '../layout/Header.vue'
-import store from '../../store.js'
 
 export default {
     components: {
@@ -51,38 +49,20 @@ export default {
         }
     },
     computed: {
-        org_data: function() {
-            if (this.$route.params.orgUnitId) {
-                return this.$store.getters.getOrgUnit(this.$route.params.orgUnitId)
-            } else {
-                return null
-            }
+        org_unit_data: function() {
+            return this.$store.getters.getOrgUnitData
         },
-        root_org_uuid: function() {
-            return this.$store.getters.getRootOrgUnitUuid
-        },
-        is_loading: function() {
-            return this.$store.getters.isLoading
+        root_uuid: function() {
+            return this.$store.getters.getRootUuid
         }
     },
     watch: {
-        org_data: function(new_data, old_data) {
+        org_unit_data: function(new_data, old_data) {
             Vue.nextTick(() => {
                 if (new_data && this.$route.query.target === 'orgunit') {
                     document.getElementById('orgtitle').focus()
                 }
             })
-        },
-        is_loading: function(it_is_loading) {
-            if (!it_is_loading && this.org_data) {
-                setTimeout(() => {
-                    document.querySelector(`#node-${this.org_data.uuid} > .oc-tt-node`).scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'nearest',
-                        inline: 'center'
-                    })
-                }, 300)
-            }
         },
         $route: function(to, from) {
             if (to.params.orgUnitId !== from.params.orgUnitId) {
@@ -92,7 +72,8 @@ export default {
     },
     methods: {
         update: function(org_unit_uuid) {
-            this.$store.dispatch('checkOrgUnitData', this.$route.params.orgUnitId)
+            this.$store.commit('clearOrgUnitData')
+            this.$store.dispatch('fetchOrgUnitData', org_unit_uuid)
         }
     },
     created: function() {

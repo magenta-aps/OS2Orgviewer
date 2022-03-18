@@ -1,48 +1,72 @@
 <template>
-    <div class="oc-chart" v-if="root_org_uuid" :class="{'oc-chart-orgopen': $route.name === 'orgunit' || $route.name === 'person'}">
-        <nav v-if="root_org_unit && root_org_unit.parent_uuid" class="oc-chart-root-nav">
+    <div class="oc-chart" v-if="root_uuid" :class="{'oc-chart-orgopen': $route.name === 'orgunit' || $route.name === 'person'}">
+        <nav v-if="root_org_unit && root_org_unit.parent" class="oc-chart-root-nav">
             <router-link 
                 class="oc-chart-root-link btn inverse"
-                :to="`/tree/${ root_org_uuid }/${ root_org_unit.parent_uuid }/`">
+                :to="`/tree/${ root_uuid }/${ root_org_unit.parent.uuid }/`">
                 <svg class="svg-toggle" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path class="svg-path" d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/></svg>
                 Niveau op
                 <svg class="svg-toggle" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path class="svg-path" d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/></svg>
             </router-link>
         </nav>
         <div :class="`oc-tree-wrapper ${ tree_layout_class }`">
-            <tidy-tree />
+            <ul class="oc-tt-ul-root">
+                <tree-item :uuid="root_uuid" />
+            </ul>
         </div>
     </div>
 </template>
 
 <script>
-import TidyTree from './TidyTree.vue'
+import Vue from 'vue'
+import TreeItem from './TreeItem.vue'
 
 export default {
     components: {
-        TidyTree
-    },
-    data: function() {
-        return {
-            tree_layout_class: OC_GLOBAL_CONF.VUE_APP_TREE_LAYOUT ? `oc-layout-${ OC_GLOBAL_CONF.VUE_APP_TREE_LAYOUT}` : 'oc-layout-vertical'
-        }
+        TreeItem
     },
     computed: {
-        root_org_uuid: function() {
-            return this.$store.getters.getRootOrgUnitUuid
+        root_uuid: function() {
+            return this.$store.getters.getRootUuid
         },
         root_org_unit: function() {
-            return this.$store.getters.getOrgUnit(this.root_org_uuid)
+            return this.$store.getters.getTreeOrgUnit(this.root_uuid)
         },
         global_root_uuid: function() {
             return this.$store.getters.getGlobalRootUuid
+        },
+        tree_is_loading: function() {
+            return this.$store.getters.getTreeLoadStatus
+        },
+        tree_layout_class: function() {
+            if (OC_GLOBAL_CONF.VUE_APP_TREE_LAYOUT === 'horizontal' || OC_GLOBAL_CONF.VUE_APP_TREE_LAYOUT === 'hybrid') {
+                return 'oc-layout-horizontal'
+            } else {
+                return 'oc-layout-vertical'
+            }
         }
     },
     watch: {
         $route: function(to, from) {
             if (to.params.rootOrgUnitId && to.params.rootOrgUnitId !== from.params.rootOrgUnitId) {
-                this.$store.commit('setRootOrgUnitUuid', to.params.rootOrgUnitId)
-                this.$store.dispatch('populateGraph', to.params.rootOrgUnitId)
+                this.$store.commit('setRootUuid', to.params.rootOrgUnitId)
+                this.$store.dispatch('buildTree', {uuids: [to.params.rootOrgUnitId, to.params.orgUnitId], route: to})
+            }
+        },
+        tree_is_loading: function(new_val, old_val) {
+            if (old_val && !new_val) { // Went from `true` to `false`
+                
+                // Tree has presumably finished loading
+                // and we can do some extra manipulations
+
+                // Center viewport on the currently selected org unit
+                Vue.nextTick(() => {
+                    document.querySelector(`#node-${this.$route.params.orgUnitId} > .oc-tt-node`).scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'nearest',
+                        inline: 'center'
+                    })
+                })
             }
         }
     },
@@ -50,14 +74,13 @@ export default {
         
         // Initialise tree view from URL params
         if (this.$route.params.rootOrgUnitId) {
-            this.$store.commit('setRootOrgUnitUuid', this.$route.params.rootOrgUnitId)
+            this.$store.commit('setRootUuid', this.$route.params.rootOrgUnitId, this.$route)
         }
         
         if (this.$route.params.orgUnitId) {
-            this.$store.dispatch('populateGraph', this.$route.params.orgUnitId)
-            this.$store.commit('setCurrentOrgUnitUuid', this.$route.params.orgUnitId)
+            this.$store.dispatch('buildTree', {uuids: [this.root_uuid, this.$route.params.orgUnitId], route: this.$route})
         } else {
-            this.$store.dispatch('populateGraph', this.global_root_uuid)
+            this.$store.dispatch('buildTree', {uuids: [this.root_uuid], route: this.$route})
         }
     }
 }

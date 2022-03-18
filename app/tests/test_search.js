@@ -1,7 +1,8 @@
 import { Selector } from 'testcafe';
+import baseurl from './baseurl.js'
 
 fixture `Test search`
-    .page `http://localhost:8652/#/search`
+    .page(`${baseurl}/#/search`)
 
 test('Search for person', async t => {
     await t

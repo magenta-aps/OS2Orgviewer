@@ -46,12 +46,59 @@ function ajax(request, options) {
         }
         return res
     })
-    .catch(() => {
+    .catch((err) => {
         if (!options.silent) {
             stopSpin()
         }
+        console.error(err)
         router.push('/error')
     })
 }
 
-export default ajax
+function getExternal(url) {
+    startSpin() 
+    return fetch(url, {method: 'GET'})
+    .then((response) => {
+        return response.json()
+    })
+    .then((res) => {
+        stopSpin()
+        return res
+    })
+    .catch((err) => {
+        stopSpin()
+        console.error(err)
+        router.push('/error')
+    })
+}
+
+function postQuery(query) {
+    startSpin()
+    return fetch(`${api_url}/graphql`, {
+        method: 'POST',
+        mode: 'cors',
+        credentials: 'same-origin',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(query) // body data type must match "Content-Type" header
+    })
+    .then((response) => {
+        return response.json()
+    })
+    .then((res) => {
+        stopSpin()
+        return res.data
+    })
+    .catch((err) => {
+        stopSpin()
+        console.error(err)
+        router.push('/error')
+    })
+}
+
+export {
+    ajax,
+    postQuery,
+    getExternal
+}

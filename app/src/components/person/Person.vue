@@ -4,8 +4,8 @@
             <oc-header>
                 <h3 slot="title">
                     <router-link 
-                        v-if="$route.params.orgUnitId"
-                        :to="`/orgunit/${ $route.params.orgUnitId }/${ root_org_uuid ? root_org_uuid : null}`"
+                        v-if="org_uuid"
+                        :to="`/orgunit/${ org_uuid }/${ root_uuid }`"
                         id="persontitle">
                         <svg class="svg-back" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path class="svg-path" d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
                         <span class="oc-person-title">{{ person.name }}</span>
@@ -16,12 +16,20 @@
             </oc-header>
             <div class="oc-person-body">
                 <dl>
+
                     <dt>Navn</dt>
                     <dd>{{ person.name }}</dd>
+
+                    <template v-if="engagement">
+                        <dt>{{ engagement.engagement_type.name }}</dt>
+                        <dd>{{ engagement.job_function.name }}</dd>
+                    </template>
                     
-                    <template v-if="association && relation_type === 'association'">
+                    <template v-if="association">
+
                         <dt>Tilknytning</dt>
                         <dd>{{ association.association_type.name }}</dd>
+
                         <template v-if="association.substitute">
                             <dt>Stedfortræder</dt>
                             <dd>
@@ -30,28 +38,27 @@
                                 </router-link>
                             </dd>
                         </template>
-                    </template>
 
-                    <template v-if="engagement && relation_type === 'engagement'">
-                        <dt>{{ engagement.engagement_type.name }}</dt>
-                        <dd>{{ engagement.job_function.name }}</dd>
-                    </template>
-                    <template v-else>
                         <dt>Afdeling</dt>
                         <dd>
-                            <engagement-list :list="person.engagement_data" />
+                            <engagement-list :list="person.engagements" />
                         </dd>
+
+                        <template v-if="association.dynamic_classes">
+                            <template v-for="dclass in association.dynamic_classes">
+                                <dt :key="dclass.top_level_facet.uuid" class="oc-dynamic-class-title">{{ dclass.top_level_facet.description }}</dt>
+                                <dd :key="dclass.uuid" class="oc-dynamic-class-body">{{ dclass.full_name }}</dd>
+                            </template>
+                        </template>
+
                     </template>
 
-                    <template v-if="association && association.dynamic_classes">
-                        <template v-for="dclass in association.dynamic_classes">
-                            <dt :key="dclass.top_level_facet.uuid" class="oc-dynamic-class-title">{{ dclass.top_level_facet.description }}</dt>
-                            <dd :key="dclass.uuid" class="oc-dynamic-class-body">{{ dclass.full_name }}</dd>
-                        </template>
-                    </template>
+                    <dt>Arbejdsadresse</dt>
+                    <dd><work-address :uuid="person.uuid" /></dd>
 
                 </dl>
-                <address-list v-if="person.address_data" :list="person.address_data" />    
+
+                <address-list v-if="person.addresses" :addresses="person.addresses" />    
             </div>
         </article>
     </transition>
@@ -62,12 +69,15 @@ import Vue from 'vue'
 import OcHeader from '../layout/Header.vue'
 import AddressList from '../address/AddressList.vue'
 import EngagementList from './Engagements.vue'
+import WorkAddress from '../address/WorkAddress.vue'
+import Store from '../../store.js'
 
 export default {
     components: {
         OcHeader,
         AddressList,
-        EngagementList
+        EngagementList,
+        WorkAddress
     },
     data: function() {
         return {
@@ -76,54 +86,42 @@ export default {
     },
     computed: {
         person: function() {
-            if (this.$route.params.personId) {
-                return this.$store.getters.getPerson(this.$route.params.personId)
+            return this.$store.getters.getPerson
+        },
+        org_uuid: function() {
+            if (this.$route.params.orgUnitId) {
+                return this.$route.params.orgUnitId
             } else {
-                return null
+                return false
             }
         },
         association: function() {
-            if (this.person.association_data && this.$route.params.orgUnitId) {
-                return this.person.association_data.find(e => {
-                    return e.org_unit.uuid === this.$route.params.orgUnitId
+            if (this.relation_type === 'association' && this.person.associations && this.$route.params.orgUnitId) {
+                return this.person.associations.find(a => {
+                    return a.org_unit_uui === this.$route.params.orgUnitId
                 })
+            } else if (this.relation_type === 'association' && this.person.associations) {
+                return this.person.associations[0]
             } else {
                 return false
             }
         },
         engagement: function() {
-            if (this.person.engagement_data && this.$route.params.orgUnitId) {
-                return this.person.engagement_data.find(e => {
-                    return e.org_unit.uuid === this.$route.params.orgUnitId
+            if (this.relation_type === 'engagement' && this.person.engagements && this.$route.params.orgUnitId) {
+                return this.person.engagements.find(e => {
+                    return e.org_unit_uuid === this.$route.params.orgUnitId
                 })
+            } else if (this.relation_type === 'engagement' && this.person.engagements) {
+                return this.person.engagements[0]
             } else {
                 return false
             }
         },
-        root_org_uuid: function() {
-            return this.$store.getters.getRootOrgUnitUuid
+        root_uuid: function() {
+            return this.$store.getters.getRootUuid
         }
     },
     watch: {
-        person: function(new_data, old_data) {
-            if (new_data !== old_data) {
-                Vue.nextTick(() => {
-                    if (new_data && this.$route.name === 'person' && this.$route.params.orgUnitId) {
-                        document.getElementById('persontitle').focus()
-                    }
-                })
-            }
-            // If no org unit id in route, set org unit from person's association/engagement data and reload
-            if (!this.$route.params.orgUnitId && new_data) {
-                let org_unit_uuid = null
-                if (this.relation_type === 'association') {
-                    org_unit_uuid = new_data.association_data[0].org_unit.uuid
-                } else {
-                    org_unit_uuid = new_data.engagement_data[0].org_unit.uuid
-                }
-                this.$router.push(`/person/${ new_data.uuid }/${ org_unit_uuid }`)
-            }
-        },
         $route: function(to, from) {
             if (to.params.personId) {
                 Vue.nextTick(() => {
@@ -132,22 +130,42 @@ export default {
                     }
                 })
                 if (to.params.personId !== from.params.personId) {
-                    this.update(to.params)
+                    this.update(to.params.personId)
+                }
+            }
+        },
+        person: function() {
+            // Check if route already knows about this person's org unit
+            // if not, update org unit uuid and redirect
+            if (!this.$route.params.orgUnitId) {
+                if (this.relation_type === 'association') {
+                    this.$router.push(`/person/${ this.person.uuid }/${ this.person.associations[0].org_unit_uuid }/${ this.root_uuid }`)
+                } else {
+                    this.$router.push(`/person/${ this.person.uuid }/${ this.person.engagements[0].org_unit_uuid }/${ this.root_uuid }`)
                 }
             }
         }
     },
     methods: {
-        update: function(params) {
-            // Initialise orgviewer from URL params
-            this.$store.dispatch('fetchPerson', params.personId)
+        update: function(person_uuid) {
+            this.$store.dispatch('fetchPerson', person_uuid)
         }
     },
-    created: function() {
+    beforeRouteEnter (to, from, next) {
+        Store.dispatch('fetchPerson', to.params.personId)
+        .then(person => {
 
-        if (this.$route.params.personId) {
-            this.update(this.$route.params)
-        }
+            // Check if route already knows about this person's org unit
+            // if not, update org unit uuid and redirect
+            if (!to.params.orgUnitId) {
+                if (Store.state.relation_type === 'association') {
+                    to.params.orgUnitId = person.associations[0].org_unit_uuid
+                } else {
+                    to.params.orgUnitId = person.engagements[0].org_unit_uuid
+                }
+            }
+            next()
+        })
     }
 }
 </script>

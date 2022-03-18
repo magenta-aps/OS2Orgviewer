@@ -1,38 +1,36 @@
 <template>
     <div v-if="person" class="oc-person-list-item">
-
         <dl>
-            
-            <template v-if="engagement && relation_type === 'engagement'">
-                <dt>{{ engagement.job_function.name }}</dt>
-            </template>
 
-            <template v-if="association && relation_type === 'association'">        
-                <dt>{{ association.association_type.name }}</dt>
+            <template v-if="relation_type === 'association'">        
+                <dt>{{ person.association_type.name }}</dt>
+            </template>
+            <template v-else>
+                <dt>{{ person.job_function.name }}</dt>
             </template>
 
             <dd>
                 <router-link
                     class="oc-person-open"
-                    :to="`/person/${ person.uuid }/${ orgUuid }/${ root_org_uuid ? root_org_uuid : null}`">
+                    :to="`/person/${ person.employee[0].uuid }/${ org_uuid }/${ root_uuid }`">
                     <span class="sr-only">Vis detaljer for </span>
-                    {{ person.name }}
+                    {{ person.employee[0].name }}
                 </router-link><br>
-                <span v-if="association && association.dynamic_classes && relation_type === 'association'" class="oc-person-asso-mainorg">
-                    <span v-for="dc in association.dynamic_classes" :key="dc.uuid">
-                        {{ dc.full_name }}
+                <span v-if="person.dynamic_classes && relation_type === 'association'" class="oc-person-asso-mainorg">
+                    <span v-for="dc in person.dynamic_classes" :key="dc.uuid">
+                        {{ dc }} Full name missing
                     </span>
                 </span>
             </dd>
 
-            <template v-if="association && relation_type === 'association' && association.substitute">
+            <template v-if="relation_type === 'association' && person.substitute_uuid">
                 <dt>Stedfortræder</dt>
                 <dd>
                     <router-link
                         class="oc-person-open"
-                        :to="`/person/${ association.substitute.uuid }/${ orgUuid }`">
+                        :to="`/person/${ person.substitute_uuid }/${ org_uuid }`">
                         <span class="sr-only">Vis detaljer for </span>
-                        {{ association.substitute.name }}
+                        {{ person.substitute_uuid }} Data missing
                     </router-link>
                 </dd>
             </template>
@@ -44,8 +42,7 @@
 <script>
 export default {
     props: [
-        'person',
-        'orgUuid'
+        'person'
     ],
     data: function() {
         return {
@@ -53,26 +50,11 @@ export default {
         }
     },
     computed: {
-        association: function() {
-            if (this.person.association_data) {
-                return this.person.association_data.find(e => {
-                    return e.org_unit.uuid === this.orgUuid
-                })
-            } else {
-                return false
-            }
+        root_uuid: function() {
+            return this.$store.getters.getRootUuid
         },
-        engagement: function() {
-            if (this.person.engagement_data) {
-                return this.person.engagement_data.find(e => {
-                    return e.org_unit.uuid === this.orgUuid
-                })
-            } else {
-                return false
-            }
-        },
-        root_org_uuid: function() {
-            return this.$store.getters.getRootOrgUnitUuid
+        org_uuid: function() {
+            return this.$route.params.orgUnitId ? this.$route.params.orgUnitId : this.root_uuid
         }
     }
 }

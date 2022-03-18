@@ -10,16 +10,15 @@
             <h3 class="oc-search-results-header" tabindex="-1">{{ results.length }} søgeresultater</h3>
             <ul class="oc-search-list">
                 <li v-for="res in results" :key="res.uuid">
-                    <a
+                    <router-link
                         v-if="res.givenname"
-                        href="#"
-                        @click.prevent="navigateToPerson(res.uuid)">
+                        :to="`/person/${ res.uuid }`">
                         <span class="label">Person</span><br>
                         {{ res.name }}
-                    </a>
+                    </router-link>
                     <router-link 
                         v-else
-                        :to="`/orgunit/${ res.uuid }/${ global_root_uuid }`">
+                        :to="`/orgunit/${ res.uuid }`">
                         <span class="label">Enhed</span><br>
                         {{ res.name }}
                     </router-link>
@@ -31,7 +30,7 @@
 
 <script>
 import Vue from 'vue'
-import ajax from '../http/http.js'
+import {ajax} from '../http/http.js'
 
 export default {
     data: function() {
@@ -39,28 +38,16 @@ export default {
             query: null,
             results: null,
             timeout: null,
-            relation_type: this.$store.state.relation_type
+            relation_type: this.$store.state.relation_type,
+            global_org_uuid: null
         }
     },
     computed: {
-        organisation_uuid: function() {
-            if (this.$store.getters.getOrganisations) {
-                return this.$store.getters.getOrganisations[0].uuid
-            } else {
-                return false
-            }
-        },
-        root_org_unit_uuid: function() {
-            return this.$store.getters.getRootOrgUnitUuid
-        },
-        global_root_uuid: function() {
-            return this.$store.getters.getGlobalRootUuid
+        root_uuid: function() {
+            return this.$store.getters.getRootUuid
         }
     },
     methods: {
-        clearRoot: function() {
-            this.$store.commit('setRootOrgUnitUuid', this.global_root_uuid)
-        },
         debounce: function(func, wait) {
             return () => {
                 const context = this,
@@ -86,9 +73,9 @@ export default {
             } else {
                 search_associated = 'associated=false'
             }
-            ajax(`/service/o/${ this.organisation_uuid }/e/?query=${ this.query }&${ search_associated }`)
+            ajax(`/service/o/${ this.global_org_uuid }/e/?query=${ this.query }&${ search_associated }`)
             .then(person_res => {
-                ajax(`/service/o/${ this.organisation_uuid }/ou/?query=${ this.query }&root=${ this.global_root_uuid }`)
+                ajax(`/service/o/${ this.global_org_uuid }/ou/?query=${ this.query }&root=${ this.root_uuid }`)
                 .then(org_res => {
                     search_res = person_res.items.concat(org_res.items)
                     this.results = search_res.sort(function(a,b) {
@@ -102,6 +89,12 @@ export default {
                 })    
             })
             
+        },
+        getGlobalOrg: function() {
+            ajax('/service/o/')
+            .then(org => {
+                this.global_org_uuid = org[0].uuid
+            })
         },
         navigateToPerson: function(person_uuid) {
             this.$store.dispatch('fetchPerson', person_uuid)
@@ -127,13 +120,10 @@ export default {
         }
     },
     mounted: function() {
-        if (!this.organisation_uuid) {
-            this.$store.dispatch('fetchGlobalOrgs')
-            .then(orgs => {
-                this.$store.commit('setOrganisations', orgs)
-            })
-        }
         document.getElementById('search-input').focus()
+    },
+    created: function() {
+        this.getGlobalOrg()
     }
 }
 </script>

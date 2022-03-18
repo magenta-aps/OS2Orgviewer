@@ -1,50 +1,52 @@
 <template>
 
-    <dl class="oc-address-list" v-if="list && list.length > 0">
-        <template v-for="address in list">
-            <template v-if="!address.visibility || address.visibility.name !== 'Hemmelig'">
-                <dt :key="address.address_type.uuid">
-                    <span v-if="address.address_type.name === 'Dokumentadresse'">
-                        Dokumenter
-                    </span>
-                    <span v-if="address.address_type.name === 'Postadresse' && address.person">
-                        Arbejdsadresse
-                    </span>
-                    <span v-else>
-                        {{ address.address_type.name }}
-                    </span>
-                </dt>
-                <dd :key="address.uuid">
-                    <a 
-                        v-if="address.address_type.name === 'Email'"
-                        :href="`mailto:${ address.name }`">
-                        {{ address.name }}
-                    </a>
-                    <a 
-                        v-else-if="address.address_type.name === 'Webadresse'"
-                        :href="address.name"
-                        target="_blank">
-                        {{ address.name }}
-                    </a>
-                    <a 
-                        v-else-if="address.address_type.name === 'Dokumentadresse'"
-                        :href="address.name"
-                        target="_blank">
-                        Vis enhedens dokumenter
-                    </a>
-                    <a 
-                        v-else-if="address.address_type.name === 'Telefon'"
-                        :href="`tel:${ address.name}`">
-                        {{ address.name }}
-                    </a>
-                    <span v-else-if="address.address_type.name === 'Postadresse' && address.person">
-                        <template v-if="work_address">{{ work_address.name }}</template>
-                    </span>
-                    <span v-else>
-                        {{ address.name }}
-                    </span>
-                </dd>
-            </template>
+    <dl class="oc-address-list" v-if="addresses && addresses.length > 0">
+        <template v-for="address in addresses">
+            <div :key="address.uuid" v-if="!address.visibility || address.visibility.name !== 'Hemmelig'">
+
+                <!-- 
+                    WARNING: Customer specific hack 
+                    `Dokumentadresser` will be inserted as link with text: "Vis enhedens dokumenter"
+                -->
+                <template v-if="address.address_type.name === 'Dokumentaddresse' && address.address_type.scope === 'WWW'">
+                    <dt>Dokumenter</dt>
+                    <dd>
+                        <a :href="address.value" target="_blank">Vis enhedens dokumenter</a>
+                    </dd>
+                </template>
+
+                <template v-else-if="address.address_type.scope === 'DAR'">
+                    <dt>{{ address.address_type.name }}</dt>
+                    <dd><dawa-address :uuid="address.value" /></dd>
+                </template>
+
+                <template v-else-if="address.address_type.scope === 'EMAIL'">
+                    <dt>E-mail</dt>
+                    <dd>
+                        <a :href="`mailto:${ address.value }`">{{ address.value }}</a>
+                    </dd>
+                </template>
+
+                <template v-else-if="address.address_type.scope === 'PHONE'">
+                    <dt>Telefon</dt>
+                    <dd>
+                        <a :href="`tel:${ address.value}`">{{ address.value }}</a>
+                    </dd>
+                </template>
+
+                <template v-else-if="address.address_type.scope === 'WWW'">
+                    <dt>{{ address.address_type.name }}</dt>
+                    <dd>
+                        <a :href="address.value" target="_blank">{{ address.value }}</a>
+                    </dd>
+                </template>                
+
+                <template v-else>
+                    <dt>{{ address.address_type.name }}</dt>
+                    <dd>{{ address.value }}</dd>
+                </template>
+
+            </div>
         </template>
     </dl>
     <p class="oc-address-list" v-else>Ingen detaljer fundet</p>
@@ -52,34 +54,15 @@
 </template>
 
 <script>
+import DawaAddress from './Address.vue'
+
 export default {
+    components: {
+        DawaAddress
+    },
     props: [
-        'list'
-    ],
-    data: function() {
-        return {
-            work_address: null
-        }
-    },
-    methods: {
-        getWorkAddress: function() {
-            const post_address = this.list.find(a => {
-                return a.address_type.name === 'Postadresse'
-            })
-            if (post_address && post_address.person) {
-                this.$store.dispatch('fetchOrgUnitAddresses', this.$store.state.person.persons[post_address.person.uuid].engagement_data[0].org_unit.uuid)
-                .then(addresses => {
-                    const address = addresses.find(a => {
-                        return a.address_type.name === 'Postadresse'
-                    })
-                    this.work_address = address
-                })
-            }
-        }
-    },
-    created: function() {
-        this.getWorkAddress()
-    }
+        'addresses'
+    ]
 }
 </script>
 

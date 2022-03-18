@@ -20,9 +20,11 @@ pnpm run build (default setup)
 
 New directories will be created in the [app/dist](./app/dist) folder with your build (example: `app/dist/default/`). Hook it up to a server, and you'll be good to go.
 
-## Configuration
+## Documentation
+[Document for the application can be found here.](./app/docs/index.md)
 
-Configuration details can be found in [the configuration section](./app/CONFIGURATION.md)
+### Configuration documentation
+Configuration details can be found in [the configuration section](./app/docs/configuration.md)
 
-## Development
-Refer to [the development section](./app/DEVELOPMENT.md) for development instructions.
+### Development documentation
+Refer to [the development section](./app/docs/development.md) for development instructions.

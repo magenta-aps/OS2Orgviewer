@@ -1,7 +1,8 @@
 import { Selector } from 'testcafe'
+import baseurl from './baseurl.js'
 
 fixture `Test org units`
-    .page `http://localhost:8652`
+    .page(baseurl)
 
 test('Open/close org unit details', async t => {
     await t
@@ -18,7 +19,7 @@ test('Display org unit addresses and people list', async t => {
         .expect(Selector('.oc-address-list').exists).ok()
 })
 
-test.page('http://localhost:8652/#/orgunit/b6c11152-0645-4712-a207-ba2c53b391ab')('Render info when sharing an org unit URL', async t => {
+test.page(`${baseurl}/#/orgunit/b6c11152-0645-4712-a207-ba2c53b391ab`)('Render info when sharing an org unit URL', async t => {
     await t
         .expect(Selector('#orgtitle').exists).ok()
         .expect(Selector('#persontitle').exists).notOk()

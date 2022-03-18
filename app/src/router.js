@@ -14,7 +14,7 @@ const router = new Router({
         {
             path: '/',
             redirect: {
-                path: `/tree/${ OC_GLOBAL_CONF.VUE_APP_ROOT_UUID }`
+                path: `/tree/${ OC_GLOBAL_CONF.VUE_APP_ROOT_UUID }/${ OC_GLOBAL_CONF.VUE_APP_ROOT_UUID }`
             }
         },
         {

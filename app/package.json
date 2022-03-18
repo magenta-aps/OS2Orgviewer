@@ -1,30 +1,29 @@
 {
   "name": "os2orgviewer",
-  "version": "3.0.8",
+  "version": "4.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve --port 8652 --mode default",
-    "build": "vue-cli-service build --mode default.production --dest ../dist/",
-    "test": "testcafe chrome tests/*.js",
-    "headlesstest": "testcafe chrome:headless tests/*.js --selector-timeout 30000 --assertion-timeout 30000"
+    "serve": "vue-cli-service serve --port 8652",
+    "build": "vue-cli-service build --dest ../dist/",
+    "test": "testcafe chrome tests/*.js --baseurl http://localhost:8652",
+    "headlesstest": "testcafe chrome:headless tests/*.js --selector-timeout 60000 --assertion-timeout 60000 --baseurl http://localhost:8652"
   },
   "dependencies": {
-    "core-js": "^3.6.5",
+    "core-js": "^3.21.1",
     "ie11-custom-properties": "^4.1.0",
-    "non-layered-tidy-tree-layout": "^2.0.2",
-    "vue": "^2.6.11",
-    "vue-router": "^3.4.3",
-    "vuex": "^3.1.3",
-    "whatwg-fetch": "^3.4.1"
+    "vue": "^2.6.14",
+    "vue-router": "^3.5.3",
+    "vuex": "^3.6.2",
+    "whatwg-fetch": "^3.6.2"
   },
   "devDependencies": {
-    "@vue/cli": "^4.5.6",
-    "@vue/cli-plugin-babel": "^4.5.6",
-    "@vue/cli-service": "^4.5.12",
-    "sass": "^1.26.10",
-    "sass-loader": "^10.0.1",
-    "testcafe": "^1.9.4",
-    "vue-template-compiler": "^2.6.11"
+    "@vue/cli": "^4.5.15",
+    "@vue/cli-plugin-babel": "^4.5.15",
+    "@vue/cli-service": "^4.5.15",
+    "sass": "^1.49.9",
+    "sass-loader": "^10.2.1",
+    "testcafe": "^1.18.4",
+    "vue-template-compiler": "^2.6.14"
   },
   "browserslist": [
     "> 0.5% and not dead",

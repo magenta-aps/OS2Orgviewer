@@ -1,170 +1,172 @@
 /* 
-    ======================
-    Horizontal tree layout
-    ======================
+  ======================
+  Horizontal tree layout
+  ======================
 
-    Tree layout is vertical on smaller screens.
-    Tree layout is horizontal on bigger screens.
+  Tree layout is vertical on smaller screens.
+  On bigger screens, the first 2 levels are horizontal 
+  and all sublevels are vertical.
 
 */
 
 .oc-layout-horizontal {
-
+  @media screen and (min-width: 40rem) {
+    .oc-tt-ul-root,
     .oc-tt-ul {
-        padding: 0;
+      list-style: none;
     }
-    
+
     .oc-tt-ul-root {
-        list-style: none;
-        margin: 2rem 0;
+      width: auto !important;
+      height: auto !important;
+      margin-top: 2rem;
     }
-  
+
+    .oc-tt-item {
+      position: relative;
+    }
+
     .oc-tt-node {
-        box-sizing: border-box;
+      position: static;
+      height: auto !important;
+      display: inline-block;
+      padding-top: 0.5rem;
+
+      & .oc-tt-node-body {
+        height: auto;
         display: flex;
-        flex-flow: column nowrap;
-        justify-content: flex-start;
-    
-        .oc-tt-node-body {
-            display: flex;
-            flex-flow: row nowrap;
-            width: 100%;
-        }
-    
-        .oc-org-link {
-            flex: 1 1 auto;
-        }
-    
-        .oc-node-expand-btn {
-            flex: 0 0 1.5rem;
-        }
+        flex-flow: row nowrap;
+      }
     }
-    
+
+    .oc-tt-node-head {
+      display: block;
+      position: absolute;
+      left: -1rem;
+      height: 3px;
+      width: 1rem;
+      top: 1.125rem;
+      background-color: var(--shade-lightest);
+    }
+
+    .oc-org-link {
+      flex: 1 0 auto;
+    }
+
+    .oc-tt-item::before {
+      content: "";
+      display: block;
+      position: absolute;
+      left: -1rem;
+      top: -1.125rem;
+      bottom: 0;
+      height: auto;
+      width: 3px;
+      background-color: var(--shade-lightest);
+      z-index: -1;
+    }
+
+    .oc-tt-item:last-child::before {
+      bottom: auto;
+      height: 2.25rem;
+    }
+
     .oc-tt-ul {
-        list-style: none;
+      margin: 0.5rem 0 1rem;
+      padding: 0 0 0 2rem;
     }
-    
-    @media screen and (max-width: 39.99rem) {
 
-        .oc-tt-ul-root {
-            padding: 0 0 0 1rem;
-            width: auto !important;
-            height: auto !important;
-    
-            & > .oc-tt-item::before,
-            & > .oc-tt-item > .oc-tt-node > .oc-tt-node-head {
-                display: none;
-            }
-        }
-    
-        .oc-tt-ul {
-            padding: 0 0 0 2rem;
-        }
-    
-        .oc-tt-item {
-            position: relative;
-        }
-    
-        .oc-tt-node {
-            height: auto !important;
-        }
-    
-        .oc-tt-node-head {
-            display: block;
-            position: absolute;
-            left: -1rem;
-            height: 3px;
-            width: 1rem;
-            top: 1.125rem;
-            background-color: var(--shade-lightest);
-        }
-    
-        .oc-tt-item::before {
-            content: '';
-            display: block;
-            position: absolute;
-            left: -1rem;
-            top: -1rem;
-            bottom: 0;
-            height: auto;
-            width: 3px;
-            background-color: var(--shade-lightest);
-        }
-    
-        .oc-tt-item:last-child:before {
-            bottom: auto;
-            height: 2.25rem;
-        }
-    
-        .oc-tt-ul {
-            margin: 1rem 0;
-        }
-    
-        .oc-tt-node-tail {
-            display: none;
-        }
+    .oc-tt-line {
+      display: none;
     }
-    
-    @media screen and (min-width: 40rem) {
 
-        .oc-tt-ul-root {
-            padding: 0;
-            position: relative;
-            margin: 2rem auto;
+    & {
+      text-align: center;
+    }
+
+    .oc-tt-item {
+      text-align: left;
+    }
+
+    .oc-tt-node-body {
+      width: 10rem;
+
+      .oc-org-link {
+        flex: 1 1 auto;
+      }
+    }
+
+    .oc-node-expand-btn[aria-expanded="false"] + .oc-tt-node-tail {
+      display: none !important;
+    }
+
+    .oc-tt-ul-root {
+      display: inline-block;
+      margin: 2rem auto;
+
+      & > .oc-tt-item {
+        text-align: center;
+
+        &::before {
+          display: none;
         }
-    
-        .oc-tt-ul-root > .oc-tt-item > .oc-tt-line,
-        .oc-tt-ul-root > .oc-tt-item > .oc-tt-node > .oc-tt-node-head {
+
+        & > .oc-tt-node {
+          text-align: left;
+          margin: 0 auto 1.25rem;
+          position: relative;
+          top: auto !important;
+          left: auto !important;
+          height: auto;
+
+          & .oc-tt-node-head {
             display: none;
-        }
-    
-        .oc-tt-line {
-            position: absolute;
-            display: block;
-            height: 1px;
-            width: auto;
-            border-top: solid 3px var(--shade-lightest);
-        }
-    
-        .oc-tt-node {
-            position: absolute;
-            z-index: 2;
-    
-            .oc-tt-node-body {
-                height: auto;
-                max-height: 4.5rem;
-            }
-        }
+          }
 
-        .oc-org-link {
-            &,
-            &:link,
-            &:visited {
-                align-items: flex-start !important;
-            }
-        }
-    
-        .oc-tt-node-head,
-        .oc-tt-node-tail {
-            content: '';
+          & .oc-tt-node-tail {
             display: block;
             position: absolute;
-            top: -1.5rem;
-            height: 1.5rem;
-            width: 3px;
+            bottom: -1.125rem;
+            top: auto;
             left: 50%;
+            height: 1.33rem;
+            width: 3px;
             background-color: var(--shade-lightest);
+          }
         }
-    
-        .oc-tt-node-tail {
-            top: 0;
-            bottom: -1.5rem;
-            height: auto;
-            z-index: -1;
+
+        & > .oc-tt-ul {
+          display: flex;
+          flex-flow: row nowrap;
+          justify-content: flex-start;
+          padding: 0;
+
+          & > .oc-tt-item {
+            padding: 0 1rem;
+
+            &::before {
+              height: 1.25rem;
+              left: 6rem;
+              top: -0.75rem;
+            }
+
+            & > .oc-tt-node .oc-tt-node-head {
+              width: auto;
+              top: -0.75rem;
+              left: 0;
+              right: 0;
+            }
+
+            &:first-child > .oc-tt-node .oc-tt-node-head {
+              left: 6rem;
+            }
+
+            &:last-child > .oc-tt-node .oc-tt-node-head {
+              right: calc(100% - 6.175rem);
+            }
+          }
         }
-    
-        .oc-tt-ul {
-            margin: 0;
-        }
+      }
     }
+  }
 }
