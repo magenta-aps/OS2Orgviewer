@@ -1,15 +1,16 @@
 <template>
 
-    <router-link v-if="uuid && org_data"
-        :to="`/orgunit/${ org_data.uuid }/${ root_org_uuid ? root_org_uuid : null}`"
-        :id="`ou-${ org_data.uuid }`"
-        class="oc-org-link btn">
+    <router-link v-if="orgUnit"
+        :to="`/orgunit/${ orgUnit.uuid }/${ root_uuid }`"
+        :id="`ou-${ orgUnit.uuid }`"
+        class="oc-org-link btn"
+        :title="orgUnit.name">
         <p class="oc-org-link-title">
             <span class="sr-only">Vis detaljer for </span>
-            {{ org_data.name }}
+            {{ orgUnit.name }}
         </p>
-        <p class="oc-org-link-count" v-if="org_data[`${relation_type}_count`]">
-            {{ displayPersonCount(org_data[`${relation_type}_count`], relation_type) }}
+        <p class="oc-org-link-count">
+            {{ displayPersonCount(orgUnit) }}
         </p>
     </router-link>
 
@@ -20,19 +21,11 @@ import Vue from 'vue'
 
 export default {
     props: [
-        'uuid'
+        'orgUnit'
     ],
-    data: function() {
-        return {
-            relation_type: this.$store.state.relation_type
-        }
-    },
     computed: {
-        root_org_uuid: function() {
-            return this.$store.getters.getRootOrgUnitUuid
-        },
-        org_data: function() {
-            return this.$store.getters.getOrgUnit(this.uuid)
+        root_uuid: function() {
+            return this.$store.getters.getRootUuid
         }
     },
     watch: {
@@ -47,20 +40,26 @@ export default {
         }
     },
     methods: {
-        displayPersonCount: function(count, relation) {
+        displayPersonCount: function(org_unit) {
             let str = ''
-            if (relation === 'association' && count === 1) {
-                str = 'tilknyttet'
-            } else if (relation === 'association' && count > 1) {
-                str = 'tilknyttede'
-            } else if (relation === 'engagement' && count === 1) {
-                str = 'ansat'
-            } else if (relation === 'engagement' && count > 1) {
-                str = 'ansatte'
+            if (org_unit.associations) {
+                str += org_unit.associations.length   
+                if (Number(str) === 1 ) {
+                    str += ' tilknyttet'
+                } else {
+                    str += ' tilknyttede'
+                }
+            } else if (org_unit.engagements) {
+                str += org_unit.engagements.length   
+                if (Number(str) === 1 ) {
+                    str += ' ansat'
+                } else {
+                    str += ' ansatte'
+                }
             } else {
                 return ''
             }
-            return `${ count } ${ str }`
+            return str
         }
     }
 }
@@ -80,6 +79,9 @@ export default {
 .oc-org-link-title {
     padding: 0;
     margin: 0;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: wrap;
 }
 
 .oc-org-link-count {

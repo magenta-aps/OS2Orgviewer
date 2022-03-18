@@ -1,0 +1,154 @@
+/* 
+    ====================
+    Vertical tree layout
+    ====================
+
+    Tree layout is vertical on all screens.
+*/
+
+.oc-tt-ul {
+  margin: 0;
+  padding: 0 0 0 3rem;
+  list-style: none;
+}
+
+.oc-tt-ul-root {
+  list-style: none;
+  margin: 2rem 0;
+  padding: 0 0 0 1rem;
+  width: auto !important;
+  height: auto !important;
+
+  & > .oc-tt-item::before,
+  & > .oc-tt-item > .oc-tt-node > .oc-tt-node-head {
+    display: none;
+  }
+}
+
+.oc-tt-item {
+  position: relative;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding-bottom: 0.25rem;
+
+  &::before {
+    content: "";
+    display: block;
+    position: absolute;
+    left: -1.5rem;
+    top: -0.25rem;
+    bottom: 0;
+    height: auto;
+    width: 3px;
+    background-color: var(--shade-lightest);
+  }
+
+  &:last-child:before {
+    bottom: auto;
+    height: 2.25rem;
+  }
+}
+
+.oc-tt-node {
+  box-sizing: border-box;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  height: auto !important;
+  padding: 0.25rem 0;
+  min-width: 9rem;
+  max-width: 18rem;
+
+  .oc-tt-node-head {
+    display: block;
+    position: absolute;
+    left: -1.5rem;
+    height: 3px;
+    width: 1.5rem;
+    top: 1.8rem;
+    background-color: var(--shade-lightest);
+  }
+
+  .oc-tt-node-body {
+    display: flex;
+    flex-flow: row nowrap;
+    width: 100%;
+  }
+
+  .oc-tt-node-tail {
+    display: none;
+  }
+
+  .oc-org-link {
+    flex: 1 1 auto;
+  }
+
+  .oc-node-expand-btn {
+    flex: 0 0 1.5rem;
+  }
+}
+
+@media screen and (min-width: 40rem) {
+  .oc-layout-vertical {
+    .oc-tt-ul {
+      margin-top: 0;
+      padding: 0 0 0 1.5rem;
+    }
+
+    .oc-tt-item {
+      display: flex;
+      flex-flow: row nowrap;
+      margin-bottom: 0.5rem;
+
+      &::before {
+        left: -0.75rem;
+        top: 1.8rem;
+        height: auto;
+        bottom: -2.5rem;
+      }
+
+      &:last-child::before {
+        display: none;
+      }
+
+      &:first-child > .oc-tt-line {
+        display: block;
+        position: absolute;
+        left: -2rem !important;
+        right: auto !important;
+        width: 2rem;
+        height: 3px;
+        background-color: var(--shade-lightest);
+      }
+    }
+
+    .oc-tt-line {
+      top: 1.8rem;
+    }
+
+    .oc-tt-ul-root > .oc-tt-item > .oc-tt-line {
+      display: none;
+    }
+
+    .oc-tt-node {
+      flex: 0 0 auto;
+    }
+
+    .oc-tt-node-head {
+      left: -0.75rem;
+      width: 0.75rem;
+    }
+
+    .svg-toggle {
+      transform: rotate(270deg);
+      transition: transform 0.3s;
+    }
+
+    .oc-node-expand-btn.close .svg-toggle {
+      transform: rotate(90deg);
+    }
+  }
+}

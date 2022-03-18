@@ -1,8 +1,7 @@
 // Import SASS styles
 import './assets/default-theme.css';
-import './assets/tree-layouts/vertical.scss';
+import './assets/tree-layouts/base.scss';
 import './assets/tree-layouts/horizontal.scss';
-import './assets/tree-layouts/hybrid.scss';
 
 // Import JS
 import Vue from 'vue'

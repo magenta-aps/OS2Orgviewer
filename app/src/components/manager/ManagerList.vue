@@ -1,13 +1,13 @@
 <template>
-    <dl class="oc-managers" v-if="org_data.manager_data && org_data.manager_data.length > 0">
-        <template v-for="m in org_data.manager_data">
+    <dl class="oc-managers" v-if="managers && managers.length > 0">
+        <template v-for="m in managers">
             <dt :key="m.manager_type.uuid">{{ m.manager_type.name }}</dt>
-            <dd :key="m.uuid">
+            <dd :key="m.employee[0].uuid">
                 <router-link
                     class="oc-person-open"
-                    :to="`/person/${ m.person.uuid }/${ org_data.uuid }/${ root_org_uuid ? root_org_uuid : null}`">
+                    :to="`/person/${ m.employee[0].uuid }/${ m.org_unit_uuid }/${ root_uuid }`">
                     <span class="sr-only">Vis detaljer for </span>
-                    {{ m.person.name }}
+                    {{ m.employee[0].name }}
                 </router-link>
             </dd>
         </template>
@@ -17,14 +17,11 @@
 <script>
 export default {
     props: [
-        'uuid'
+        'managers'
     ],
     computed: {
-        org_data: function() {
-            return this.$store.getters.getOrgUnit(this.uuid)
-        },
-        root_org_uuid: function() {
-            return this.$store.getters.getRootOrgUnitUuid
+        root_uuid: function() {
+            return this.$store.getters.getRootUuid
         }
     }
 }

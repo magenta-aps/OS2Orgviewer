@@ -1,6 +1,6 @@
 # Development
 
-Refer to the [the general README](../README.md) for setup instructions.
+Refer to the [the general README](../../README.md) for setup instructions.
 
 
 ## Start a development server with hot reload
@@ -26,7 +26,7 @@ pnpm run headlesstest
 
 ## Configuration
 
-See [the configuration section](./app/CONFIGURATION.md) for details on configuration.
+See [the configuration section](configuration.md) for details on configuration.
 
 
 # REST API interfacing

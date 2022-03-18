@@ -1,105 +1,133 @@
-import ajax from '../http/http.js'
-import Vue from 'vue'
+import {postQuery} from '../http/http.js'
 
 const state = {
-    persons: {},
-    current_person_uuid: null,
-    queue: []
+    person: null
 }
 
 const getters = {
-    getPersons: state => {
-        return state.persons
-    },
-    getPerson: state => uuid => {
-        return state.persons[uuid]
+    getPerson: state => {
+        return state.person
     }
 }
 const mutations = {
     setPerson: (state, person) => {
-        state.persons[person.uuid] = person
-    },
-    popLoadQueue: (state) => {
-        state.queue.pop()
-    },
-    pushLoadQueue: (state) => {
-        state.queue.push(1)
+        state.person = person
     }
 }
 const actions = {
-    fetchPersons: ({dispatch, rootState}, options) => {
-        if (!rootState.organisation.orgs[options.org_uuid].person_data) {
-            let relation_type = options.relation ? options.relation : 'engagement'
-            ajax(`/service/ou/${ options.org_uuid }/details/${ relation_type }`)
-            .then(relations => {
-                let payload = {
-                    org_uuid: options.org_uuid,
-                    queue: relations.length,
-                    persons: []
+    fetchPerson: ({commit, rootState}, uuid) => {
+        let relation_query = ''
+        if (rootState.relation_type === 'association') {
+            relation_query = `
+                associations {
+                    org_unit_uuid,
+                    association_type {
+                        name
+                    },
+                    substitute_uuid,
+                    dynamic_classes {
+                        uuid
+                    }
                 }
-                for (let r in relations) {
-                    payload.persons.push(relations[r].person.uuid)
-                    dispatch('fetchPerson', relations[r].person.uuid)
+            `
+        } else {
+            relation_query = `
+                engagements {
+                    org_unit_uuid,
+                    engagement_type {
+                        name
+                    },
+                    job_function {
+                        name
+                    }
                 }
-                dispatch('awaitPersonData', payload)
-            })
+            `
         }
+        return postQuery({"query": `
+            {
+                employees(uuids:"${uuid}") {
+                    uuid,
+                    objects {
+                        name,
+                        addresses {
+                            uuid,
+                            value,
+                            visibility {
+                                name
+                            },
+                            address_type {
+                                uuid,
+                                name,
+                                scope
+                            }
+                        },
+                        ${relation_query}
+                    }
+                }	  
+            }
+        `})
+        .then(res => {
+
+            let person = res.employees[0].objects[0]
+            person.uuid = res.employees[0].uuid
+
+            commit('setPerson', person)
+            return person
+        })
     },
-    awaitPersonData: ({dispatch, state, commit}, payload) => {
-        setTimeout(() => {
-            if (state.queue.length > 0) {
-                dispatch('awaitPersonData', payload)
+    fetchPersonWorkAddress: ({rootState}, uuid) => {
+        let relation_query = ''
+        if (rootState.relation_type === 'association') {
+            relation_query = `
+                associations {
+                    org_unit {
+                        uuid,
+                        addresses {
+                            uuid,
+                            value,
+                            address_type {
+                                scope,
+                                name
+                            }
+                        }
+                    }
+                }
+            `
+        } else {
+            relation_query = `
+                engagements {
+                    org_unit {
+                        uuid,
+                        addresses {
+                            uuid,
+                            value,
+                            address_type {
+                                scope,
+                                name
+                            }
+                        }
+                    }
+                }
+            `
+        }
+        return postQuery({"query": `
+            {
+                employees(uuids:"${uuid}") {
+                    uuid,
+                    objects {
+                        ${relation_query}    
+                    }
+                }	  
+            }
+        `})
+        .then(res => {
+
+            if (rootState.relation_type === 'association') {
+                return res.employees[0].objects[0].associations[0].org_unit[0].addresses
             } else {
-                commit('setOrgUnitPeople', payload)
+                return res.employees[0].objects[0].engagements[0].org_unit[0].addresses
             }
-        }, 500)
-    },
-    fetchPerson: ({state, commit, dispatch}, uuid) => {
-        if (!state.persons[uuid]) {
-
-            let responses = {
-                person: null,
-                address_data: null,
-                association_data: null,
-                engagement_data: null
-            }
-
-            commit('pushLoadQueue')
-
-            ajax(`/service/e/${ uuid }/`)
-            .then(person => {
-                responses.person = person
-            })
-            ajax(`/service/e/${ uuid }/details/address`)
-            .then(addresses => {
-                responses.address_data = addresses
-            })
-            ajax(`/service/e/${ uuid }/details/association`)
-            .then(associations => {
-                responses.association_data = associations
-            })
-            ajax(`/service/e/${ uuid }/details/engagement`)
-            .then(engagements => {
-                responses.engagement_data = engagements
-            })
-
-            dispatch('awaitPersonAPIresponses', responses)
-        }
-    },
-    awaitPersonAPIresponses: ({dispatch, commit, state}, res) => {
-        setTimeout(() => {
-            if (!res.person || !res.address_data || !res.association_data || !res.engagement_data) {
-                dispatch('awaitPersonAPIresponses', res)
-            } else { 
-                let person = res.person
-                person.address_data = res.address_data
-                person.association_data = res.association_data
-                person.engagement_data = res.engagement_data
-                
-                Vue.set(state.persons, res.person.uuid, res.person)
-                commit('popLoadQueue')
-            }
-        }, 300)
+        })
     }
 }
 

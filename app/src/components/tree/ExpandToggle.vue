@@ -1,57 +1,68 @@
 <template>
     <button 
-        v-if="node_data && node_data.child_count > 0"
+        v-if="orgUnit && count > 0"
         class="oc-node-expand-btn inverse"
-        :class="branch_open ? 'close': 'open'"
-        :aria-expanded="branch_open ? 'true': 'false'"
-        :title="branch_open ? `Skjul ${ node_data.child_count } underenheder` : `Vis ${ node_data.child_count } underenheder`"
+        :class="orgUnit.showchildren ? 'close': 'open'"
+        :aria-expanded="orgUnit.showchildren ? 'true': 'false'"
+        :title="orgUnit.showchildren ? `Skjul ${ count } underenheder` : `Vis ${ count } underenheder`"
         type="button" 
         @click="toggleBranch">
             <svg class="svg-toggle" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path class="svg-path" d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/></svg>
-            <span class="sr-only">{{ branch_open ? 'Skjul' : 'Vis' }}</span>
-            {{ node_data.child_count }} <span class="sr-only">underenheder</span>
+            <span class="sr-only">{{ orgUnit.showchildren ? 'Skjul' : 'Vis' }}</span>
+            {{ count }} <span class="sr-only">underenheder</span>
     </button>
 </template>
 
 <script>
 export default {
     props: [
-        'uuid'
+        'orgUnit'
     ],
-    data: function() {
-        return {
-            branch_open: false
+    computed: {
+        root_uuid: function() {
+            return this.$store.getters.getRootUuid
+        },
+        count: function() {
+            if (this.orgUnit.children) {
+                return this.orgUnit.children.length
+            } else {
+                return false
+            }
         }
     },
-    computed: {
-        node_data: {
-            get: function() {
-                let node = this.$store.getters.getOrgUnit(this.uuid)
-                if (node.showchildren) {
-                    this.branch_open = true
-                }
-                return node
-            }, 
-            set: function(new_node) {
-                this.$store.commit('updateNode', new_node)
-            }
-        },
-        root_org_unit_uuid: function() {
-            return this.$store.getters.getRootOrgUnitUuid
+    watch: {
+        route: function(new_route, old_route) {
+            this.updateShowChildren(new_route)
         }
     },
     methods: {
-        toggleBranch: function() {
-            this.branch_open = !this.branch_open
-            this.$router.push(`/tree/${ this.node_data.uuid }/${ this.root_org_unit_uuid }?showchildren=${ this.branch_open ? 1 : 0 }`)
-            if (this.branch_open) {
-                this.node_data.showchildren = true
-                this.$store.dispatch('getChildren', this.uuid)
-            } else {
-                this.node_data.showchildren = false
+        updateShowChildren: function(route) {
+            if (route.params.orgUnitId === this.orgUnit.uuid && route.query.showchildren) {
+                if (route.query.showchildren === 'false') {
+                    this.orgUnit.showchildren = false
+                } else {
+                    this.orgUnit.showchildren = true    
+                }
             }
-            this.$store.dispatch('updateTreeData')
+        },
+        toggleBranch: function() {
+            if (!this.orgUnit.showchildren) {
+                this.orgUnit.showchildren = true
+            } else { 
+                this.orgUnit.showchildren = false
+            }
+            this.$router.push(`/tree/${ this.orgUnit.uuid }/${ this.root_uuid }?showchildren=${ this.orgUnit.showchildren ? 'true' : 'false' }`)
+            this.$store.commit('setOrgUnit', this.orgUnit)
+            if (this.orgUnit.showchildren) {
+                const children_uuids = this.orgUnit.children.map(function(child) {
+                    return child.uuid
+                })
+                this.$store.dispatch('buildTree', {uuids: children_uuids})
+            }
         }
+    },
+    created: function() {
+        this.updateShowChildren(this.$route)
     }
     
 }

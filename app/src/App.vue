@@ -4,11 +4,11 @@
             <load-screen v-if="first_load" text="Vent et øjeblik mens vi henter data" />
         </transition>
         <oc-header id="oc-global-header">
-            <button slot="preaction" @click="navToRoot" class="oc-header-preaction btn" :title="`Vis første niveau i ${ title }`">
+            <router-link slot="preaction" to="/" class="oc-header-preaction btn" :title="`Vis første niveau i ${ title }`">
                 <img v-if="logo_src" :src="logo_src" alt="">
                 <svg class="oc-home-img" v-else xmlns="http://www.w3.org/2000/svg" height="100%" viewBox="0 0 24 24" width="100%"><path d="M0 0h24v24H0z" fill="none"/><path class="oc-home-img-path" d="M22 11V3h-7v3H9V3H2v8h7V8h2v10h4v3h7v-8h-7v3h-2V8h2v3z" fill="#000"/></svg>
                 <span class="sr-only">Vis første niveau i {{ title }}</span>
-            </button>
+            </router-link>
             <h1 v-if="title" slot="title" class="oc-header-title">
                 {{ title }}
             </h1>
@@ -73,7 +73,7 @@ export default {
                 } else {
                     this.first_load = false
                 }
-            }, 3000)
+            }, 1000)
         },
         checkRootOrgUuid: function (root_uuid) {
             try {
@@ -82,7 +82,7 @@ export default {
                 }
             }
             catch(err) {
-                console.log(err)
+                console.error(err)
             }
         },
         navToRoot: function() {

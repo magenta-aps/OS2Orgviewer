@@ -10,16 +10,7 @@
 export default {
     props: [
         'list'
-    ],
-    computed:{
-        
-    },
-    watch: {
-        
-    },
-    created: function() {
-        
-    }
+    ]
 }
 </script>
 

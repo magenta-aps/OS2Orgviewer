@@ -1,25 +1,22 @@
 <template>
     <router-link
         class="oc-node-focus-btn btn"
-        v-if="uuid !== root_org_unit_uuid && node_data"
-        :to="`/tree/${ uuid }/${ uuid }/`"
-        :title="`Vis kun ${ node_data.name }`">
+        v-if="orgUnit && orgUnit.uuid !== root_uuid"
+        :to="`/tree/${ orgUnit.uuid }/${ orgUnit.uuid }/`"
+        :title="`Vis kun ${ orgUnit.name }`">
         <svg class="svg-focus" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path class="svg-path" d="M5 15H3v4c0 1.1.9 2 2 2h4v-2H5v-4zM5 5h4V3H5c-1.1 0-2 .9-2 2v4h2V5zm14-2h-4v2h4v4h2V5c0-1.1-.9-2-2-2zm0 16h-4v2h4c1.1 0 2-.9 2-2v-4h-2v4zM12 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" /></svg>
-        <span class="sr-only">Vis kun {{ node_data.name }}</span>
+        <span class="sr-only">Vis kun {{ orgUnit.name }}</span>
     </router-link>
 </template>
 
 <script>
 export default {
     props: [
-        'uuid'
+        'orgUnit'
     ],
     computed: {
-        node_data: function() {
-            return this.$store.getters.getOrgUnit(this.uuid)
-        },
-        root_org_unit_uuid: function() {
-            return this.$store.getters.getRootOrgUnitUuid
+        root_uuid: function() {
+            return this.$store.getters.getRootUuid
         }
     }
 }
