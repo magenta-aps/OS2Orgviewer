@@ -6,9 +6,15 @@ For build configurations in VueJS, Babel, or Webpack, refer to the [Vue-CLI conf
 
 Also, check the [full documentation on setting environment variables for VueJS applications.](https://cli.vuejs.org/guide/mode-and-env.html#modes)
 
-## 1. Pre-build configuration
+## 1. Post-build configuration
 
-Refer to [.env.default](../.env.default) for an example of environment variables you can set prior to building the Node/VueJS application.
+If you are unable to configure the application before the build process, (usually the case) you may manipulate the `index.html` for the specific `/dist` that you want to serve. In `index.html` you can set specific Javascript variables that correspond to configuration options for the application.
+
+There is a script for use in Docker containers, [30-sed-on-index-html.sh](../../docker/30-sed-on-index-html.sh). This script takes environment variables and manipulates config vars in `index.html` while the container is running.
+
+## 2. Pre-build configuration
+
+Refer to [.env.example](../.env.example) for an example of environment variables you can set PRIOR TO BUILDING the Node/VueJS application.
 
 ### Pre-build Environment variables
 
@@ -51,9 +57,3 @@ VUE_APP_LOGO_PATH=path-to-logo/logo.svg
 # Default: none
 VUE_APP_FAVICON_PATH=path-to-favicon/favicon.ico
 ```
-
-## 2. Post-build configuration
-
-If you are unable to configure the application before the build process, you may manipulate the `index.html` for the specific `/dist` that you want to serve. In `index.html` you can set specific Javascript variables that correspond to configuration options for the application.
-
-Refer to [public/index.html](../public/index.html) for an example of configurations you can make when the application has been built.
