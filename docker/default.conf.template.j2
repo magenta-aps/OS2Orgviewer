@@ -17,9 +17,13 @@ server {
         proxy_set_header Session "${SAML_TOKEN}";
 
         proxy_pass ${PROXY_PASS_TO};
+    }
 
-        # Only allow GET requests to come through
-        limit_except GET {
+    location = /graphql {
+        try_files /dev/null @service;
+
+        # With GraphQL, you use POST requests.
+        limit_except POST {
             deny all;
         }
     }
@@ -27,6 +31,11 @@ server {
 {% for whitelist_url in url_whitelist %}
     location ~ "{{ whitelist_url }}" {
         try_files /dev/null @service;
+
+        # Only allow GET requests to come through
+        limit_except GET {
+            deny all;
+        }
     }
 {% endfor %}
 }

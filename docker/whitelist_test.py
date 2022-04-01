@@ -42,6 +42,26 @@ class TestStringMethods(unittest.TestCase):
             self.assertEqual(response.status_code, 404)
             self.assertIn("text/html", response.headers['content-type'])
 
+    @parameterized.expand(test_urls)
+    def test_post_not_allowed(self, url, expected):
+        protocol = "http"
+        host = "localhost:8083"
+        url = f"{ protocol }://{ host }/{url}"
+
+        response = requests.post(url)
+        self.assertIn(response.status_code, (403, 404))
+
+    def test_graphql(self):
+        url = "http://localhost:8083/graphql"
+        query = """
+        query MyQuery {
+          version {
+            lora_version
+          }
+        }
+        """
+        response = requests.post(url, json={"query": query, "variables": None, "operationName": "MyQuery"})
+        self.assertEqual(response.status_code, 200)
 
 
 if __name__ == '__main__':
