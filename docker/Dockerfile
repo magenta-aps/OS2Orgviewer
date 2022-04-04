@@ -37,12 +37,18 @@ LABEL org.opencontainers.image.title="OS2OrgViewer" \
       org.opencontainers.image.licenses="MPL-2.0" \
       org.opencontainers.image.url="https://git.magenta.dk/rammearkitektur/os2orgviewer" \
       org.opencontainers.image.source="https://git.magenta.dk/rammearkitektur/os2orgviewer"
+
+RUN apk add --no-cache jq==1.6-r1
+
 # Copy in configuration script
 COPY ./docker/25-symlink-html.sh /docker-entrypoint.d/25-symlink-html.sh
 RUN chmod 775 /docker-entrypoint.d/25-symlink-html.sh
 
 COPY ./docker/30-sed-on-index-html.sh /docker-entrypoint.d/30-sed-on-index-html.sh
 RUN chmod 775 /docker-entrypoint.d/30-sed-on-index-html.sh
+
+COPY ./docker/40-keycloak-auth.sh /docker-entrypoint.d/40-keycloak-auth.sh
+RUN chmod 775 /docker-entrypoint.d/40-keycloak-auth.sh
 
 # Copy in nginx configuration
 COPY --from=templater ./code/default.conf.template /etc/nginx/templates/default.conf.template

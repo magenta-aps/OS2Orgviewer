@@ -14,7 +14,7 @@ server {
     }
 
     location @service {
-        proxy_set_header Session "${SAML_TOKEN}";
+        proxy_set_header Authorization "bearer ACCESS_TOKEN";
 
         proxy_pass ${PROXY_PASS_TO};
     }
