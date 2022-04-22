@@ -50,6 +50,9 @@ RUN chmod 775 /docker-entrypoint.d/30-sed-on-index-html.sh
 COPY ./docker/40-keycloak-auth.sh /docker-entrypoint.d/40-keycloak-auth.sh
 RUN chmod 775 /docker-entrypoint.d/40-keycloak-auth.sh
 
+COPY ./docker/50-crash.sh /docker-entrypoint.d/50-crash.sh
+RUN chmod 775 /docker-entrypoint.d/50-crash.sh
+
 # Copy in nginx configuration
 COPY --from=templater ./code/default.conf.template /etc/nginx/templates/default.conf.template
 
