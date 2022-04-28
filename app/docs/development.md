@@ -21,11 +21,15 @@ After compile, pick any build folder and serve `index.html` and its associated s
 ## Run tests
 
 You can run Testcafe E2E tests from the command line.
-
+Assuming you have Chrome browser installed, and your app runs on localhost:8083:
 ```
-npm run test
-# or
-npm run headlesstest
+(from app/)
+node_modules/.bin/testcafe chrome tests/*.js --baseurl http://localhost:8083
+```
+Tests can also be run in headless mode, if your browser supports it:
+```
+(from app/) 
+node_modules/.bin/testcafe chrome:headless tests/*.js --baseurl http://localhost:8083
 ```
 
 ## Configuration
