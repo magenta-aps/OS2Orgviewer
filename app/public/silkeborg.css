@@ -1,0 +1,43 @@
+/*
+    =====================================================
+    Custom CSS variables and styles for Silkeborg kommune
+    =====================================================
+
+    #004884 rgb(0,75,141) blå
+    rgb(138,212,223) lys blå
+    
+    rgb(122,152,54) #6d9c32 grøn
+    rgb(247,142,30) orange
+    rgb(90,20,0) brun
+    
+    #830054 vinrød
+    #91b465 lys grøn
+    #bbb #dddd #eee grå
+*/
+
+:root {
+    --color-1: rgb(0,75,141) !important; /* Primary branding color for high visibility elements */
+    --color-2: rgb(122,152,54) !important; /* Used for higlights and accents */
+
+    --color-3: rgb(138,212,223) !important; /* Light color for dark backgrounds */ 
+    --color-4: #91b465 !important; /* Alternative light color for dark backgrounds */
+
+    --shade-lightest: #fff !important;
+    --shade-lighter: #ccc !important;
+    --shade-light: #999 !important;
+    --shade-dark: #666 !important;
+    --shade-darker: #333 !important;
+    --shade-darkest: #000 !important;
+
+    --shadow-1: .25rem .25rem 0 hsla(0,0%,0%,.125) !important;
+    --shadow-2: -.5rem 0  0 hsla(0,0%,0%,.2) !important;
+    --shadow-3: 0 .5rem  0 hsla(0,0%,0%,.2) !important;
+
+    --font: 1em/1.4 Verdana,sans-serif !important;
+}
+
+.oc-header-preaction img {    
+    height: 2rem !important;
+    width: auto !important;
+    margin-left: .5rem;
+}
