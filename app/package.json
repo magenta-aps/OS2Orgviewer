@@ -1,12 +1,12 @@
 {
   "name": "os2orgviewer",
-  "version": "4.1.0",
+  "version": "4.1.1",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --port 8652",
     "build": "vue-cli-service build --dest ../dist/",
     "test": "testcafe chrome tests/*.js --baseurl http://localhost:8652",
-    "headlesstest": "testcafe chrome:headless tests/*.js --selector-timeout 60000 --assertion-timeout 60000 --baseurl http://localhost:8652"
+    "headlesstest": "testcafe chrome:headless tests/*.js --baseurl http://localhost:8652"
   },
   "dependencies": {
     "core-js": "^3.21.1",
