@@ -7,4 +7,4 @@
 # on startup. Well, the tokens expire so we just do the obvious thing; crash
 # every 10 minutes and let k8s/docker restart the process!
 
-(sleep 600 && kill 1)&
+(sleep $((500 + $RANDOM % 100)) && kill 1)&
