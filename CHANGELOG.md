@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+2.3.1 - 2022-05-03
+------------------
+
+[#50058] Sleep for a random number of seconds before crashing
+
 2.3.0 - 2022-04-26
 ------------------
 
