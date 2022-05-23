@@ -17,7 +17,11 @@ RUN npm ci
 
 # Copy in and build source
 COPY app ./
-RUN npm run build
+
+ARG COMMIT_TAG
+ENV COMMIT_TAG=${COMMIT_TAG:-0.0.0}
+RUN sed -i "s/\"version\": \".*\"/\"version\": \"${COMMIT_TAG}\"/g" ./package.json; \
+    npm run build
 
 
 FROM python:3 AS templater
