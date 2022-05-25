@@ -1,6 +1,7 @@
 {
   "name": "os2orgviewer",
-  "version": "4.1.2",
+  "__comment": "Version is set by CI build",
+  "version": "0.0.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --port 8652",
