@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+2.5.1 - 2022-06-15
+------------------
+
+[#50902] Crash less often due to Kubernetes CrashLoopBackoff issues
+
 2.5.0 - 2022-06-09
 ------------------
 
