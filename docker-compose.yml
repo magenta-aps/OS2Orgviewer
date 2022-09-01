@@ -24,7 +24,7 @@ services:
 
       # Required for Keycloak auth
       # GLOBAL_API_URL should point to ourselves
-      KEYCLOAK_CLIENT_SECRET: "603f1c82-d012-4d04-9382-dbe659c533fb"
+      KEYCLOAK_CLIENT_SECRET: "30303030-3030-3030-3030-303030303030"
       PROXY_PASS_TO: http://mo:5000
     ports:
       - "8083:80"
