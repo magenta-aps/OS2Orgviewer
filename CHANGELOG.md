@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+2.7.0 - 2022-09-02
+------------------
+
+[#51382] Query `dynamic_class` instead of `dynamic_classes`
+
 2.6.0 - 2022-09-01
 ------------------
 
