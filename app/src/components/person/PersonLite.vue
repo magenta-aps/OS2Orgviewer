@@ -16,8 +16,8 @@
                     <span class="sr-only">Vis detaljer for </span>
                     {{ person.employee[0].name }}
                 </router-link><br>
-                <span v-if="person.dynamic_classes && relation_type === 'association'" class="oc-person-asso-mainorg">
-                    <span v-for="dc in person.dynamic_classes" :key="dc.uuid">
+                <span v-if="person.dynamic_class && relation_type === 'association'" class="oc-person-asso-mainorg">
+                    <span v-for="dc in person.dynamic_class" :key="dc.uuid">
                         {{ dc }} Full name missing
                     </span>
                 </span>

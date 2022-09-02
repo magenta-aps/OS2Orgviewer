@@ -25,7 +25,7 @@ const actions = {
                         name
                     },
                     substitute_uuid,
-                    dynamic_classes {
+                    dynamic_class {
                         uuid
                     }
                 }

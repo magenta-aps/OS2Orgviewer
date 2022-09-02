@@ -44,8 +44,8 @@
                             <engagement-list :list="person.engagements" />
                         </dd>
 
-                        <template v-if="association.dynamic_classes">
-                            <template v-for="dclass in association.dynamic_classes">
+                        <template v-if="association.dynamic_class">
+                            <template v-for="dclass in association.dynamic_class">
                                 <dt :key="dclass.top_level_facet.uuid" class="oc-dynamic-class-title">{{ dclass.top_level_facet.description }}</dt>
                                 <dd :key="dclass.uuid" class="oc-dynamic-class-body">{{ dclass.full_name }}</dd>
                             </template>
