@@ -103,7 +103,7 @@ const actions = {
                     association_type {
                         name
                     },
-                    dynamic_classes {
+                    dynamic_class {
                         uuid
                     }
                 }
