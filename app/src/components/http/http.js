@@ -2,6 +2,7 @@ import 'whatwg-fetch'
 import spinner from '../spinner/Spinner.js'
 import router from '../../router.js'
 import store from '../../store.js'
+import {initKeycloak} from '../../keycloak.js'
 
 let loadstack = []
 
@@ -11,6 +12,27 @@ const ajax_init = {
     method: 'GET',
     credentials: 'same-origin',
     mode: 'cors'
+}
+
+function authFetch(url, args) {
+    function addAuthHeader(args) {
+      if (args.headers === undefined) {
+          args.headers = {'Authorization': `Bearer ${store.state.access_token}`}
+      } else {
+          args.headers['Authorization'] = `Bearer ${store.state.access_token}`
+      }
+    }
+
+    // Make sure access_token has been retrieved
+    if (store.state.access_token === undefined) {
+        return initKeycloak().then(() => {
+            addAuthHeader(args)
+            return fetch(url, args)
+        })
+    }
+
+    addAuthHeader(args)
+    return fetch(url, args)
 }
 
 function startSpin() {
@@ -36,7 +58,7 @@ function ajax(request, options) {
     if (!options.silent) {
         startSpin() 
     }
-    return fetch(api_url + request, ajax_init)
+    return authFetch(api_url + request, ajax_init)
     .then((response) => {
         return response.json()
     })
@@ -57,7 +79,7 @@ function ajax(request, options) {
 
 function getExternal(url) {
     startSpin() 
-    return fetch(url, {method: 'GET'})
+    return authFetch(url, {method: 'GET'})
     .then((response) => {
         return response.json()
     })
@@ -74,7 +96,8 @@ function getExternal(url) {
 
 function postQuery(query) {
     startSpin()
-    return fetch(`${api_url}/graphql`, {
+
+    return authFetch(`${api_url}/graphql`, {
         method: 'POST',
         mode: 'cors',
         credentials: 'same-origin',
