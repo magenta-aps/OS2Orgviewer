@@ -103,8 +103,11 @@ const actions = {
                     association_type {
                         name
                     },
-                    dynamic_class {
-                        uuid
+                    dynamic_class{
+                        name
+                        parent {
+                            name
+                        }
                     }
                 }
             `

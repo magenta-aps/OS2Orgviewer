@@ -24,10 +24,17 @@ const actions = {
                     association_type {
                         name
                     },
-                    substitute_uuid,
-                    dynamic_class {
+                    substitute {
                         uuid
+                        name
+                    },
+                    dynamic_class {
+                        name
+                        parent {
+                            name
+                        }
                     }
+                                      
                 }
             `
         } else {

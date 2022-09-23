@@ -34,7 +34,7 @@ VUE_APP_ROOT_UUID=f06ee470-9f17-566f-acbe-e938112d46d9
 # Set type of relation between people and organisations [engagement|association]
 # The UI will display people in organisations based on their engagement or association.
 # Default: engagement
-VUE_APP_ORG_PERSON_RELATION=engagement
+GLOBAL_ORG_PERSON_RELATION=engagement
 
 # Set the application title. It will appear in the UI header and in the HTML document title.
 # Default: Organization chart demo
