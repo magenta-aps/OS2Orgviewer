@@ -162,7 +162,6 @@ const actions = {
             return res['org_units'].map(org => {
                 let obj = org.objects[0]
                 obj.uuid = org.uuid
-                obj.parent = obj.parent[0] ? obj.parent[0] : null
                 return obj
             })
         })
