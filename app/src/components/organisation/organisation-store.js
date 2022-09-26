@@ -95,7 +95,10 @@ const actions = {
         if (rootState.relation_type === 'association') {
             relation_query = `
                 associations {
-                    substitute_uuid,
+                    substitute {
+                        uuid
+                        name
+                    },
                     employee {
                         uuid,
                         name

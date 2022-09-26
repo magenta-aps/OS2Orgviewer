@@ -29,10 +29,11 @@
                 <dd>
                     <router-link
                         class="oc-person-open"
-                        :to="`/person/${ person.substitute.uuid }/${ org_uuid }`">
+                        :to="`/person/${ person.substitute[0].uuid }/${ org_uuid }`">
                         <span class="sr-only">Vis detaljer for </span>
-                        {{ person.substitute.name }} 
+                        {{ person.substitute[0].name }} 
                     </router-link>
+                    <hr>
                 </dd>
             </template>
 
