@@ -17,21 +17,23 @@
                     {{ person.employee[0].name }}
                 </router-link><br>
                 <span v-if="person.dynamic_class && relation_type === 'association'" class="oc-person-asso-mainorg">
-                    <span v-for="dc in person.dynamic_class" :key="dc.uuid">
-                        {{ dc }} Full name missing
+                    <span v-if="person.dynamic_class.parent">
+                        {{ person.dynamic_class.parent.name }} /
                     </span>
+                    {{ person.dynamic_class.name }} 
                 </span>
             </dd>
 
-            <template v-if="relation_type === 'association' && person.substitute_uuid">
+            <template v-if="relation_type === 'association' && person.substitute">
                 <dt>Stedfortræder</dt>
                 <dd>
                     <router-link
                         class="oc-person-open"
-                        :to="`/person/${ person.substitute_uuid }/${ org_uuid }`">
+                        :to="`/person/${ person.substitute[0].uuid }/${ org_uuid }`">
                         <span class="sr-only">Vis detaljer for </span>
-                        {{ person.substitute_uuid }} Data missing
+                        {{ person.substitute[0].name }} 
                     </router-link>
+                    <hr>
                 </dd>
             </template>
 
