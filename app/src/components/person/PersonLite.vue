@@ -24,7 +24,7 @@
                 </span>
             </dd>
 
-            <template v-if="relation_type === 'association' && person.substitute">
+            <template v-if="relation_type === 'association' && person.substitute.length === 1">
                 <dt>Stedfortræder</dt>
                 <dd>
                     <router-link
@@ -33,10 +33,9 @@
                         <span class="sr-only">Vis detaljer for </span>
                         {{ person.substitute[0].name }} 
                     </router-link>
-                    <hr>
                 </dd>
             </template>
-
+            <hr>
         </dl>
     </div>
 </template>
