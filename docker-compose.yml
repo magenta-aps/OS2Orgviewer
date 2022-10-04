@@ -22,10 +22,3 @@ services:
       # VUE_APP_FAVICON_PATH: "https://frederikshavn.dk/Resources/images/favicon.ico"
     ports:
       - "8083:80"
-    networks:
-      - os2mo_default
-
-networks:
-  os2mo_default:
-    external:
-      name: "os2mo_default"
