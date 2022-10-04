@@ -28,7 +28,7 @@ node_modules/.bin/testcafe chrome tests/*.js --baseurl http://localhost:8083
 ```
 Tests can also be run in headless mode, if your browser supports it:
 ```
-(from app/) 
+(from app/)
 node_modules/.bin/testcafe chrome:headless tests/*.js --baseurl http://localhost:8083
 ```
 
@@ -38,4 +38,6 @@ See [the configuration section](configuration.md) for details on configuration.
 
 # REST API interfacing
 
-orgviewer uses a combination of the [OS2MO REST API]() and [GraphQL](https://rammearkitektur.docs.magenta.dk/os2mo/graphql/intro.html) as a backend.
+orgviewer uses a combination of the OS2MO REST API and
+[GraphQL](https://rammearkitektur.docs.magenta.dk/os2mo/graphql/intro.html) as a
+backend.
