@@ -1,0 +1,61 @@
+/*
+    =====================================================
+    Custom CSS variables and styles for Holstebro kommune
+    =====================================================
+
+    ----------------
+    Primary color (blå)
+    #00577d
+    RGB 0 88 125
+    ----------------
+
+    ----------------
+    Secondary color (lys blå)
+    #00838f
+    RGB 0 131 143
+    ----------------
+
+    ----------------
+    Accent color (rød)
+    #bb304a
+    RGB 187 48 75
+    -----------------
+*/
+
+
+:root {
+  /* Holstebro colors defined above */
+  --primary-color-holstebro: rgb(0,88,125);
+  --secondary-color-holstebro: rgb(0,131,143);
+  --accent-color-holstebro: rgb(187,48,75);
+
+
+  /* Org-viewer variables */
+  --color-1: var(--primary-color-holstebro) !important; /* Primary branding color for high visibility elements */
+  --color-2: var(--accent-color-holstebro) !important; /* Used for higlights and accents */
+  --color-3: var(--secondary-color-holstebro) !important; /* Light color for dark backgrounds */
+  --color-4: var(--accent-color-holstebro) !important; /* Alternative light color for dark backgrounds */
+
+  --shade-lightest: #fff !important;
+  --shade-lighter: #ccc !important;
+  --shade-light: #999 !important;
+  --shade-dark: #666 !important;
+  --shade-darker: #333 !important;
+  --shade-darkest: #000 !important;
+
+  --shadow-1: .25rem .25rem 0 hsla(0,0%,0%,.125) !important;
+  --shadow-2: -.5rem 0  0 hsla(0,0%,0%,.2) !important;
+  --shadow-3: 0 .5rem  0 hsla(0,0%,0%,.2) !important;
+
+  --font: 1em/1.4 Verdana,sans-serif !important;
+}
+
+.oc-header-preaction img {
+  height: 2rem !important;
+  width: auto !important;
+  margin-left: .5rem;
+}
+
+.oc-org-link-count {
+  opacity: 1 !important;
+}
