@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+3.4.0 - 2022-10-13
+------------------
+
+[#51382] Serve assets under a relative path
+This enables the application to be served under a sub-path by the reverse-proxy
+
 3.3.1 - 2022-10-13
 ------------------
 
