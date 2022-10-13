@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+3.3.1 - 2022-10-13
+------------------
+
+[#51884] Fix bug where only associations with substitutes were shown.
+
 3.3.0 - 2022-10-13
 ------------------
 
