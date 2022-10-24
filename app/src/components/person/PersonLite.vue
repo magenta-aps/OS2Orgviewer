@@ -10,12 +10,17 @@
             </template>
 
             <dd>
-                <router-link
-                    class="oc-person-open"
-                    :to="`/person/${ person.employee[0].uuid }/${ org_uuid }/${ root_uuid }`">
-                    <span class="sr-only">Vis detaljer for </span>
-                    {{ person.employee[0].name }}
-                </router-link><br>
+                <template v-if="person.employee.length > 0">
+                    <router-link
+                        class="oc-person-open"
+                        :to="`/person/${ person.employee[0].uuid }/${ org_uuid }/${ root_uuid }`">
+                        <span class="sr-only">Vis detaljer for </span>
+                        {{ person.employee[0].name }}
+                    </router-link><br>
+                </template>
+                <template v-else="person.employee.length == 0">
+                    Vakant <br>
+                </template>
                 <span v-if="person.dynamic_class && relation_type === 'association'" class="oc-person-asso-mainorg">
                     <span v-if="person.dynamic_class.parent">
                         {{ person.dynamic_class.parent.name }} /
