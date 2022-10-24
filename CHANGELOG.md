@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+3.4.1 - 2022-10-24
+------------------
+
+[#51884] Fix bug to allow showing vacant associations
+
 3.4.0 - 2022-10-13
 ------------------
 
