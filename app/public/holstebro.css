@@ -31,10 +31,10 @@
 
 
   /* Org-viewer variables */
-  --color-1: var(--primary-color-holstebro) !important; /* Primary branding color for high visibility elements */
-  --color-2: var(--accent-color-holstebro) !important; /* Used for higlights and accents */
-  --color-3: var(--secondary-color-holstebro) !important; /* Light color for dark backgrounds */
-  --color-4: var(--accent-color-holstebro) !important; /* Alternative light color for dark backgrounds */
+  --primary-color: var(--primary-color-holstebro) !important; /* Primary branding color for high visibility elements */
+  --secondary-color: var(--accent-color-holstebro) !important; /* Used for higlights and accents */
+  --background-color: var(--secondary-color-holstebro) !important; /* Light color for dark backgrounds */
+  --accent-color: var(--accent-color-holstebro) !important; /* Alternative light color for dark backgrounds */
 
   --shade-lightest: #fff !important;
   --shade-lighter: #ccc !important;

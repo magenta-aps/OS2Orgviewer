@@ -93,6 +93,6 @@ export default {
 
 .oc-tt-item.active > .oc-tt-node > .oc-tt-node-body > .oc-org-link {
     color: var(--shade-darkest);
-    border-left: solid .25rem var(--color-1);
+    border-left: solid .25rem var(--primary-color);
 }
 </style>

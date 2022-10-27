@@ -17,7 +17,7 @@
                 slot="postaction"
                 :to="'/search'"
                 class="oc-header-postaction btn">
-                <svg class="oc-search-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black" width="18px" height="18px"><path d="M0 0h24v24H0z" fill="none"/><path class="oc-search-svg-path" d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                <svg class="oc-search-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black" width="30px" height="30px"><path d="M0 0h24v24H0z" fill="none"/><path class="oc-search-svg-path" d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
                 <span class="sr-only">Åben søgefunktion</span>
             </router-link>
             <button 
@@ -109,7 +109,7 @@ body {
 }
 
 body {
-    background-color: var(--color-3);
+    background-color: var(--background-color);
     color: var(--shade-darker);
     padding: 0;
     margin: 0;
@@ -126,7 +126,7 @@ a,
 a:link,
 a:visited {
     text-decoration: none;
-    color: var(--color-1);
+    color: var(--primary-color);
     transition: padding .3s;
 }
 
@@ -137,7 +137,7 @@ a:hover {
 }
 
 a:active{
-    background-color: var(--color-1);
+    background-color: var(--primary-color);
     color: var(--shade-lightest);
 }
 
@@ -154,7 +154,7 @@ a.btn:link,
 a.btn:visited,
 input[type="submit"] {
     display: block;
-    color: var(--color-1);
+    color: var(--primary-color);
     background-color: var(--shade-lightest);
     padding: .25rem .5rem;
     text-align: center;
@@ -178,7 +178,7 @@ input[type="submit"]:hover {
 button:active,
 a.btn:active,
 input[type="submit"]:active {
-    background-color: var(--color-1);
+    background-color: var(--primary-color);
     color: var(--shade-lightest);
 }
 
@@ -196,7 +196,7 @@ a.btn.inverse,
 a.btn.inverse:link,
 a.btn.inverse:visited,
 input[type="submit"].inverse {
-    background-color: var(--color-1);
+    background-color: var(--primary-color);
     color: var(--shade-lightest);
 }
 
@@ -271,7 +271,7 @@ a.oc-header-preaction img {
 }
 
 .oc-home-img-path {
-    fill: var(--color-1);
+    fill: var(--primary-color);
 }
 
 .oc-header-title {
@@ -291,7 +291,7 @@ a.oc-header-preaction img {
     line-height: 1;
 
     .oc-search-svg-path {
-        fill: var(--color-1);
+        fill: var(--primary-color);
     }
 }
 

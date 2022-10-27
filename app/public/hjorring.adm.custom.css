@@ -5,11 +5,11 @@
 */
 
 :root {
-    --color-1: #263333 !important; /* Primary branding color for high visibility elements */
-    --color-2: #56C198 !important; /* Used for higlights and accents */
+    --primary-color: #263333 !important; /* Primary branding color for high visibility elements */
+    --secondary-color: #56C198 !important; /* Used for higlights and accents */
 
-    --color-3: #82CFC0 !important; /* Light color for dark backgrounds */ 
-    --color-4: #B1D2BB !important; /* Alternative light color for dark backgrounds */
+    --background-color: #82CFC0 !important; /* Light color for dark backgrounds */ 
+    --accent-color: #B1D2BB !important; /* Alternative light color for dark backgrounds */
 
     --shade-lightest: #fff !important;
     --shade-lighter: #B1D2BB !important;
