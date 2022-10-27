@@ -26,8 +26,8 @@
 #spinner::before {
     animation: 1.5s linear infinite spinner;
     animation-play-state: inherit;
-    border: solid 1rem var(--color-1);
-    border-bottom-color: var(--color-2);
+    border: solid 1rem var(--primary-color);
+    border-bottom-color: var(--secondary-color);
     border-radius: 50%;
     content: "";
     height: 6rem;

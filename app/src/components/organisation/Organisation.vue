@@ -128,7 +128,7 @@ export default {
 }
 
 .oc-org .svg-path {
-    fill: var(--color-1);
+    fill: var(--primary-color);
 }
 
 @media screen and (max-width: 40rem) {

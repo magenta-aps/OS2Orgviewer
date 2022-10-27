@@ -38,7 +38,7 @@ a.oc-node-focus-btn.btn:visited  {
     }
 
     .svg-path {
-        fill: var(--color-1);
+        fill: var(--primary-color);
     }
 }
 

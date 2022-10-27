@@ -1,0 +1,28 @@
+/*
+    =====================================================
+    Custom CSS variables and styles for Ballerup kommune
+    =====================================================
+    --primary-color-ballerup: rgb(48,56,128)
+    --background-color-ballerup: rgb(199,190,206)
+    Converted to hsl below.
+    --background-color-ballerup: hsl(var(--color),var(--l))
+    --accent-color-ballerup: rgb(0,0,0)
+*/
+:root {
+    /* This is used to calculate shades, this color is usually the background color */
+    --color: 274, 14%; /*the base color*/
+    --l:77%; /*the initial lightness*/
+
+    /* Org-viewer variables */
+    --primary-color: rgb(48,56,128) !important; /* Primary branding color for high visibility elements */
+    --secondary-color: rgb(0,0,0) !important; /* Used for higlights and accents */
+    --background-color: hsl(var(--color),var(--l)) !important; /* Light color for dark backgrounds */    
+    
+    /* Shades */
+    /* --shade-light is usually the same as background-color */
+
+    --shade-lighter: hsl(var(--color),calc(var(--l) + 10%)) !important;
+    --shade-light: hsl(var(--color),var(--l)) !important;
+    --shade-dark: hsl(var(--color),calc(var(--l) - 10%)) !important;
+    --shade-darker: hsl(var(--color),calc(var(--l) - 30%)) !important;
+}

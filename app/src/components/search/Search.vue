@@ -166,7 +166,7 @@ export default {
 }
 
 #search-input:focus {
-    border: solid 1px var(--color-1);
+    border: solid 1px var(--primary-color);
     box-shadow: var(--shadow-1);
     outline: none;
 }
