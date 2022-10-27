@@ -19,7 +19,8 @@ export default new Vuex.Store({
         global_api_url: OC_GLOBAL_CONF.VUE_APP_API_BASEURL,
         keycloak_client_secret: OC_GLOBAL_CONF.KEYCLOAK_CLIENT_SECRET,
         relation_type: OC_GLOBAL_CONF.VUE_APP_ORG_PERSON_RELATION ? OC_GLOBAL_CONF.VUE_APP_ORG_PERSON_RELATION : 'engagement',
-        global_root_uuid: OC_GLOBAL_CONF.VUE_APP_ROOT_UUID ? OC_GLOBAL_CONF.VUE_APP_ROOT_UUID : false
+        global_root_uuid: OC_GLOBAL_CONF.VUE_APP_ROOT_UUID ? OC_GLOBAL_CONF.VUE_APP_ROOT_UUID : false,
+        org_unit_hierarchy_uuid: OC_GLOBAL_CONF.VUE_ORG_UNIT_HIERARCHY_UUID
     },
     getters: {
         isLoading: state => {
@@ -30,6 +31,9 @@ export default new Vuex.Store({
         },
         getGlobalRootUuid: state => {
             return state.global_root_uuid
+        },
+        getOrgUnitHierarchyUuid: state => {
+            return state.org_unit_hierarchy_uuid
         }
     },
     mutations: {

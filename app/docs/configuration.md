@@ -36,6 +36,10 @@ VUE_APP_ROOT_UUID=f06ee470-9f17-566f-acbe-e938112d46d9
 # Default: engagement
 GLOBAL_ORG_PERSON_RELATION=engagement
 
+# Optional org_unit_hierarchy uuid. Set a UUID representing the org_unit_hierarchy class to filter organisations by.
+# Default: None
+GLOBAL_ORG_UNIT_HIERARCHY_UUID=
+
 # Set the application title. It will appear in the UI header and in the HTML document title.
 # Default: Organization chart demo
 VUE_APP_TITLE=Organization chart demo

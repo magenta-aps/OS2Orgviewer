@@ -63,6 +63,9 @@ export default {
         },
         global_root_uuid: function() {
             return this.$store.getters.getGlobalRootUuid
+        },
+        org_unit_hierarchy_uuid: function() {
+            return this.$store.getters.getOrgUnitHierarchy
         }
     },
     methods: {

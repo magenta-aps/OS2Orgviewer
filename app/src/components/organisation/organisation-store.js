@@ -141,7 +141,7 @@ const actions = {
         }
         postQuery({"query": `
             {   
-                org_units(uuids:"${org_unit_uuid}") {
+                org_units(uuids:"${org_unit_uuid}", hierarchies: "${rootState.org_unit_hierarchy_uuid}") {
                     uuid,
                     objects {
                         name,
