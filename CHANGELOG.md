@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+3.5.0 - 2022-10-27
+------------------
+
+[#53261] Add Ballerup CSS, add logic for calculating shades and make search icon bigger
+
 3.4.1 - 2022-10-24
 ------------------
 
