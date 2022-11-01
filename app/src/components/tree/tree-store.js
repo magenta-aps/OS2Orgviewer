@@ -36,6 +36,7 @@ const onLoadEndHandler = function(route) {
 
 const state = {
     root_uuid: OC_GLOBAL_CONF.VUE_APP_ROOT_UUID,
+    org_unit_hierarchy_uuids: OC_GLOBAL_CONF.VUE_ORG_UNIT_HIERARCHY_UUIDS ? OC_GLOBAL_CONF.VUE_ORG_UNIT_HIERARCHY_UUIDS : "[]",
     org_units: {},
     tree_is_loading: false 
 }
@@ -46,6 +47,9 @@ const getters = {
     }, 
     getRootUuid: state => {
         return state.root_uuid
+    },
+    getOrgUnitHierarchyUuid: state => {
+        return state.org_unit_hierarchy_uuids
     },
     getTreeOrgUnit: (state) => (uuid) => {
         return state.org_units[uuid]
@@ -134,14 +138,14 @@ const actions = {
         }
         return postQuery({"query": `
             {
-                org_units(uuids: [${uuids}]) {
+                org_units(uuids: [${uuids}], hierarchies: ${rootState.org_unit_hierarchy_uuids}) {
                     uuid,
                     objects {
                         name,
                         parent {
                             uuid,
                         },
-                        children {
+                        children (hierarchies: ${rootState.org_unit_hierarchy_uuids}) {
                             uuid
                         },
                         ${relation_query_str}

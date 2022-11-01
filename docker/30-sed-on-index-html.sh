@@ -24,14 +24,14 @@ replace_global_root_uuid() {
   sed "s#VUE_APP_ROOT_UUID: '.*'#VUE_APP_ROOT_UUID: '${GLOBAL_API_ROOT_UUID}'#g" -i $index_file
 }
 
-replace_org_unit_hierarchy_uuid() {
+replace_org_unit_hierarchy_uuids() {
   local index_file="/usr/share/nginx/html/index.html"
 
   if [ ! -f $index_file ]; then
     echo >&3 "$ME: ERROR: $index_file does not exist"
     exit 1
   fi
-  sed "s#VUE_ORG_UNIT_HIERARCHY_UUID: '.*'#VUE_ORG_UNIT_HIERARCHY_UUID: '${GLOBAL_ORG_UNIT_HIERARCHY_UUID}'#g" -i $index_file
+  sed "s#VUE_ORG_UNIT_HIERARCHY_UUIDS: '.*'#VUE_ORG_UNIT_HIERARCHY_UUIDS: '${GLOBAL_ORG_UNIT_HIERARCHY_UUIDS}'#g" -i $index_file
 }
 
 replace_global_app_title() {
@@ -111,7 +111,7 @@ replace_css_path() {
 
 replace_global_url
 replace_global_root_uuid
-replace_org_unit_hierarchy_uuid
+replace_org_unit_hierarchy_uuids
 replace_global_app_title
 replace_global_replace_org_person_relation
 replace_tree_layout
