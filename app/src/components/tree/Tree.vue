@@ -35,6 +35,9 @@ export default {
         global_root_uuid: function() {
             return this.$store.getters.getGlobalRootUuid
         },
+        org_unit_hierarchy_uuid: function() {
+            return this.$store.getters.getOrgUnitHierarchyUuid
+        },
         tree_is_loading: function() {
             return this.$store.getters.getTreeLoadStatus
         },

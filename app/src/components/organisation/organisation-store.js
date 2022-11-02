@@ -92,6 +92,7 @@ const actions = {
     },
     fetchOrgUnitData: ({commit, rootState}, org_unit_uuid) => {
         let relation_query = ''
+        let hierarchies_filter = rootState.org_unit_hierarchy_uuids ? `, hierarchies: ${rootState.org_unit_hierarchy_uuids}`: ""
         if (rootState.relation_type === 'association') {
             relation_query = `
                 associations {
@@ -141,7 +142,7 @@ const actions = {
         }
         postQuery({"query": `
             {   
-                org_units(uuids:"${org_unit_uuid}") {
+                org_units(uuids:"${org_unit_uuid}" ${hierarchies_filter}) {
                     uuid,
                     objects {
                         name,
