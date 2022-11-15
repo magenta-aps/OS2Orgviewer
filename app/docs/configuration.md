@@ -61,4 +61,7 @@ VUE_APP_LOGO_PATH=path-to-logo/logo.svg
 # Set local or global path to image file (usually `favicon.ico`) you want as your application's favicon.
 # Default: none
 VUE_APP_FAVICON_PATH=path-to-favicon/favicon.ico
+
+# Set list of UUIDS of org_units you want to remove from the tree view
+VUE_APP_HIDE_ORG_UNIT_UUIDS=
 ```
