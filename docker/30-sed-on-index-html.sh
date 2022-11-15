@@ -79,6 +79,16 @@ replace_logo_path() {
   sed "s#VUE_APP_LOGO_PATH: '.*'#VUE_APP_LOGO_PATH: '${VUE_APP_LOGO_PATH}'#g" -i $index_file
 }
 
+replace_hide_org_unit_uuids() {
+  local index_file="/usr/share/nginx/html/index.html"
+
+  if [ ! -f $index_file ]; then
+    echo >&3 "$ME: ERROR: $index_file does not exist"
+    exit 1
+  fi
+  sed "s#VUE_APP_HIDE_ORG_UNIT_UUIDS: '.*'#VUE_APP_HIDE_ORG_UNIT_UUIDS: '${VUE_APP_HIDE_ORG_UNIT_UUIDS}'#g" -i $index_file
+}
+
 replace_keycloak_client_secret() {
   local index_file="/usr/share/nginx/html/index.html"
 
@@ -116,6 +126,7 @@ replace_global_app_title
 replace_global_replace_org_person_relation
 replace_tree_layout
 replace_logo_path
+replace_hide_org_unit_uuids
 replace_keycloak_client_secret
 replace_favicon_path
 replace_css_path

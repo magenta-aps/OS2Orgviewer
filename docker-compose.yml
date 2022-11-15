@@ -20,5 +20,6 @@ services:
       # VUE_APP_TREE_LAYOUT: "hybrid"
       # VUE_APP_LOGO_PATH: "https://frederikshavn.dk/Resources/images/frk_logo_blue.svg"
       # VUE_APP_FAVICON_PATH: "https://frederikshavn.dk/Resources/images/favicon.ico"
+      # VUE_APP_HIDE_ORG_UNIT_UUIDS=
     ports:
       - "8083:80"

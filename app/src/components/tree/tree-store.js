@@ -87,7 +87,7 @@ const actions = {
     buildTree: ({commit, state, dispatch}, {uuids, route}) => { // Assumes `uuids` is an array
         
         commit('setTreeLoadSTatus', true)
-        
+
         const uuid_set = new Set(uuids) // Creating a Set removes duplicate uuids
         let uuid_query_str = ''
         uuid_set.forEach(function(uuid) {
@@ -159,6 +159,17 @@ const actions = {
             if (!res) {
                 return []
             }
+
+            console.log(res['org_units']);
+            if (OC_GLOBAL_CONF.VUE_APP_HIDE_ORG_UNIT_UUIDS) {
+                res['org_units'] =  res['org_units'].filter(org => {
+                    if (OC_GLOBAL_CONF.VUE_APP_HIDE_ORG_UNIT_UUIDS.includes(org.uuid)) {
+                        return false
+                    }
+                    return true
+                })
+            }
+            console.log(res['org_units']);
             return res['org_units'].map(org => {
                 let obj = org.objects[0]
                 obj.uuid = org.uuid
