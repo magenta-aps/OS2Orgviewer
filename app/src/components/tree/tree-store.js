@@ -160,7 +160,6 @@ const actions = {
                 return []
             }
 
-            console.log(res['org_units']);
             if (OC_GLOBAL_CONF.VUE_APP_HIDE_ORG_UNIT_UUIDS) {
                 res['org_units'] =  res['org_units'].filter(org => {
                     if (OC_GLOBAL_CONF.VUE_APP_HIDE_ORG_UNIT_UUIDS.includes(org.uuid)) {
@@ -169,7 +168,6 @@ const actions = {
                     return true
                 })
             }
-            console.log(res['org_units']);
             return res['org_units'].map(org => {
                 let obj = org.objects[0]
                 obj.uuid = org.uuid

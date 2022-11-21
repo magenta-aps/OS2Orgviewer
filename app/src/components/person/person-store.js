@@ -40,10 +40,10 @@ const actions = {
         } else {
             relation_query = `
                 engagements {
-                    org_unit_uuid,
+                    org_unit_uuid
                     engagement_type {
                         name
-                    },
+                    }
                     job_function {
                         name
                     }
@@ -55,16 +55,16 @@ const actions = {
                 employees(uuids:"${uuid}") {
                     uuid,
                     objects {
-                        name,
+                        name
                         addresses {
-                            uuid,
-                            value,
+                            uuid
+                            value
                             visibility {
                                 name
-                            },
+                            }
                             address_type {
-                                uuid,
-                                name,
+                                uuid
+                                name
                                 scope
                             }
                         },
@@ -84,39 +84,21 @@ const actions = {
     },
     fetchPersonWorkAddress: ({rootState}, uuid) => {
         let relation_query = ''
-        if (rootState.relation_type === 'association') {
-            relation_query = `
-                associations {
-                    org_unit {
-                        uuid,
-                        addresses {
-                            uuid,
-                            value,
-                            address_type {
-                                scope,
-                                name
-                            }
+        relation_query = `
+            engagements {
+                org_unit {
+                    uuid
+                    addresses {
+                        uuid
+                        value
+                        address_type {
+                            scope
+                            name
                         }
                     }
                 }
-            `
-        } else {
-            relation_query = `
-                engagements {
-                    org_unit {
-                        uuid,
-                        addresses {
-                            uuid,
-                            value,
-                            address_type {
-                                scope,
-                                name
-                            }
-                        }
-                    }
-                }
-            `
-        }
+            }
+        `
         return postQuery({"query": `
             {
                 employees(uuids:"${uuid}") {
@@ -128,12 +110,7 @@ const actions = {
             }
         `})
         .then(res => {
-
-            if (rootState.relation_type === 'association') {
-                return res.employees[0].objects[0].associations[0].org_unit[0].addresses
-            } else {
-                return res.employees[0].objects[0].engagements[0].org_unit[0].addresses
-            }
+            return res.employees[0].objects[0].engagements[0].org_unit[0].addresses
         })
     }
 }

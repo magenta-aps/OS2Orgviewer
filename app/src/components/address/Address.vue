@@ -16,6 +16,9 @@ export default {
     },
     methods: {
         fetchDAWA: async function(uuid) {
+            if (!uuid) {
+                return
+            }
             getExternal(`https://api.dataforsyningen.dk/adresser?id=${ uuid }`)
             .then(res => {
                 if (res) {
