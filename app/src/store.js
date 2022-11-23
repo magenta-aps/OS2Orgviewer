@@ -32,9 +32,6 @@ export default new Vuex.Store({
         getGlobalRootUuid: state => {
             return state.global_root_uuid
         },
-        getOrgUnitHierarchyUuid: state => {
-            return state.org_unit_hierarchy_uuids
-        }
     },
     mutations: {
         setLoading: (state, bool) => {
