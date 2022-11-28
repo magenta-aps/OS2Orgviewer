@@ -64,4 +64,7 @@ VUE_APP_FAVICON_PATH=path-to-favicon/favicon.ico
 
 # Set list of UUIDS of org_units you want to remove from the tree view
 VUE_APP_HIDE_ORG_UNIT_UUIDS=
+
+# True or False, hide org_units that ends with "_leder" (specific functionality for Holstebro)
+VUE_APP_HIDE_MANAGER_ORG_UNITS=False
 ```
