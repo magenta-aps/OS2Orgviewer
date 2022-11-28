@@ -168,6 +168,15 @@ const actions = {
                     return true
                 })
             }
+            // Remove org_units which names ends with `_leder`
+            if (OC_GLOBAL_CONF.VUE_APP_HIDE_MANAGER_ORG_UNITS) {
+                res['org_units'] =  res['org_units'].filter(org => {
+                    if (org.objects[0].name.endsWith("_leder")) {
+                        return false
+                    }
+                    return true
+                })
+            }
             return res['org_units'].map(org => {
                 let obj = org.objects[0]
                 obj.uuid = org.uuid
