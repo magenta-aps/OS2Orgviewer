@@ -156,4 +156,3 @@ This enables the application to be served under a sub-path by the reverse-proxy
 ------------------
 
 [#39266] Implement automatic versioning through autopub
-

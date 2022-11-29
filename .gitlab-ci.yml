@@ -13,20 +13,6 @@ variables:
   IMAGE_SHA: ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHA}
   DOCKERFILE: ${CI_PROJECT_DIR}/docker/Dockerfile
 
-include:
-  - project: 'labs/salt-automation'
-    ref: 'master'
-    file: '/gitlab-ci-templates/common/autopub.v1.yml'
-  - project: 'labs/salt-automation'
-    ref: 'master'
-    file: '/gitlab-ci-templates/common/docker-build.v1.yml'
-  - project: 'labs/salt-automation'
-    ref: 'master'
-    file: '/gitlab-ci-templates/common/docker-release.v1.yml'
-  - project: 'labs/salt-automation'
-    ref: 'master'
-    file: '/gitlab-ci-templates/common/config-updater-meta.v1.yml'
-
 
 # Conditions
 #############
@@ -50,6 +36,26 @@ workflow:
     - <<: *if-tag
     - <<: *if-default-branch-refs
     - <<: *if-merge-request
+
+
+include:
+  - project: 'labs/salt-automation'
+    ref: 'master'
+    file: '/gitlab-ci-templates/common/autopub.v1.yml'
+  - project: 'labs/salt-automation'
+    ref: 'master'
+    file: '/gitlab-ci-templates/common/docker-build.v1.yml'
+  - project: 'labs/salt-automation'
+    ref: 'master'
+    file: '/gitlab-ci-templates/common/docker-release.v1.yml'
+  - project: 'labs/salt-automation'
+    ref: 'master'
+    file: '/gitlab-ci-templates/common/config-updater-meta.v1.yml'
+  - project: 'labs/salt-automation'
+    ref: 'master'
+    file: 'gitlab-ci-templates/common/pre-commit.v1.yml'
+    rules:
+      - <<: *if-merge-request
 
 
 # Lint

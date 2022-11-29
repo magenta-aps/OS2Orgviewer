@@ -23,6 +23,7 @@
     z-index: 9999;
 }
 
+
 #spinner::before {
     animation: 1.5s linear infinite spinner;
     animation-play-state: inherit;
@@ -34,7 +35,7 @@
     left: 50%;
     opacity: inherit;
     position: absolute;
-    top: 45%; 
+    top: 45%;
     transform: translate3d(-50%, -50%, 0);
     width: 6rem;
     box-shadow: 0 0 2rem hsla(0,0%,0%,.5);

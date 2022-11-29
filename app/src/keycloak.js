@@ -1,7 +1,7 @@
-import store from './store.js'
+import store from "./store.js"
 
-const clientId = 'orgviewer'
-const realm = 'mo'
+const clientId = "orgviewer"
+const realm = "mo"
 
 export async function initKeycloak() {
   async function refreshToken() {
@@ -10,18 +10,16 @@ export async function initKeycloak() {
 
     const keycloak_url = `${url}/realms/${realm}/protocol/openid-connect/token`
 
-    const res = await fetch(
-        keycloak_url, {
-        method: 'POST',
-        body: `grant_type=client_credentials&client_id=${clientId}&client_secret=${clientSecret}`,
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        }
-      }
-    )
+    const res = await fetch(keycloak_url, {
+      method: "POST",
+      body: `grant_type=client_credentials&client_id=${clientId}&client_secret=${clientSecret}`,
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    })
 
     const json = await res.json()
-    store.commit('setAccessToken', json.access_token)
+    store.commit("setAccessToken", json.access_token)
   }
 
   await refreshToken()

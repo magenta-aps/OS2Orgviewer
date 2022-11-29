@@ -22,19 +22,25 @@
     -----------------
 */
 
-
 :root {
   /* Holstebro colors defined above */
-  --primary-color-holstebro: rgb(0,88,125);
-  --secondary-color-holstebro: rgb(0,131,143);
-  --accent-color-holstebro: rgb(187,48,75);
-
+  --primary-color-holstebro: rgb(0, 88, 125);
+  --secondary-color-holstebro: rgb(0, 131, 143);
+  --accent-color-holstebro: rgb(187, 48, 75);
 
   /* Org-viewer variables */
-  --primary-color: var(--primary-color-holstebro) !important; /* Primary branding color for high visibility elements */
-  --secondary-color: var(--accent-color-holstebro) !important; /* Used for higlights and accents */
-  --background-color: var(--secondary-color-holstebro) !important; /* Light color for dark backgrounds */
-  --accent-color: var(--accent-color-holstebro) !important; /* Alternative light color for dark backgrounds */
+  --primary-color: var(
+    --primary-color-holstebro
+  ) !important; /* Primary branding color for high visibility elements */
+  --secondary-color: var(
+    --accent-color-holstebro
+  ) !important; /* Used for higlights and accents */
+  --background-color: var(
+    --secondary-color-holstebro
+  ) !important; /* Light color for dark backgrounds */
+  --accent-color: var(
+    --accent-color-holstebro
+  ) !important; /* Alternative light color for dark backgrounds */
 
   --shade-lightest: #fff !important;
   --shade-lighter: #ccc !important;
@@ -43,17 +49,17 @@
   --shade-darker: #333 !important;
   --shade-darkest: #000 !important;
 
-  --shadow-1: .25rem .25rem 0 hsla(0,0%,0%,.125) !important;
-  --shadow-2: -.5rem 0  0 hsla(0,0%,0%,.2) !important;
-  --shadow-3: 0 .5rem  0 hsla(0,0%,0%,.2) !important;
+  --shadow-1: 0.25rem 0.25rem 0 hsla(0, 0%, 0%, 0.125) !important;
+  --shadow-2: -0.5rem 0 0 hsla(0, 0%, 0%, 0.2) !important;
+  --shadow-3: 0 0.5rem 0 hsla(0, 0%, 0%, 0.2) !important;
 
-  --font: 1em/1.4 Verdana,sans-serif !important;
+  --font: 1em/1.4 Verdana, sans-serif !important;
 }
 
 .oc-header-preaction img {
   height: 2rem !important;
   width: auto !important;
-  margin-left: .5rem;
+  margin-left: 0.5rem;
 }
 
 .oc-org-link-count {
