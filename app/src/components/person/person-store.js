@@ -1,24 +1,24 @@
-import {postQuery} from '../http/http.js'
+import { postQuery } from "../http/http.js"
 
 const state = {
-    person: null
+  person: null,
 }
 
 const getters = {
-    getPerson: state => {
-        return state.person
-    }
+  getPerson: (state) => {
+    return state.person
+  },
 }
 const mutations = {
-    setPerson: (state, person) => {
-        state.person = person
-    }
+  setPerson: (state, person) => {
+    state.person = person
+  },
 }
 const actions = {
-    fetchPerson: ({commit, rootState}, uuid) => {
-        let relation_query = ''
-        if (rootState.relation_type === 'association') {
-            relation_query = `
+  fetchPerson: ({ commit, rootState }, uuid) => {
+    let relation_query = ""
+    if (rootState.relation_type === "association") {
+      relation_query = `
                 associations {
                     org_unit_uuid,
                     association_type {
@@ -34,11 +34,11 @@ const actions = {
                             name
                         }
                     }
-                                      
+
                 }
             `
-        } else {
-            relation_query = `
+    } else {
+      relation_query = `
                 engagements {
                     org_unit_uuid
                     engagement_type {
@@ -49,8 +49,9 @@ const actions = {
                     }
                 }
             `
-        }
-        return postQuery({"query": `
+    }
+    return postQuery({
+      query: `
             {
                 employees(uuids:"${uuid}") {
                     uuid,
@@ -70,21 +71,20 @@ const actions = {
                         },
                         ${relation_query}
                     }
-                }	  
+                }
             }
-        `})
-        .then(res => {
+        `,
+    }).then((res) => {
+      let person = res.employees[0].objects[0]
+      person.uuid = res.employees[0].uuid
 
-            let person = res.employees[0].objects[0]
-            person.uuid = res.employees[0].uuid
-
-            commit('setPerson', person)
-            return person
-        })
-    },
-    fetchPersonWorkAddress: ({rootState}, uuid) => {
-        let relation_query = ''
-        relation_query = `
+      commit("setPerson", person)
+      return person
+    })
+  },
+  fetchPersonWorkAddress: ({ rootState }, uuid) => {
+    let relation_query = ""
+    relation_query = `
             engagements {
                 org_unit {
                     uuid
@@ -99,25 +99,26 @@ const actions = {
                 }
             }
         `
-        return postQuery({"query": `
+    return postQuery({
+      query: `
             {
                 employees(uuids:"${uuid}") {
                     uuid,
                     objects {
-                        ${relation_query}    
+                        ${relation_query}
                     }
-                }	  
+                }
             }
-        `})
-        .then(res => {
-            return res.employees[0].objects[0].engagements[0].org_unit[0].addresses
-        })
-    }
+        `,
+    }).then((res) => {
+      return res.employees[0].objects[0].engagements[0].org_unit[0].addresses
+    })
+  },
 }
 
 export default {
-    state,
-    getters,
-    mutations,
-    actions
+  state,
+  getters,
+  mutations,
+  actions,
 }

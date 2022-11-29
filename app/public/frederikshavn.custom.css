@@ -23,35 +23,35 @@
 */
 
 :root {
-    --primary-color: #004765 !important; /* Primary branding color for high visibility elements */
-    --secondary-color: #00A9CB !important; /* Used for higlights and accents */
+  --primary-color: #004765 !important; /* Primary branding color for high visibility elements */
+  --secondary-color: #00a9cb !important; /* Used for higlights and accents */
 
-    --background-color: #96BBD2 !important; /* Light color for dark backgrounds */
-    --accent-color: #D9D9BC !important; /* Alternative light color for dark backgrounds */
+  --background-color: #96bbd2 !important; /* Light color for dark backgrounds */
+  --accent-color: #d9d9bc !important; /* Alternative light color for dark backgrounds */
 
-    --shade-lightest: #fff !important;
-    --shade-lighter: #B5E3FF !important;
-    --shade-light: #96BBD2 !important;
-    --shade-dark: #6E8A9C !important;
-    --shade-darker: #002433 !important;
-    --shade-darkest: #000 !important;
+  --shade-lightest: #fff !important;
+  --shade-lighter: #b5e3ff !important;
+  --shade-light: #96bbd2 !important;
+  --shade-dark: #6e8a9c !important;
+  --shade-darker: #002433 !important;
+  --shade-darkest: #000 !important;
 
-    --shadow-1: .25rem .25rem 0 hsla(0,0%,0%,.125) !important;
-    --shadow-2: -.5rem 0 0 hsla(0,0%,0%,.2) !important;
-    --shadow-3: 0 .5rem 0 hsla(0,0%,0%,.2) !important;
+  --shadow-1: 0.25rem 0.25rem 0 hsla(0, 0%, 0%, 0.125) !important;
+  --shadow-2: -0.5rem 0 0 hsla(0, 0%, 0%, 0.2) !important;
+  --shadow-3: 0 0.5rem 0 hsla(0, 0%, 0%, 0.2) !important;
 
-    --font: 1em/1.4 Tahoma, Helvetica, sans-serif !important;
+  --font: 1em/1.4 Tahoma, Helvetica, sans-serif !important;
 }
 
 a.oc-header-preaction {
-    padding: .5rem 1rem !important;
+  padding: 0.5rem 1rem !important;
 }
 
-.oc-header-preaction img {    
-    height: 1.5rem !important;
-    width: 7rem !important;
+.oc-header-preaction img {
+  height: 1.5rem !important;
+  width: 7rem !important;
 }
 
 .oc-org-link {
-    font-size: .9em !important;
+  font-size: 0.9em !important;
 }

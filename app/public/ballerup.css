@@ -4,53 +4,61 @@
     =====================================================
     --primary-color-ballerup: rgb(0,98,143)
     --background-color-ballerup: rgb(179,208,222)
-    
+
     Text color override: rgb(20,36,43) !important;
     Hover override: rgb(110, 129, 136) !important;
 */
 
 /* Import google font(s) */
-@import url('https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;700&display=swap");
 
 :root {
-    /* This is used to calculate shades, this color is usually the background color */
-    --color: 200, 39.4%; /*the base color*/
-    --l:78.6%; /*the initial lightness*/
+  /* This is used to calculate shades, this color is usually the background color */
+  --color: 200, 39.4%; /*the base color*/
+  --l: 78.6%; /*the initial lightness*/
 
-    /* Org-viewer variables */
-    --primary-color: rgb(0,98,143) !important; /* Primary branding color for high visibility elements */
-    --secondary-color: rgb(110,129,136) !important; /* Used for higlights and accents */
-    --background-color: hsl(var(--color),var(--l)) !important; /* Light color for dark backgrounds */    
-    
-    /* Shades */
-    /* --shade-light is usually the same as background-color */
+  /* Org-viewer variables */
+  --primary-color: rgb(
+    0,
+    98,
+    143
+  ) !important; /* Primary branding color for high visibility elements */
+  --secondary-color: rgb(110, 129, 136) !important; /* Used for higlights and accents */
+  --background-color: hsl(
+    var(--color),
+    var(--l)
+  ) !important; /* Light color for dark backgrounds */
 
-    --shade-lighter: hsl(var(--color),calc(var(--l) + 10%)) !important;
-    --shade-light: hsl(var(--color),var(--l)) !important;
-    --shade-dark: hsl(var(--color),calc(var(--l) - 10%)) !important;
-    --shade-darker: hsl(var(--color),calc(var(--l) - 30%)) !important;
+  /* Shades */
+  /* --shade-light is usually the same as background-color */
 
-    --font: 1em/1.4 'Gothic A1', sans-serif !important;
+  --shade-lighter: hsl(var(--color), calc(var(--l) + 10%)) !important;
+  --shade-light: hsl(var(--color), var(--l)) !important;
+  --shade-dark: hsl(var(--color), calc(var(--l) - 10%)) !important;
+  --shade-darker: hsl(var(--color), calc(var(--l) - 30%)) !important;
+
+  --font: 1em/1.4 "Gothic A1", sans-serif !important;
 }
 
 /* Custom overrides according to #53521 */
 
-a.btn, a.btn:link {
-    color: rgb(20,36,43) !important;
+a.btn,
+a.btn:link {
+  color: rgb(20, 36, 43) !important;
 }
 
 a.btn:hover,
 a:hover,
 a:focus {
-    color: var(--secondary-color) !important;
+  color: var(--secondary-color) !important;
 }
 
 button.inverse:hover,
 button.inverse:active,
 button.inverse:focus {
-    background-color: var(--secondary-color) !important;
+  background-color: var(--secondary-color) !important;
 }
 
 .oc-org-link-count {
-    font-weight: bold !important;
+  font-weight: bold !important;
 }

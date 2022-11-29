@@ -38,7 +38,7 @@ GLOBAL_ORG_PERSON_RELATION=engagement
 
 # Optional list of org_unit_hierarchy uuids. Set a list of UUIDs representing the org_unit_hierarchy classes to filter organisations by.
 # Default: empty list
-# Example 
+# Example
 GLOBAL_ORG_UNIT_HIERARCHY_UUIDS= '[]'
 
 # Set the application title. It will appear in the UI header and in the HTML document title.

@@ -1,34 +1,34 @@
 /*
     Default CSS variables
 
-    NOTE: If you copy this file in order to override for your own custom CSS theme, 
+    NOTE: If you copy this file in order to override for your own custom CSS theme,
     you must add `!important` statements are each rule.
-    
-    Your custom style will be read before default styles 
+
+    Your custom style will be read before default styles
     and they will be overridden otherwise.
 
-    This is silly, we know, but it is due to vue-cli not supporting 
+    This is silly, we know, but it is due to vue-cli not supporting
     `<%= htmlWebpackPlugin.tags.headTags %>` as well as we would like:
     https://github.com/jantimon/html-webpack-plugin/issues/1284
 */
 
 :root {
-    --primary-color: #284; /* Primary branding color for high visibility elements */
-    --secondary-color: #000; /* Used for higlights and accents */
+  --primary-color: #284; /* Primary branding color for high visibility elements */
+  --secondary-color: #000; /* Used for higlights and accents */
 
-    --background-color: #cec; /* Light color for dark backgrounds */
-    --accent-color: #eee; /* Alternative light color for dark backgrounds */
+  --background-color: #cec; /* Light color for dark backgrounds */
+  --accent-color: #eee; /* Alternative light color for dark backgrounds */
 
-    --shade-lightest: #fff;
-    --shade-lighter: #DBFFDB;
-    --shade-light: #cec;
-    --shade-dark: #91A891;
-    --shade-darker: #536153;
-    --shade-darkest: #000;
+  --shade-lightest: #fff;
+  --shade-lighter: #dbffdb;
+  --shade-light: #cec;
+  --shade-dark: #91a891;
+  --shade-darker: #536153;
+  --shade-darkest: #000;
 
-    --shadow-1: .25rem .25rem 0 hsla(0,0%,0%,.125);
-    --shadow-2: -.5rem 0 0 hsla(0,0%,0%,.2);
-    --shadow-3: 0 .5rem 0 hsla(0,0%,0%,.2);
+  --shadow-1: 0.25rem 0.25rem 0 hsla(0, 0%, 0%, 0.125);
+  --shadow-2: -0.5rem 0 0 hsla(0, 0%, 0%, 0.2);
+  --shadow-3: 0 0.5rem 0 hsla(0, 0%, 0%, 0.2);
 
-    --font: 1em/1.3 Avenir, Helvetica, Arial, sans-serif;
+  --font: 1em/1.3 Avenir, Helvetica, Arial, sans-serif;
 }
