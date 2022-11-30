@@ -22,5 +22,6 @@ services:
       # VUE_APP_FAVICON_PATH: "https://frederikshavn.dk/Resources/images/favicon.ico"
       # VUE_APP_HIDE_ORG_UNIT_UUIDS:
       # VUE_APP_HIDE_MANAGER_ORG_UNITS: "true"
+      # VUE_APP_USE_AUTOCOMPLETE_API: "true"
     ports:
       - "8083:80"
