@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+3.13.1 - 2022-12-02
+-------------------
+
+[#53767] Add trimming to avoid ignoring org_units with whitespaces
+
 3.13.0 - 2022-11-29
 -------------------
 
