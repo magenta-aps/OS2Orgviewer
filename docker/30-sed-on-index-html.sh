@@ -147,6 +147,7 @@ replace_global_replace_org_person_relation
 replace_tree_layout
 replace_logo_path
 replace_hide_org_unit_uuids
+replace_hide_manager_org_units
 replace_keycloak_client_secret
 replace_favicon_path
 replace_css_path
