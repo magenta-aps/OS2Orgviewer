@@ -29,12 +29,22 @@
         </li>
         <li v-if="use_autocomplete_api" v-for="res in results" :key="res.uuid">
           <router-link v-if="res.path" :to="`/orgunit/${res.uuid}`">
-            <span class="label">Enhed</span><br />
+            <span class="label">Enhed</span>
+            <br />
             {{ res.name }}
+            <br />
+            <span v-for="attr in res.attrs" v-if="attr.title == 'Telefon'">
+              {{ attr.value }}
+            </span>
           </router-link>
           <router-link v-else :to="`/person/${res.uuid}`">
-            <span class="label">Person</span><br />
-            {{ res.name }}
+            <span class="label">Person</span>
+            <br />
+            <span>{{ res.name }}</span>
+            <br />
+            <span v-for="attr in res.attrs" v-if="attr.title == 'Telefon'">
+              {{ attr.value }}
+            </span>
           </router-link>
         </li>
       </ul>
@@ -54,6 +64,7 @@ export default {
       timeout: null,
       relation_type: this.$store.state.relation_type,
       global_org_uuid: null,
+      use_autocomplete_api: OC_GLOBAL_CONF.VUE_APP_USE_AUTOCOMPLETE_API,
     }
   },
   computed: {
@@ -84,7 +95,6 @@ export default {
       let search_associated = ""
       let employee_url = ""
       let org_unit_url = ""
-      this.use_autocomplete_api = OC_GLOBAL_CONF.VUE_APP_USE_AUTOCOMPLETE_API
 
       if (this.relation_type === "association") {
         search_associated = "associated=true"
