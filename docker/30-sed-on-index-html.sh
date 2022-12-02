@@ -99,6 +99,16 @@ replace_hide_manager_org_units() {
   sed "s#VUE_APP_HIDE_MANAGER_ORG_UNITS: '.*'#VUE_APP_HIDE_MANAGER_ORG_UNITS: '${VUE_APP_HIDE_MANAGER_ORG_UNITS}'#g" -i $index_file
 }
 
+replace_use_autocomplete_api() {
+  local index_file="/usr/share/nginx/html/index.html"
+
+  if [ ! -f $index_file ]; then
+    echo >&3 "$ME: ERROR: $index_file does not exist"
+    exit 1
+  fi
+  sed "s#VUE_APP_USE_AUTOCOMPLETE_API: '.*'#VUE_APP_USE_AUTOCOMPLETE_API: '${VUE_APP_USE_AUTOCOMPLETE_API}'#g" -i $index_file
+}
+
 replace_keycloak_client_secret() {
   local index_file="/usr/share/nginx/html/index.html"
 
