@@ -11,7 +11,7 @@ replace_global_url() {
     echo >&3 "$ME: ERROR: $index_file does not exist"
     exit 1
   fi
-  sed "s#VUE_APP_API_BASEURL: '.*'#VUE_APP_API_BASEURL: '${GLOBAL_API_URL}'#g" -i $index_file
+  sed "s#VUE_APP_API_BASEURL: \".*\"#VUE_APP_API_BASEURL: \"${GLOBAL_API_URL}\"#g" -i $index_file
 }
 
 replace_global_root_uuid() {
@@ -21,7 +21,7 @@ replace_global_root_uuid() {
     echo >&3 "$ME: ERROR: $index_file does not exist"
     exit 1
   fi
-  sed "s#VUE_APP_ROOT_UUID: '.*'#VUE_APP_ROOT_UUID: '${GLOBAL_API_ROOT_UUID}'#g" -i $index_file
+  sed "s#VUE_APP_ROOT_UUID: \".*\"#VUE_APP_ROOT_UUID: \"${GLOBAL_API_ROOT_UUID}\"#g" -i $index_file
 }
 
 replace_org_unit_hierarchy_uuids() {
@@ -31,7 +31,7 @@ replace_org_unit_hierarchy_uuids() {
     echo >&3 "$ME: ERROR: $index_file does not exist"
     exit 1
   fi
-  sed "s#VUE_ORG_UNIT_HIERARCHY_UUIDS: '.*'#VUE_ORG_UNIT_HIERARCHY_UUIDS: '${GLOBAL_ORG_UNIT_HIERARCHY_UUIDS}'#g" -i $index_file
+  sed "s#VUE_ORG_UNIT_HIERARCHY_UUIDS: \".*\"#VUE_ORG_UNIT_HIERARCHY_UUIDS: \"${GLOBAL_ORG_UNIT_HIERARCHY_UUIDS}\"#g" -i $index_file
 }
 
 replace_global_app_title() {
@@ -43,7 +43,7 @@ replace_global_app_title() {
   fi
   # Check if variable is set, regardless of empty or not
   if [ ! -z "${GLOBAL_APP_TITLE+x}" ]; then
-    sed "s#VUE_APP_TITLE: '.*'#VUE_APP_TITLE: '${GLOBAL_APP_TITLE}'#g" -i $index_file
+    sed "s#VUE_APP_TITLE: \".*\"#VUE_APP_TITLE: \"${GLOBAL_APP_TITLE}\"#g" -i $index_file
     sed "s#<title>.*</title>#<title>${GLOBAL_APP_TITLE}</title>#g" -i $index_file
   fi
 
@@ -56,7 +56,7 @@ replace_global_replace_org_person_relation() {
     echo >&3 "$ME: ERROR: $index_file does not exist"
     exit 1
   fi
-  sed "s#VUE_APP_ORG_PERSON_RELATION: '.*'#VUE_APP_ORG_PERSON_RELATION: '${GLOBAL_ORG_PERSON_RELATION}'#g" -i $index_file
+  sed "s#VUE_APP_ORG_PERSON_RELATION: \".*\"#VUE_APP_ORG_PERSON_RELATION: \"${GLOBAL_ORG_PERSON_RELATION}\"#g" -i $index_file
 }
 
 replace_tree_layout() {
@@ -66,7 +66,7 @@ replace_tree_layout() {
     echo >&3 "$ME: ERROR: $index_file does not exist"
     exit 1
   fi
-  sed "s#VUE_APP_TREE_LAYOUT: '.*'#VUE_APP_TREE_LAYOUT: '${VUE_APP_TREE_LAYOUT}'#g" -i $index_file
+  sed "s#VUE_APP_TREE_LAYOUT: \".*\"#VUE_APP_TREE_LAYOUT: \"${VUE_APP_TREE_LAYOUT}\"#g" -i $index_file
 }
 
 replace_logo_path() {
@@ -76,7 +76,7 @@ replace_logo_path() {
     echo >&3 "$ME: ERROR: $index_file does not exist"
     exit 1
   fi
-  sed "s#VUE_APP_LOGO_PATH: '.*'#VUE_APP_LOGO_PATH: '${VUE_APP_LOGO_PATH}'#g" -i $index_file
+  sed "s#VUE_APP_LOGO_PATH: \".*\"#VUE_APP_LOGO_PATH: \"${VUE_APP_LOGO_PATH}\"#g" -i $index_file
 }
 
 replace_hide_org_unit_uuids() {
@@ -86,7 +86,7 @@ replace_hide_org_unit_uuids() {
     echo >&3 "$ME: ERROR: $index_file does not exist"
     exit 1
   fi
-  sed "s#VUE_APP_HIDE_ORG_UNIT_UUIDS: '.*'#VUE_APP_HIDE_ORG_UNIT_UUIDS: '${VUE_APP_HIDE_ORG_UNIT_UUIDS}'#g" -i $index_file
+  sed "s#VUE_APP_HIDE_ORG_UNIT_UUIDS: \".*\"#VUE_APP_HIDE_ORG_UNIT_UUIDS: \"${VUE_APP_HIDE_ORG_UNIT_UUIDS}\"#g" -i $index_file
 }
 
 replace_hide_manager_org_units() {
@@ -96,7 +96,7 @@ replace_hide_manager_org_units() {
     echo >&3 "$ME: ERROR: $index_file does not exist"
     exit 1
   fi
-  sed "s#VUE_APP_HIDE_MANAGER_ORG_UNITS: '.*'#VUE_APP_HIDE_MANAGER_ORG_UNITS: '${VUE_APP_HIDE_MANAGER_ORG_UNITS}'#g" -i $index_file
+  sed "s#VUE_APP_HIDE_MANAGER_ORG_UNITS: \".*\"#VUE_APP_HIDE_MANAGER_ORG_UNITS: \"${VUE_APP_HIDE_MANAGER_ORG_UNITS}\"#g" -i $index_file
 }
 
 replace_use_autocomplete_api() {
@@ -106,7 +106,7 @@ replace_use_autocomplete_api() {
     echo >&3 "$ME: ERROR: $index_file does not exist"
     exit 1
   fi
-  sed "s#VUE_APP_USE_AUTOCOMPLETE_API: '.*'#VUE_APP_USE_AUTOCOMPLETE_API: '${VUE_APP_USE_AUTOCOMPLETE_API}'#g" -i $index_file
+  sed "s#VUE_APP_USE_AUTOCOMPLETE_API: \".*\"#VUE_APP_USE_AUTOCOMPLETE_API: \"${VUE_APP_USE_AUTOCOMPLETE_API}\"#g" -i $index_file
 }
 
 replace_keycloak_client_secret() {
@@ -116,7 +116,7 @@ replace_keycloak_client_secret() {
     echo >&3 "$ME: ERROR: $index_file does not exist"
     exit 1
   fi
-  sed "s#KEYCLOAK_CLIENT_SECRET: '.*'#KEYCLOAK_CLIENT_SECRET: '${KEYCLOAK_CLIENT_SECRET}'#g" -i $index_file
+  sed "s#KEYCLOAK_CLIENT_SECRET: \".*\"#KEYCLOAK_CLIENT_SECRET: \"${KEYCLOAK_CLIENT_SECRET}\"#g" -i $index_file
 }
 
 replace_favicon_path() {
