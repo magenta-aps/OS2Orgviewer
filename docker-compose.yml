@@ -13,15 +13,18 @@ services:
       # Loenorganisation
       # GLOBAL_API_ROOT_UUID: "fb2d158f-114e-5f67-8365-2c520cf10b58"
       # GLOBAL_ORG_PERSON_RELATION: "association"
-      KEYCLOAK_CLIENT_SECRET: "30303030-3030-3030-3030-303030303030"
-      GLOBAL_ORG_UNIT_HIERARCHY_UUIDS:
 
-      # VUE_APP_THEME_CSS: "frederikshavn.custom.css"
+      GLOBAL_ORG_UNIT_HIERARCHY_UUIDS:
+      # GLOBAL_APP_TITLE: "Andeby Kommune"
+      # GLOBAL_ORG_PERSON_RELATION: "engagement"
       # VUE_APP_TREE_LAYOUT: "hybrid"
       # VUE_APP_LOGO_PATH: "https://frederikshavn.dk/Resources/images/frk_logo_blue.svg"
-      # VUE_APP_FAVICON_PATH: "https://frederikshavn.dk/Resources/images/favicon.ico"
       # VUE_APP_HIDE_ORG_UNIT_UUIDS:
       # VUE_APP_HIDE_MANAGER_ORG_UNITS: "true"
       # VUE_APP_USE_AUTOCOMPLETE_API: "true"
+      KEYCLOAK_CLIENT_SECRET: "30303030-3030-3030-3030-303030303030"
+      # VUE_APP_FAVICON_PATH: "https://frederikshavn.dk/Resources/images/favicon.ico"
+      # VUE_APP_THEME_CSS: "frederikshavn.custom.css"
+
     ports:
       - "8083:80"
