@@ -148,6 +148,7 @@ replace_tree_layout
 replace_logo_path
 replace_hide_org_unit_uuids
 replace_hide_manager_org_units
+replace_use_autocomplete_api
 replace_keycloak_client_secret
 replace_favicon_path
 replace_css_path
