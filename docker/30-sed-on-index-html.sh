@@ -31,7 +31,8 @@ replace_org_unit_hierarchy_uuids() {
     echo >&3 "$ME: ERROR: $index_file does not exist"
     exit 1
   fi
-  sed "s#VUE_ORG_UNIT_HIERARCHY_UUIDS: \".*\"#VUE_ORG_UNIT_HIERARCHY_UUIDS: \"${GLOBAL_ORG_UNIT_HIERARCHY_UUIDS}\"#g" -i $index_file
+  # NOTE: single quotes are necessary around $(...) since the value may contain JSON
+  sed "s#VUE_ORG_UNIT_HIERARCHY_UUIDS: \".*\"#VUE_ORG_UNIT_HIERARCHY_UUIDS: '${GLOBAL_ORG_UNIT_HIERARCHY_UUIDS}'#g" -i $index_file
 }
 
 replace_global_app_title() {
@@ -86,7 +87,8 @@ replace_hide_org_unit_uuids() {
     echo >&3 "$ME: ERROR: $index_file does not exist"
     exit 1
   fi
-  sed "s#VUE_APP_HIDE_ORG_UNIT_UUIDS: \".*\"#VUE_APP_HIDE_ORG_UNIT_UUIDS: \"${VUE_APP_HIDE_ORG_UNIT_UUIDS}\"#g" -i $index_file
+  # NOTE: single quotes are necessary around $(...) since the value may contain JSON
+  sed "s#VUE_APP_HIDE_ORG_UNIT_UUIDS: \".*\"#VUE_APP_HIDE_ORG_UNIT_UUIDS: '${VUE_APP_HIDE_ORG_UNIT_UUIDS}'#g" -i $index_file
 }
 
 replace_hide_manager_org_units() {
@@ -96,7 +98,8 @@ replace_hide_manager_org_units() {
     echo >&3 "$ME: ERROR: $index_file does not exist"
     exit 1
   fi
-  sed "s#VUE_APP_HIDE_MANAGER_ORG_UNITS: \".*\"#VUE_APP_HIDE_MANAGER_ORG_UNITS: \"${VUE_APP_HIDE_MANAGER_ORG_UNITS}\"#g" -i $index_file
+  # NOTE: single quotes are necessary around $(...) since the value may contain JSON
+  sed "s#VUE_APP_HIDE_MANAGER_ORG_UNITS: \".*\"#VUE_APP_HIDE_MANAGER_ORG_UNITS: '${VUE_APP_HIDE_MANAGER_ORG_UNITS}'#g" -i $index_file
 }
 
 replace_use_autocomplete_api() {
