@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+3.14.1 - 2022-12-07
+-------------------
+
+[#54099] Use single quotes where ENV values may contain JSON
+
 3.14.0 - 2022-12-06
 -------------------
 
