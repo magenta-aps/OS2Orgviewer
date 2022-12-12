@@ -8,23 +8,23 @@ services:
       context: .
       dockerfile: docker/Dockerfile
     environment:
-      GLOBAL_API_URL: http://localhost:5000
-      GLOBAL_API_ROOT_UUID: "f06ee470-9f17-566f-acbe-e938112d46d9"
+      OS2ORGVIEWER_API_URL: http://localhost:5000
+      OS2ORGVIEWER_API_ROOT_UUID: "f06ee470-9f17-566f-acbe-e938112d46d9"
       # Loenorganisation
-      # GLOBAL_API_ROOT_UUID: "fb2d158f-114e-5f67-8365-2c520cf10b58"
-      # GLOBAL_ORG_PERSON_RELATION: "association"
+      OS2ORGVIEWER_API_ROOT_UUID: "fb2d158f-114e-5f67-8365-2c520cf10b58"
+      OS2ORGVIEWER_ORG_PERSON_RELATION: "association"
 
-      GLOBAL_ORG_UNIT_HIERARCHY_UUIDS:
-      # GLOBAL_APP_TITLE: "Andeby Kommune"
-      # GLOBAL_ORG_PERSON_RELATION: "engagement"
-      # VUE_APP_TREE_LAYOUT: "hybrid"
-      # VUE_APP_LOGO_PATH: "https://frederikshavn.dk/Resources/images/frk_logo_blue.svg"
-      # VUE_APP_HIDE_ORG_UNIT_UUIDS:
-      # VUE_APP_HIDE_MANAGER_ORG_UNITS: "true"
-      # VUE_APP_USE_AUTOCOMPLETE_API: "true"
-      KEYCLOAK_CLIENT_SECRET: "30303030-3030-3030-3030-303030303030"
-      # VUE_APP_FAVICON_PATH: "https://frederikshavn.dk/Resources/images/favicon.ico"
-      # VUE_APP_THEME_CSS: "frederikshavn.custom.css"
+      OS2ORGVIEWER_ORG_UNIT_HIERARCHY_UUIDS: '{"Some": {"complicated": ["json", "structure"]}}'
+      OS2ORGVIEWER_APP_TITLE: "Andeby Kommune"
+      OS2ORGVIEWER_ORG_PERSON_RELATION: "engagement"
+      OS2ORGVIEWER_TREE_LAYOUT: "hybrid"
+      OS2ORGVIEWER_LOGO_PATH: "https://frederikshavn.dk/Resources/images/frk_logo_blue.svg"
+      OS2ORGVIEWER_HIDE_ORG_UNIT_UUIDS: '["9840379F-B798-4AC2-B1BA-C479D80EDE9A", "89D7B03E-B9FB-4B12-9616-CE9FE2DC47BF"]'
+      OS2ORGVIEWER_HIDE_MANAGER_ORG_UNITS: "true"
+      OS2ORGVIEWER_USE_AUTOCOMPLETE_API: "true"
+      OS2ORGVIEWER_KEYCLOAK_CLIENT_SECRET: "30303030-3030-3030-3030-303030303030"
+      OS2ORGVIEWER_FAVICON_PATH: "https://frederikshavn.dk/Resources/images/favicon.ico"
+      OS2ORGVIEWER_THEME_CSS: "frederikshavn.custom.css"
 
     ports:
       - "8083:80"

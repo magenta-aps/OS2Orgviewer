@@ -33,4 +33,6 @@ RUN apk add --no-cache jq==1.6-r2
 COPY ./docker/25-symlink-html.sh /docker-entrypoint.d/25-symlink-html.sh
 RUN chmod 775 /docker-entrypoint.d/25-symlink-html.sh
 
+COPY ./docker/50-env-to-json.sh /docker-entrypoint.d/50-env-to-json.sh.sh
+
 COPY --from=builder ./code/dist /code/dist
