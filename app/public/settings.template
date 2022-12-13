@@ -1,0 +1,39 @@
+// This file is an  example of how settings.json could look, though you need to remove comments
+
+{
+    // Set the hostname and/or port of the OS2MO REST API you want the application to pull data from
+    "mo_base_url": "http://localhost:5000",
+
+    // Set a UUID representing whatever organisation unit you want as the default root org
+    // fb2d158f-114e-5f67-8365-2c520cf10b58
+    "root_uuid": "f06ee470-9f17-566f-acbe-e938112d46d9",
+
+    // Set type of relation between people and organisations [engagement|association]
+    // The UI will display people in organisations based on their engagement or association.
+    "person_relation": "engagement",
+
+    // Set the application title. It will appear in the UI header and in the HTML document title.
+    "title": "Magenta Kommune",
+
+    // Set local path to CSS file containing custom style variables and overrides.
+    // You can make a copy of `src/assets/default-theme.css` and edit it to create your own custom theme.
+    "custom_css": "ballerup.css",
+
+    // Set organization tree layout style [horizontal|vertical]
+    "tree_layout": "vertical",
+
+    // Set local or global path to image file you want as your application's branding image
+    "logo_src": "viborg_logo.png",
+
+    // Set local or global path to image file (usually `favicon.ico`) you want as your application's favicon.
+    "favicon_src": "https://silkeborg.dk/static/dist/favicons/apple-touch-icon.png",
+
+    // Set list of UUIDS of org_units you want to remove from the tree view
+    "hide_org_unit_uuids": "",
+
+    // True or False, hide org_units that ends with "_leder" (specific functionality for Holstebro)
+    "hide_manager_org_units": "",
+
+    // True or False, use autocomplete API (for extended search)
+    "use_autocomplete_api": "true"
+}

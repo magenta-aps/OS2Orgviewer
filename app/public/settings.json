@@ -1,0 +1,14 @@
+{
+    "mo_base_url": "http://localhost:5000",
+    "root_uuid": "f06ee470-9f17-566f-acbe-e938112d46d9",
+    "person_relation": "engagement",
+    "org_unit_hierarchy_uuids": "",
+    "title": "Magenta Kommune",
+    "custom_css": "ballerup.css",
+    "tree_layout": "vertical",
+    "logo_src": "viborg_logo.png",
+    "favicon_src": "https://silkeborg.dk/static/dist/favicons/apple-touch-icon.png",
+    "hide_org_unit_uuids": "",
+    "hide_manager_org_units": true,
+    "use_autocomplete_api": false
+}

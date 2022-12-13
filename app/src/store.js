@@ -16,15 +16,15 @@ export default new Vuex.Store({
   state: {
     loading: false,
     access_token: undefined,
-    global_api_url: OC_GLOBAL_CONF.VUE_APP_API_BASEURL,
-    keycloak_client_secret: OC_GLOBAL_CONF.KEYCLOAK_CLIENT_SECRET,
-    relation_type: OC_GLOBAL_CONF.VUE_APP_ORG_PERSON_RELATION
-      ? OC_GLOBAL_CONF.VUE_APP_ORG_PERSON_RELATION
+    global_api_url: process.env.VUE_APP_API_BASEURL,
+    keycloak_client_secret: process.env.VUE_APP_MO_BASEURL,
+    relation_type: process.env.VUE_APP_PERSON_RELATION
+      ? process.env.VUE_APP_PERSON_RELATION
       : "engagement",
-    global_root_uuid: OC_GLOBAL_CONF.VUE_APP_ROOT_UUID
-      ? OC_GLOBAL_CONF.VUE_APP_ROOT_UUID
+    global_root_uuid: process.env.VUE_APP_ROOT_UUID
+      ? process.env.VUE_APP_ROOT_UUID
       : false,
-    org_unit_hierarchy_uuids: OC_GLOBAL_CONF.VUE_ORG_UNIT_HIERARCHY_UUIDS,
+    org_unit_hierarchy_uuids: process.env.VUE_ORG_UNIT_HIERARCHY_UUIDS,
   },
   getters: {
     isLoading: (state) => {

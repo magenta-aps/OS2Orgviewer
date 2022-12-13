@@ -68,8 +68,8 @@ export default {
     },
     tree_layout_class: function () {
       if (
-        OC_GLOBAL_CONF.VUE_APP_TREE_LAYOUT === "horizontal" ||
-        OC_GLOBAL_CONF.VUE_APP_TREE_LAYOUT === "hybrid"
+        process.env.VUE_APP_TREE_LAYOUT === "horizontal" ||
+        process.env.VUE_APP_TREE_LAYOUT === "hybrid"
       ) {
         return "oc-layout-horizontal"
       } else {
