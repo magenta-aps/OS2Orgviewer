@@ -17,7 +17,11 @@
         {{ results.length }} søgeresultater
       </h3>
       <ul class="oc-search-list">
-        <li v-if="!use_autocomplete_api" v-for="res in results" :key="res.uuid">
+        <li
+          v-if="use_autocomplete_api !== 'true'"
+          v-for="res in results"
+          :key="res.uuid"
+        >
           <router-link v-if="res.givenname" :to="`/person/${res.uuid}`">
             <span class="label">Person</span><br />
             {{ res.name }}
@@ -27,7 +31,11 @@
             {{ res.name }}
           </router-link>
         </li>
-        <li v-if="use_autocomplete_api" v-for="res in results" :key="res.uuid">
+        <li
+          v-if="use_autocomplete_api === 'true'"
+          v-for="res in results"
+          :key="res.uuid"
+        >
           <router-link v-if="res.path" :to="`/orgunit/${res.uuid}`">
             <span class="label">Enhed</span><br />
             {{ res.name }}
@@ -53,6 +61,7 @@ export default {
       results: null,
       timeout: null,
       relation_type: this.$store.state.relation_type,
+      use_autocomplete_api: process.env.VUE_APP_USE_AUTOCOMPLETE_API,
       global_org_uuid: null,
     }
   },
@@ -84,19 +93,18 @@ export default {
       let search_associated = ""
       let employee_url = ""
       let org_unit_url = ""
-      this.use_autocomplete_api = OC_GLOBAL_CONF.VUE_APP_USE_AUTOCOMPLETE_API
 
       if (this.relation_type === "association") {
         search_associated = "associated=true"
       } else {
         search_associated = "associated=false"
       }
-      if (!this.use_autocomplete_api) {
-        employee_url = `/service/o/${this.global_org_uuid}/e/?query=${this.query}&${search_associated}`
-        org_unit_url = `/service/o/${this.global_org_uuid}/ou/?query=${this.query}&root=${this.root_uuid}`
-      } else {
+      if (process.env.VUE_APP_USE_AUTOCOMPLETE_API === "true") {
         employee_url = `/service/e/autocomplete/?query=${this.query}&${search_associated}`
         org_unit_url = `/service/ou/autocomplete/?query=${this.query}&${search_associated}`
+      } else {
+        employee_url = `/service/o/${this.global_org_uuid}/e/?query=${this.query}&${search_associated}`
+        org_unit_url = `/service/o/${this.global_org_uuid}/ou/?query=${this.query}&root=${this.root_uuid}`
       }
       ajax(employee_url).then((person_res) => {
         ajax(org_unit_url).then((org_res) => {

@@ -6,8 +6,8 @@ import { initKeycloak } from "../../keycloak.js"
 
 let loadstack = []
 
-const api_url = OC_GLOBAL_CONF.VUE_APP_API_BASEURL
-  ? OC_GLOBAL_CONF.VUE_APP_API_BASEURL
+const api_url = process.env.VUE_APP_MO_BASEURL
+  ? process.env.VUE_APP_MO_BASEURL
   : "https://moratest.magenta.dk"
 
 const ajax_init = {

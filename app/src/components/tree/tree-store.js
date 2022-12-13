@@ -34,8 +34,8 @@ const onLoadEndHandler = function (route) {
 }
 
 const state = {
-  root_uuid: OC_GLOBAL_CONF.VUE_APP_ROOT_UUID,
-  org_unit_hierarchy_uuids: OC_GLOBAL_CONF.VUE_ORG_UNIT_HIERARCHY_UUIDS,
+  root_uuid: process.env.VUE_APP_ROOT_UUID,
+  org_unit_hierarchy_uuids: process.env.VUE_ORG_UNIT_HIERARCHY_UUIDS,
   org_units: {},
   tree_is_loading: false,
 }
@@ -165,17 +165,16 @@ const actions = {
       if (!res) {
         return []
       }
-
-      if (OC_GLOBAL_CONF.VUE_APP_HIDE_ORG_UNIT_UUIDS) {
+      if (process.env.VUE_APP_HIDE_ORG_UNIT_UUIDS) {
         res["org_units"] = res["org_units"].filter((org) => {
-          if (OC_GLOBAL_CONF.VUE_APP_HIDE_ORG_UNIT_UUIDS.includes(org.uuid)) {
+          if (process.env.VUE_APP_HIDE_ORG_UNIT_UUIDS.includes(org.uuid)) {
             return false
           }
           return true
         })
       }
       // Remove org_units which names ends with `_leder`
-      if (OC_GLOBAL_CONF.VUE_APP_HIDE_MANAGER_ORG_UNITS) {
+      if (process.env.VUE_APP_HIDE_MANAGER_ORG_UNITS === "true") {
         res["org_units"] = res["org_units"].filter((org) => {
           if (org.objects[0].name.endsWith("_leder")) {
             return false

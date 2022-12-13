@@ -8,7 +8,7 @@
         slot="preaction"
         to="/"
         class="oc-header-preaction btn"
-        :title="`Vis første niveau i ${title}`"
+        :title="`Vis første niveau i ${this.title}`"
       >
         <img v-if="logo_src" :src="logo_src" alt="" />
         <svg
@@ -26,10 +26,10 @@
             fill="#000"
           />
         </svg>
-        <span class="sr-only">Vis første niveau i {{ title }}</span>
+        <span class="sr-only">Vis første niveau i {{ this.title }}</span>
       </router-link>
-      <h1 v-if="title" slot="title" class="oc-header-title">
-        {{ title }}
+      <h1 v-if="this.title" slot="title" class="oc-header-title">
+        {{ this.title }}
       </h1>
       <router-link
         v-if="$route.name !== 'search'"
@@ -90,6 +90,11 @@
 import OcHeader from "./components/layout/Header.vue"
 import LoadScreen from "./components/spinner/Loadscreen.vue"
 
+import Vue from "vue"
+import VueHead from "vue-head"
+
+Vue.use(VueHead)
+
 export default {
   name: "App",
   components: {
@@ -98,8 +103,9 @@ export default {
   },
   data: function () {
     return {
-      title: OC_GLOBAL_CONF.VUE_APP_TITLE,
-      logo_src: OC_GLOBAL_CONF.VUE_APP_LOGO_PATH,
+      title: process.env.VUE_APP_TITLE,
+      favicon_src: process.env.VUE_APP_FAVICON_SRC,
+      logo_src: process.env.VUE_APP_LOGO_SRC,
       first_load: true,
     }
   },
@@ -140,6 +146,27 @@ export default {
   mounted: function () {
     this.checkRootOrgUuid(this.global_root_uuid)
     this.checkFirstLoad()
+  },
+  head: {
+    title: function () {
+      return {
+        inner: process.env.VUE_APP_TITLE, // same as `this.title`, idk what we prefer. This is global in the app, but can't be used in templates afaik
+        separator: " ",
+        undo: false,
+      }
+    },
+    meta: function () {
+      return [
+        {
+          name: "description",
+          content: `OS2Orgviewer version ${process.env.VUE_APP_VERSION}`,
+          undo: false,
+        },
+      ]
+    },
+    link: function () {
+      return [{ rel: "icon", href: process.env.VUE_APP_FAVICON_SRC, undo: false }]
+    },
   },
 }
 </script>
