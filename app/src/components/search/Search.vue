@@ -42,7 +42,7 @@
   </section>
 </template>
 
-<script>
+<script lang="ts">
 import Vue from "vue"
 import { ajax } from "../http/http.js"
 
@@ -80,11 +80,10 @@ export default {
       }
     },
     search: function () {
-      let search_res = []
-      let search_associated = ""
-      let employee_url = ""
-      let org_unit_url = ""
-      this.use_autocomplete_api = OC_GLOBAL_CONF.VUE_APP_USE_AUTOCOMPLETE_API
+      let search_res: Array<any> = []
+      let search_associated: string = ""
+      let employee_url: string = ""
+      let org_unit_url: string = ""
 
       if (this.relation_type === "association") {
         search_associated = "associated=true"
@@ -99,6 +98,8 @@ export default {
         org_unit_url = `/service/ou/autocomplete/?query=${this.query}&${search_associated}`
       }
       ajax(employee_url).then((person_res) => {
+        console.log(person_res)
+
         ajax(org_unit_url).then((org_res) => {
           search_res = person_res.items.concat(org_res.items)
           this.results = search_res.sort(function (a, b) {
