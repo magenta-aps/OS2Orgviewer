@@ -174,11 +174,17 @@ const actions = {
           return true
         })
       }
-      // Remove org_units which names ends with `_leder`
-      if (OC_GLOBAL_CONF.VUE_APP_HIDE_MANAGER_ORG_UNITS) {
+      // TODO: FIX THIS CODE AFTER WE FIXED ENV VARIABLES
+      // https://redmine.magenta-aps.dk/issues/54117
+      // Remove org_units with names that has `_leder`, `Ø_`, `_adm`, `_COVID` or `_vikar` in it
+      if (OC_GLOBAL_CONF.VUE_APP_HIDE_MANAGER_ORG_UNITS == "true") {
+        // Since VUE can't understand lists from docker-compose, I'm manually removing these
+        let substrings = ["_leder", "Ø_", "_adm", "_COVID", "_vikar"]
         res["org_units"] = res["org_units"].filter((org) => {
-          if (org.objects[0].name.endsWith("_leder")) {
-            return false
+          for (let i = 0; i < substrings.length; i++) {
+            if (org.objects[0].name.includes(substrings[i])) {
+              return false
+            }
           }
           return true
         })
