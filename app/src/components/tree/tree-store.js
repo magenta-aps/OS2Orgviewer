@@ -147,15 +147,16 @@ const actions = {
       query: `
             {
                 org_units(uuids: [${uuids}] ${hierarchies_filter}) {
-                    uuid,
+                    uuid
                     objects {
-                        name,
+                        name
                         parent {
-                            uuid,
-                        },
+                            uuid
+                        }
                         children ${hierarchies_filter_children} {
                             uuid
-                        },
+                        }
+                        org_unit_level_uuid
                         ${relation_query_str}
                     }
                 }
@@ -189,6 +190,21 @@ const actions = {
           return true
         })
       }
+
+      // Remove specific org_unit_levels from orgviewer
+      if (OC_GLOBAL_CONF.VUE_APP_HIDE_ORG_UNIT_LEVELS) {
+        res["org_units"] = res["org_units"].filter((org) => {
+          if (
+            OC_GLOBAL_CONF.VUE_APP_HIDE_ORG_UNIT_LEVELS.includes(
+              org.objects[0].org_unit_level_uuid
+            )
+          ) {
+            return false
+          }
+          return true
+        })
+      }
+
       return res["org_units"].map((org) => {
         let obj = org.objects[0]
         obj.uuid = org.uuid
