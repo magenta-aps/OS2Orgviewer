@@ -102,6 +102,17 @@ replace_hide_manager_org_units() {
   sed "s#VUE_APP_HIDE_MANAGER_ORG_UNITS: \".*\"#VUE_APP_HIDE_MANAGER_ORG_UNITS: '${VUE_APP_HIDE_MANAGER_ORG_UNITS}'#g" -i $index_file
 }
 
+replace_hide_org_unit_levels() {
+  local index_file="/usr/share/nginx/html/index.html"
+
+  if [ ! -f $index_file ]; then
+    echo >&3 "$ME: ERROR: $index_file does not exist"
+    exit 1
+  fi
+  # NOTE: single quotes are necessary around $(...) since the value may contain JSON
+  sed "s#VUE_APP_HIDE_ORG_UNIT_LEVELS: \".*\"#VUE_APP_HIDE_ORG_UNIT_LEVELS: '${VUE_APP_HIDE_ORG_UNIT_LEVELS}'#g" -i $index_file
+}
+
 replace_use_autocomplete_api() {
   local index_file="/usr/share/nginx/html/index.html"
 
@@ -151,6 +162,7 @@ replace_tree_layout
 replace_logo_path
 replace_hide_org_unit_uuids
 replace_hide_manager_org_units
+replace_hide_org_unit_levels
 replace_use_autocomplete_api
 replace_keycloak_client_secret
 replace_favicon_path
