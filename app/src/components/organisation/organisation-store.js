@@ -59,6 +59,14 @@ const sortAssociations = function (people) {
   })
 }
 
+const sortByName = function (people) {
+  return people.sort((x, y) => {
+    let a = x.employee[0].name,
+      b = y.employee[0].name
+    return a == b ? 0 : a > b ? 1 : -1
+  })
+}
+
 const state = {
   org_unit: null,
 }
@@ -168,6 +176,9 @@ const actions = {
     }).then((res) => {
       let org_unit = res["org_units"][0].objects[0]
       org_unit.uuid = res["org_units"][0].uuid
+      if (rootState.relation_type === "engagement") {
+        org_unit.associations = sortByName(org_unit.engagements)
+      }
       if (rootState.relation_type === "association") {
         org_unit.associations = sortAssociations(org_unit.associations)
       }

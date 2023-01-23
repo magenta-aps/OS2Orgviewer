@@ -20,7 +20,7 @@
     </span>
     <ul class="oc-tt-ul" :id="`branch-${uuid}`" v-if="org_unit.showchildren">
       <tree-item
-        v-for="child in org_unit.children"
+        v-for="child in sorted_org_unit_children"
         :uuid="child.uuid"
         :key="child.uuid"
       />
@@ -44,6 +44,21 @@ export default {
   computed: {
     org_unit: function () {
       return this.$store.getters.getTreeOrgUnit(this.uuid)
+    },
+    sorted_org_unit_children: function () {
+      // sort org unit children alphabetically
+      let org_unit = this.$store.getters.getTreeOrgUnit(this.uuid)
+      return org_unit.children.sort((x, y) => {
+        let a = x.name.toUpperCase(),
+          b = y.name.toUpperCase()
+        // Specific sort, which puts 2 units at the bottom
+        if (OC_GLOBAL_CONF.VUE_APP_SORT_SPECIFIC_UNITS_SILKEBORG) {
+          if (a == "MJBR" || a == "FORSYNINGEN") {
+            return 1
+          }
+        }
+        return a == b ? 0 : a > b ? 1 : -1
+      })
     },
   },
 }
