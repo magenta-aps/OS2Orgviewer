@@ -154,6 +154,7 @@ const actions = {
                             uuid
                         }
                         children ${hierarchies_filter_children} {
+                            name
                             uuid
                         }
                         org_unit_level_uuid

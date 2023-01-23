@@ -70,4 +70,7 @@ VUE_APP_HIDE_MANAGER_ORG_UNITS=False
 
 # True or False, use autocomplete API (for extended search)
 VUE_APP_USE_AUTOCOMPLETE_API=False
+
+# Sort out "MJBR" and "Forsyningen" (specific for Silkeborg)
+VUE_APP_SORT_SPECIFIC_UNITS_SILKEBORG=False
 ```
