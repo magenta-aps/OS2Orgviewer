@@ -4,8 +4,10 @@
       <template v-if="relation_type === 'association'">
         <dt>{{ person.association_type.name }}</dt>
       </template>
-      <!-- Temporarily remove job functions (Viborg)  -->
-      <span v-else-if="remove_job_function"></span>
+      <!-- Show `extension_2` instead of job_function for Viborg -->
+      <template v-else-if="show_extension_2">
+        <dt>{{ person.extension_2 }}</dt>
+      </template>
       <template v-else>
         <dt>{{ person.job_function.name }}</dt>
       </template>
@@ -55,7 +57,7 @@ export default {
   data: function () {
     return {
       relation_type: this.$store.state.relation_type,
-      remove_job_function: OC_GLOBAL_CONF.VUE_APP_REMOVE_JOB_FUNCTION_VIBORG,
+      show_extension_2: OC_GLOBAL_CONF.VUE_APP_SHOW_EXTENSION_2_VIBORG,
     }
   },
   computed: {
