@@ -146,6 +146,7 @@ const actions = {
                     job_function {
                         name
                     }
+                    extension_2
                 }
             `
     }

@@ -24,7 +24,7 @@ services:
       # VUE_APP_HIDE_ORG_UNIT_LEVELS: '["abbbefb2-85a6-4a5d-ad94-98a363adfee6", "418b313a-979f-4a26-807e-ba8dd3114d74"]'
       # VUE_APP_USE_AUTOCOMPLETE_API: "true"
       # VUE_APP_SORT_SPECIFIC_UNITS_SILKEBORG: "true"
-      # VUE_APP_REMOVE_JOB_FUNCTION_VIBORG: "true"
+      # VUE_APP_SHOW_EXTENSION_2_VIBORG: "true"
       KEYCLOAK_CLIENT_SECRET: "30303030-3030-3030-3030-303030303030"
       # VUE_APP_FAVICON_PATH: "https://frederikshavn.dk/Resources/images/favicon.ico"
       # VUE_APP_THEME_CSS: "frederikshavn.custom.css"

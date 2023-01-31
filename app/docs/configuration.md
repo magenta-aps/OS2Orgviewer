@@ -74,6 +74,6 @@ VUE_APP_USE_AUTOCOMPLETE_API=False
 # Sort out "MJBR" and "Forsyningen" (specific for Silkeborg)
 VUE_APP_SORT_SPECIFIC_UNITS_SILKEBORG=False
 
-# Remove job functions temporarily (Viborg)
-VUE_APP_REMOVE_JOB_FUNCTION_VIBORG=True
+# Show 'extension_2' instead of job_function (Viborg)
+VUE_APP_SHOW_EXTENSION_2_VIBORG=True
 ```

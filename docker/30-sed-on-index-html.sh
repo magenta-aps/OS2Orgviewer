@@ -133,14 +133,14 @@ replace_sort_specific_units_silkeborg() {
   sed "s#VUE_APP_SORT_SPECIFIC_UNITS_SILKEBORG: \".*\"#VUE_APP_SORT_SPECIFIC_UNITS_SILKEBORG: \"${VUE_APP_SORT_SPECIFIC_UNITS_SILKEBORG}\"#g" -i $index_file
 }
 
-replace_remove_job_function_viborg() {
+replace_show_extension_2_viborg() {
   local index_file="/usr/share/nginx/html/index.html"
 
   if [ ! -f $index_file ]; then
     echo >&3 "$ME: ERROR: $index_file does not exist"
     exit 1
   fi
-  sed "s#VUE_APP_REMOVE_JOB_FUNCTION_VIBORG: \".*\"#VUE_APP_REMOVE_JOB_FUNCTION_VIBORG: \"${VUE_APP_REMOVE_JOB_FUNCTION_VIBORG}\"#g" -i $index_file
+  sed "s#VUE_APP_SHOW_EXTENSION_2_VIBORG: \".*\"#VUE_APP_SHOW_EXTENSION_2_VIBORG: \"${VUE_APP_SHOW_EXTENSION_2_VIBORG}\"#g" -i $index_file
 }
 
 replace_keycloak_client_secret() {
@@ -185,7 +185,7 @@ replace_hide_manager_org_units
 replace_hide_org_unit_levels
 replace_use_autocomplete_api
 replace_sort_specific_units_silkeborg
-replace_remove_job_function_viborg
+replace_show_extension_2_viborg
 replace_keycloak_client_secret
 replace_favicon_path
 replace_css_path
