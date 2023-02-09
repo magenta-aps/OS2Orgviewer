@@ -27,10 +27,12 @@
         </template>
 
         <template v-else-if="address.address_type.scope === 'EMAIL'">
-          <dt>E-mail</dt>
-          <dd>
-            <a :href="`mailto:${address.value}`">{{ address.value }}</a>
-          </dd>
+          <template v-if="!remove_org_unit_email">
+            <dt>E-mail</dt>
+            <dd>
+              <a :href="`mailto:${address.value}`">{{ address.value }}</a>
+            </dd>
+          </template>
         </template>
 
         <template v-else-if="address.address_type.scope === 'PHONE'">
@@ -65,6 +67,11 @@ export default {
     DawaAddress,
   },
   props: ["addresses"],
+  data: function () {
+    return {
+      remove_org_unit_email: OC_GLOBAL_CONF.VUE_APP_REMOVE_ORG_UNIT_EMAIL,
+    }
+  },
 }
 </script>
 

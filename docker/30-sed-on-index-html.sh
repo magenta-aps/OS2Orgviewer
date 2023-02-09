@@ -143,6 +143,16 @@ replace_show_extension_2_viborg() {
   sed "s#VUE_APP_SHOW_EXTENSION_2_VIBORG: \".*\"#VUE_APP_SHOW_EXTENSION_2_VIBORG: \"${VUE_APP_SHOW_EXTENSION_2_VIBORG}\"#g" -i $index_file
 }
 
+replace_remove_org_unit_email() {
+  local index_file="/usr/share/nginx/html/index.html"
+
+  if [ ! -f $index_file ]; then
+    echo >&3 "$ME: ERROR: $index_file does not exist"
+    exit 1
+  fi
+  sed "s#VUE_APP_REMOVE_ORG_UNIT_EMAIL: \".*\"#VUE_APP_REMOVE_ORG_UNIT_EMAIL: \"${VUE_APP_REMOVE_ORG_UNIT_EMAIL}\"#g" -i $index_file
+}
+
 replace_keycloak_client_secret() {
   local index_file="/usr/share/nginx/html/index.html"
 
@@ -186,6 +196,7 @@ replace_hide_org_unit_levels
 replace_use_autocomplete_api
 replace_sort_specific_units_silkeborg
 replace_show_extension_2_viborg
+replace_remove_org_unit_email
 replace_keycloak_client_secret
 replace_favicon_path
 replace_css_path
