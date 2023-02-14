@@ -44,7 +44,7 @@ include:
     file: '/gitlab-ci-templates/common/autopub.v1.yml'
   - project: 'labs/salt-automation'
     ref: 'master'
-    file: '/gitlab-ci-templates/common/docker-build.v1.yml'
+    file: '/gitlab-ci-templates/common/docker-build.v2.yml'
   - project: 'labs/salt-automation'
     ref: 'master'
     file: '/gitlab-ci-templates/common/docker-release.v1.yml'
