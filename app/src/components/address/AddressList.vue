@@ -27,7 +27,14 @@
         </template>
 
         <template v-else-if="address.address_type.scope === 'EMAIL'">
-          <template v-if="!remove_org_unit_email">
+          <!-- Make sure we only remove org_unit emails and not for a person -->
+          <template
+            v-if="
+              remove_org_unit_email && address.address_type.user_key === 'EmailUnit'
+            "
+          >
+          </template>
+          <template v-else>
             <dt>E-mail</dt>
             <dd>
               <a :href="`mailto:${address.value}`">{{ address.value }}</a>

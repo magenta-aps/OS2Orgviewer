@@ -79,4 +79,7 @@ VUE_APP_SHOW_EXTENSION_2_VIBORG=True
 
 # Remove org_unit emails
 VUE_APP_REMOVE_ORG_UNIT_EMAIL=True
+
+# Remove person count
+VUE_APP_REMOVE_PERSON_COUNT=True
 ```

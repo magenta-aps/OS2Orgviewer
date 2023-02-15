@@ -26,6 +26,7 @@ services:
       # VUE_APP_SORT_SPECIFIC_UNITS_SILKEBORG: "true"
       # VUE_APP_SHOW_EXTENSION_2_VIBORG: "true"
       # VUE_APP_REMOVE_ORG_UNIT_EMAIL: "true"
+      # VUE_APP_REMOVE_PERSON_COUNT: "true"
       KEYCLOAK_CLIENT_SECRET: "30303030-3030-3030-3030-303030303030"
       # VUE_APP_FAVICON_PATH: "https://frederikshavn.dk/Resources/images/favicon.ico"
       # VUE_APP_THEME_CSS: "frederikshavn.custom.css"
