@@ -82,4 +82,8 @@ VUE_APP_REMOVE_ORG_UNIT_EMAIL=True
 
 # Remove person count
 VUE_APP_REMOVE_PERSON_COUNT=True
+
+# Remove children count
+VUE_APP_REMOVE_CHILDREN_COUNT=True
+
 ```
