@@ -110,7 +110,7 @@ const actions = {
                         name
                     },
                     employee {
-                        uuid,
+                        uuid
                         name
                     },
                     association_type {
@@ -127,20 +127,20 @@ const actions = {
     } else {
       relation_query = `
                 managers(inherit:true) {
-                    org_unit_uuid,
+                    org_unit_uuid
                     manager_type {
-                        uuid,
+                        uuid
                         name
                     },
                     employee {
-                        uuid,
+                        uuid
                         name
                     }
                 },
                 engagements {
                     org_unit_uuid,
                     employee {
-                        uuid,
+                        uuid
                         name
                     },
                     job_function {
@@ -154,18 +154,19 @@ const actions = {
       query: `
             {
                 org_units(uuids:"${org_unit_uuid}" ${hierarchies_filter}) {
-                    uuid,
+                    uuid
                     objects {
-                        name,
+                        name
                         addresses {
-                            uuid,
-                            value,
+                            uuid
+                            value
                             visibility {
                                 name
-                            },
+                            }
                             address_type {
-                                uuid,
-                                name,
+                                uuid
+                                name
+                                user_key
                                 scope
                             }
                         },

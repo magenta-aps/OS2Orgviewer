@@ -76,4 +76,14 @@ VUE_APP_SORT_SPECIFIC_UNITS_SILKEBORG=False
 
 # Show 'extension_2' instead of job_function (Viborg)
 VUE_APP_SHOW_EXTENSION_2_VIBORG=True
+
+# Remove org_unit emails
+VUE_APP_REMOVE_ORG_UNIT_EMAIL=True
+
+# Remove person count
+VUE_APP_REMOVE_PERSON_COUNT=True
+
+# Remove children count
+VUE_APP_REMOVE_CHILDREN_COUNT=True
+
 ```

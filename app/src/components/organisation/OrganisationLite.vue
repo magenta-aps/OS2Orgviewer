@@ -10,7 +10,7 @@
       <span class="sr-only">Vis detaljer for </span>
       {{ orgUnit.name }}
     </p>
-    <p class="oc-org-link-count">
+    <p class="oc-org-link-count" v-if="!hide_person_count">
       {{ displayPersonCount(orgUnit) }}
     </p>
   </router-link>
@@ -25,6 +25,11 @@ export default {
     root_uuid: function () {
       return this.$store.getters.getRootUuid
     },
+  },
+  data: function () {
+    return {
+      hide_person_count: OC_GLOBAL_CONF.VUE_APP_REMOVE_PERSON_COUNT,
+    }
   },
   watch: {
     $route: function (to, from) {
