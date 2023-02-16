@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+3.21.0 - 2023-02-16
+-------------------
+
+[#54616] Add support for removing manager email, person count and children count
+
 3.20.0 - 2023-01-31
 -------------------
 
