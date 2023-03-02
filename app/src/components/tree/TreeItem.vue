@@ -53,8 +53,11 @@ export default {
           b = y.name.toUpperCase()
         // Specific sort, which puts 2 units at the bottom
         if (OC_GLOBAL_CONF.VUE_APP_SORT_SPECIFIC_UNITS_SILKEBORG) {
-          if (a == "MJBR" || a == "FORSYNINGEN") {
+          if (a == "MIDTJYSK BRAND & REDNING" || a == "FORSYNINGSAFDELINGEN") {
             return 1
+          }
+          if (b == "MIDTJYSK BRAND & REDNING" || b == "FORSYNINGSAFDELINGEN") {
+            return -1
           }
         }
         return a == b ? 0 : a > b ? 1 : -1
