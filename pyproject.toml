@@ -12,7 +12,7 @@ repository = "https://git.magenta.dk/rammearkitektur/os2orgviewer"
 keywords = ["os2orgviewer"]
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.11"
 pre-commit = "^2.20.0"
 
 [build-system]

@@ -63,7 +63,7 @@ include:
 .lint-base:
   stage: lint
   needs: []
-  image: python:3.9
+  image: python:3.11
   rules:
     - <<: *if-merge-request
 
