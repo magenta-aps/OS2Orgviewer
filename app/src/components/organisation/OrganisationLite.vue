@@ -29,6 +29,7 @@ export default {
   data: function () {
     return {
       hide_person_count: OC_GLOBAL_CONF.VUE_APP_REMOVE_PERSON_COUNT,
+      remove_engagement_type_uuid: OC_GLOBAL_CONF.VUE_APP_REMOVE_ENGAGEMENT_TYPE_UUID,
     }
   },
   watch: {
@@ -53,7 +54,16 @@ export default {
           str += " tilknyttede"
         }
       } else if (org_unit.engagements) {
-        str += org_unit.engagements.length
+        let eng = org_unit.engagements
+        if (this.remove_engagement_type_uuid) {
+          eng = eng.filter((engagement) => {
+            if (engagement.engagement_type_uuid == this.remove_engagement_type_uuid) {
+              return false
+            }
+            return true
+          })
+        }
+        str += eng.length
         if (Number(str) === 1) {
           str += " ansat"
         } else {

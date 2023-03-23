@@ -139,6 +139,7 @@ const actions = {
                 },
                 engagements {
                     org_unit_uuid,
+                    engagement_type_uuid
                     employee {
                         uuid
                         name

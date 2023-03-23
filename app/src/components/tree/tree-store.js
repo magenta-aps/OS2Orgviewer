@@ -134,6 +134,7 @@ const actions = {
       relation_query_str = `
                 engagements {
                     uuid
+                    engagement_type_uuid
                 }
             `
     } else {
