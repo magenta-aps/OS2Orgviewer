@@ -1,6 +1,17 @@
 <template>
   <div class="people-list-wrapper" v-if="people">
-    <ul class="people-list" v-if="people.length > 0">
+    <ul
+      class="people-list"
+      v-if="remove_engagement_type_uuid && updated_people.length > 0"
+    >
+      <li v-for="updated_person in updated_people" :key="updated_person.uuid">
+        <person-lite :person="updated_person" />
+      </li>
+    </ul>
+    <ul
+      class="people-list"
+      v-else-if="!remove_engagement_type_uuid && people.length > 0"
+    >
       <li v-for="person in people" :key="person.uuid">
         <person-lite :person="person" />
       </li>
@@ -22,12 +33,23 @@ export default {
   data: function () {
     return {
       relation_type: this.$store.state.relation_type,
+      remove_engagement_type_uuid: OC_GLOBAL_CONF.VUE_APP_REMOVE_ENGAGEMENT_TYPE_UUID,
     }
   },
   props: ["people"],
   computed: {
     is_loading: function () {
       return this.$store.getters.isLoading
+    },
+    updated_people: function () {
+      let self = this
+      let updated_people_list = self.people.filter((person) => {
+        if (person.engagement_type_uuid == self.remove_engagement_type_uuid) {
+          return false
+        }
+        return true
+      })
+      return updated_people_list
     },
   },
 }
