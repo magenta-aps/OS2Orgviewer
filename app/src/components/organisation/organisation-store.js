@@ -1,5 +1,6 @@
 import Vue from "vue"
 import { postQuery, ajax } from "../http/http.js"
+import { convertToArray } from "../../helpers.js"
 
 const sortAssociations = function (people) {
   let unsorted_persons = []
@@ -109,92 +110,97 @@ const actions = {
     })
   },
   fetchOrgUnitData: ({ commit, rootState }, org_unit_uuid) => {
-    let relation_query = ""
+    let by_association = rootState.relation_type === "association" ? true : false
+
+    // Remove any single or double quotes, `[` and `]` and spaces. Now we have a string of UUIDs seperated by comma.
+    // Then split() by comma(,), which gives an array of uuids.
     let hierarchies_filter = rootState.org_unit_hierarchy_uuids
-      ? `, hierarchies: ${rootState.org_unit_hierarchy_uuids}`
-      : ""
-    if (rootState.relation_type === "association") {
-      relation_query = `
-                associations {
-                    substitute {
-                        uuid
-                        name
-                    },
-                    employee {
-                        uuid
-                        name
-                    },
-                    association_type {
-                        name
-                    },
-                    dynamic_class{
-                        name
-                        parent {
-                            name
-                        }
-                    }
-                }
-            `
-    } else {
-      relation_query = `
-                managers(inherit:true) {
-                    org_unit_uuid
-                    manager_type {
-                        uuid
-                        name
-                    },
-                    employee {
-                        uuid
-                        name
-                    }
-                },
-                engagements {
-                    org_unit_uuid,
-                    engagement_type_uuid
-                    employee {
-                        uuid
-                        name
-                    },
-                    job_function {
-                        name
-                    }
-                    extension_2
-                }
-            `
-    }
+      ? convertToArray(rootState.org_unit_hierarchy_uuids)
+      : null
+
     postQuery({
       query: `
-            {
-                org_units(uuids:"${org_unit_uuid}" ${hierarchies_filter}) {
-                    uuid
-                    objects {
-                        name
-                        addresses {
-                            uuid
-                            value
-                            visibility {
-                                name
-                            }
-                            address_type {
-                                uuid
-                                name
-                                user_key
-                                scope
-                            }
-                        },
-                        ${relation_query}
-                    }
-                }
+      query GetOrgUnit($uuid: [UUID!], $hierarchies: [UUID!], $by_association: Boolean!) {
+        org_units(uuids: $uuid, hierarchies: $hierarchies) {
+          uuid
+          objects {
+            name
+            addresses {
+              uuid
+              value
+              visibility {
+                name
+              }
+              address_type {
+                uuid
+                name
+                user_key
+                scope
+              }
             }
-        `,
+            ...association_or_engagement
+          }
+        }
+      }
+
+      fragment association_or_engagement on OrganisationUnit {
+        associations @include(if: $by_association) {
+          substitute {
+            uuid
+            name
+          }
+          employee {
+            uuid
+            name
+          }
+          association_type {
+            name
+          }
+          dynamic_class {
+            name
+            parent {
+              name
+            }
+          }
+        }
+        managers(inherit: true) @skip(if: $by_association) {
+          org_unit_uuid
+          manager_type {
+            uuid
+            name
+          }
+          employee {
+            uuid
+            name
+          }
+        }
+        engagements @skip(if: $by_association) {
+          org_unit_uuid
+          engagement_type_uuid
+          employee {
+            uuid
+            name
+          }
+          job_function {
+            name
+          }
+          extension_2
+        }
+      }
+    `,
+      variables: {
+        uuid: org_unit_uuid,
+        hierarchies: hierarchies_filter,
+        by_association: by_association,
+      },
     }).then((res) => {
       let org_unit = res["org_units"][0].objects[0]
       org_unit.uuid = res["org_units"][0].uuid
-      if (rootState.relation_type === "engagement") {
-        org_unit.associations = sortByName(org_unit.engagements)
-      }
-      if (rootState.relation_type === "association") {
+      if (by_association) {
         org_unit.associations = sortAssociations(org_unit.associations)
+      }
+      if (!by_association) {
+        org_unit.associations = sortByName(org_unit.engagements)
       }
       commit("setOrgUnitData", org_unit)
     })

@@ -16,65 +16,64 @@ const mutations = {
 }
 const actions = {
   fetchPerson: ({ commit, rootState }, uuid) => {
-    let relation_query = ""
-    if (rootState.relation_type === "association") {
-      relation_query = `
-                associations {
-                    org_unit_uuid,
-                    association_type {
-                        name
-                    },
-                    substitute {
-                        uuid
-                        name
-                    },
-                    dynamic_class {
-                        name
-                        parent {
-                            name
-                        }
-                    }
-
-                }
-            `
-    } else {
-      relation_query = `
-                engagements {
-                    org_unit_uuid
-                    engagement_type {
-                        name
-                    }
-                    job_function {
-                        name
-                    }
-                    extension_2
-                }
-            `
-    }
+    let by_association = rootState.relation_type === "association" ? true : false
     return postQuery({
       query: `
-            {
-                employees(uuids:"${uuid}") {
-                    uuid,
-                    objects {
-                        name
-                        addresses {
-                            uuid
-                            value
-                            visibility {
-                                name
-                            }
-                            address_type {
-                                uuid
-                                name
-                                scope
-                            }
-                        },
-                        ${relation_query}
-                    }
-                }
+      query GetPerson($uuid: [UUID!], $by_association: Boolean!) {
+        employees(uuids: $uuid) {
+          uuid
+          objects {
+            name
+            addresses {
+              uuid
+              value
+              visibility {
+                name
+              }
+              address_type {
+                uuid
+                name
+                scope
+              }
             }
-        `,
+            ...association_or_engagement
+          }
+        }
+      }
+
+      fragment association_or_engagement on Employee {
+        associations @include(if: $by_association) {
+          org_unit_uuid
+          association_type {
+            name
+          }
+          substitute {
+            uuid
+            name
+          }
+          dynamic_class {
+            name
+            parent {
+              name
+            }
+          }
+        }
+        engagements @skip(if: $by_association) {
+          org_unit_uuid
+          engagement_type {
+            name
+          }
+          job_function {
+            name
+          }
+          extension_2
+        }
+      }
+    `,
+      variables: {
+        uuid: uuid,
+        by_association: by_association,
+      },
     }).then((res) => {
       let person = res.employees[0].objects[0]
       person.uuid = res.employees[0].uuid
@@ -84,33 +83,26 @@ const actions = {
     })
   },
   fetchPersonWorkAddress: ({ rootState }, uuid) => {
-    let relation_query = ""
-    relation_query = `
-            engagements {
-                org_unit {
-                    uuid
-                    addresses {
-                        uuid
-                        value
-                        address_type {
-                            scope
-                            name
-                        }
-                    }
-                }
-            }
-        `
     return postQuery({
       query: `
-            {
-                employees(uuids:"${uuid}") {
-                    uuid,
-                    objects {
-                        ${relation_query}
-                    }
+      query getOrgUnitAddress($uuid: [UUID!]) {
+        employees(uuids: $uuid) {
+          objects {
+            engagements {
+              org_unit {
+                addresses {
+                  value
+                  address_type {
+                    name
+                  }
                 }
+              }
             }
-        `,
+          }
+        }
+      }
+    `,
+      variables: { uuid: uuid },
     }).then((res) => {
       return res.employees[0].objects[0].engagements[0].org_unit[0].addresses
     })
