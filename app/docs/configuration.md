@@ -89,4 +89,7 @@ VUE_APP_REMOVE_CHILDREN_COUNT=True
 # Remove specific engagement type by UUID
 VUE_APP_REMOVE_ENGAGEMENT_TYPE_UUID=SOME_ENGAGEMENT_TYPE_UUID
 
+# Remove manager engagements from engagements list
+VUE_APP_REMOVE_MANAGER_ENGAGEMENT=true
+
 ```

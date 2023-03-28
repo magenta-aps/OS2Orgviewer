@@ -73,6 +73,13 @@ const state = {
 
 const getters = {
   getOrgUnitData: (state) => {
+    if (OC_GLOBAL_CONF.VUE_APP_REMOVE_MANAGER_ENGAGEMENT && state.org_unit != null) {
+      state.org_unit.engagements = state.org_unit.engagements.filter((engagement) => {
+        return !(
+          engagement.employee[0].uuid == state.org_unit.managers[0].employee[0].uuid
+        )
+      })
+    }
     return state.org_unit
   },
 }
