@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+3.23.0 - 2023-03-28
+-------------------
+
+[#55501] Remove manager engament from organisation list
+
 3.22.0 - 2023-03-23
 -------------------
 
