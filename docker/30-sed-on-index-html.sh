@@ -183,6 +183,16 @@ replace_remove_engagement_type_uuid() {
   sed "s#VUE_APP_REMOVE_ENGAGEMENT_TYPE_UUID: \".*\"#VUE_APP_REMOVE_ENGAGEMENT_TYPE_UUID: \"${VUE_APP_REMOVE_ENGAGEMENT_TYPE_UUID}\"#g" -i $index_file
 }
 
+replace_remove_manager_engagement() {
+  local index_file="/usr/share/nginx/html/index.html"
+
+  if [ ! -f $index_file ]; then
+    echo >&3 "$ME: ERROR: $index_file does not exist"
+    exit 1
+  fi
+  sed "s#VUE_APP_REMOVE_MANAGER_ENGAGEMENT: \".*\"#VUE_APP_REMOVE_MANAGER_ENGAGEMENT: \"${VUE_APP_REMOVE_MANAGER_ENGAGEMENT}\"#g" -i $index_file
+}
+
 replace_keycloak_client_secret() {
   local index_file="/usr/share/nginx/html/index.html"
 
@@ -230,6 +240,7 @@ replace_remove_org_unit_email
 replace_remove_person_count
 replace_remove_children_count
 replace_remove_engagement_type_uuid
+replace_remove_manager_engagement
 replace_keycloak_client_secret
 replace_favicon_path
 replace_css_path
