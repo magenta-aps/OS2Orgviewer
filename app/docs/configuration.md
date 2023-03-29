@@ -92,4 +92,7 @@ VUE_APP_REMOVE_ENGAGEMENT_TYPE_UUID=SOME_ENGAGEMENT_TYPE_UUID
 # Remove manager engagements from engagements list
 VUE_APP_REMOVE_MANAGER_ENGAGEMENT=true
 
+# Remove "scope" from org_unit search
+VUE_APP_REMOVE_SCOPE_FROM_SEARCH=true
+
 ```
