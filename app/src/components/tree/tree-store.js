@@ -1,5 +1,6 @@
 import Vue from "vue"
 import { postQuery } from "../http/http.js"
+import { convertToArray } from "../../helpers.js"
 
 const setParentOrgUnitVisibility = function (parent_uuid) {
   let new_parent = state.org_units[parent_uuid]
@@ -89,15 +90,15 @@ const actions = {
     commit("setTreeLoadSTatus", true)
 
     const uuid_set = new Set(uuids) // Creating a Set removes duplicate uuids
-    let uuid_query_str = ""
+    let uuid_array = []
     uuid_set.forEach(function (uuid) {
       if (!state.org_units[uuid]) {
         // Only add uuid to query if data does not exist in state
-        uuid_query_str += `"${uuid}",`
+        uuid_array.push(uuid)
       }
     })
-    if (uuid_query_str.length > 0) {
-      dispatch("fetchOrgUnitsInTree", uuid_query_str).then((orgs) => {
+    if (uuid_array.length > 0) {
+      dispatch("fetchOrgUnitsInTree", uuid_array).then((orgs) => {
         commit("setOrgUnits", orgs)
 
         // Check if orgs have parents we need to fetch
@@ -123,47 +124,49 @@ const actions = {
     }
   },
   fetchOrgUnitsInTree: ({ rootState }, uuids) => {
-    let relation_query_str = ""
+    let by_association = rootState.relation_type === "association" ? true : false
+
+    // Remove any single or double quotes, `[` and `]` and spaces. Now we have a string of UUIDs seperated by comma.
+    // Then split() by comma(,), which gives an array of uuids.
     let hierarchies_filter = rootState.org_unit_hierarchy_uuids
-      ? `, hierarchies: ${rootState.org_unit_hierarchy_uuids}`
-      : ""
-    let hierarchies_filter_children = rootState.org_unit_hierarchy_uuids
-      ? `(hierarchies: ${rootState.org_unit_hierarchy_uuids})`
-      : ""
-    if (rootState.relation_type === "engagement") {
-      relation_query_str = `
-                engagements {
-                    uuid
-                    engagement_type_uuid
-                }
-            `
-    } else {
-      relation_query_str = `
-                associations {
-                    uuid
-                }
-            `
-    }
+      ? convertToArray(rootState.org_unit_hierarchy_uuids)
+      : null
+
     return postQuery({
       query: `
-            {
-                org_units(uuids: [${uuids}] ${hierarchies_filter}) {
-                    uuid
-                    objects {
-                        name
-                        parent {
-                            uuid
-                        }
-                        children ${hierarchies_filter_children} {
-                            name
-                            uuid
-                        }
-                        org_unit_level_uuid
-                        ${relation_query_str}
-                    }
-                }
+      query GetOrgUnitsInTree($uuids: [UUID!], $hierarchies: [UUID!], $by_association: Boolean!) {
+        org_units(uuids: $uuids, hierarchies: $hierarchies) {
+          uuid
+          objects {
+            parent {
+              uuid
             }
-        `,
+            children(hierarchies: $hierarchies) {
+              name
+              uuid
+            }
+            name
+            org_unit_level_uuid
+            ...association_or_engagement
+          }
+        }
+      }
+
+      fragment association_or_engagement on OrganisationUnit {
+        associations @include(if: $by_association) {
+          uuid
+        }
+        engagements @skip(if: $by_association) {
+          uuid
+          engagement_type_uuid
+        }
+      }
+    `,
+      variables: {
+        uuids: uuids,
+        hierarchies: hierarchies_filter,
+        by_association: by_association,
+      },
     }).then((res) => {
       if (!res) {
         return []
@@ -246,15 +249,15 @@ const actions = {
     }
 
     // When we have a list of uuids, fetch them
-    let uuid_query_str = ""
+    let uuid_array = []
     additional_child_uuids.forEach(function (uuid) {
       if (!state.org_units[uuid]) {
         // Only add uuid to query if data does not exist in state
-        uuid_query_str += `"${uuid}",`
+        uuid_array.push(uuid)
       }
     })
-    if (uuid_query_str.length > 0) {
-      dispatch("fetchOrgUnitsInTree", uuid_query_str).then((orgs) => {
+    if (uuid_array.length > 0) {
+      dispatch("fetchOrgUnitsInTree", uuid_array).then((orgs) => {
         commit("setOrgUnits", orgs)
         onLoadEndHandler(route)
       })
