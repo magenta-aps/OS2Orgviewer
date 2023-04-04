@@ -28,6 +28,8 @@
 </template>
 
 <script>
+import { convertToBoolean } from "../../helpers"
+
 export default {
   props: ["orgUnit"],
   computed: {
@@ -82,7 +84,9 @@ export default {
   },
   data: function () {
     return {
-      hide_children_count: OC_GLOBAL_CONF.VUE_APP_REMOVE_CHILDREN_COUNT,
+      hide_children_count: convertToBoolean(
+        OC_GLOBAL_CONF.VUE_APP_REMOVE_CHILDREN_COUNT
+      ),
     }
   },
 }

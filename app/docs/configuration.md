@@ -39,7 +39,7 @@ GLOBAL_ORG_PERSON_RELATION=engagement
 # Optional list of org_unit_hierarchy uuids. Set a list of UUIDs representing the org_unit_hierarchy classes to filter organisations by.
 # Default: empty list
 # Example
-GLOBAL_ORG_UNIT_HIERARCHY_UUIDS= '[]'
+VUE_APP_ORG_UNIT_HIERARCHY_UUIDS= '[UUID]'
 
 # Set the application title. It will appear in the UI header and in the HTML document title.
 # Default: Organization chart demo
@@ -63,16 +63,19 @@ VUE_APP_LOGO_PATH=path-to-logo/logo.svg
 VUE_APP_FAVICON_PATH=path-to-favicon/favicon.ico
 
 # Set list of UUIDS of org_units you want to remove from the tree view
-VUE_APP_HIDE_ORG_UNIT_UUIDS=
+VUE_APP_HIDE_ORG_UNIT_UUIDS='[UUID]'
 
-# True or False, hide org_units that ends with "_leder" (specific functionality for Holstebro)
-VUE_APP_HIDE_MANAGER_ORG_UNITS=False
+# List of strings that will remove org_units with the string in it's name
+VUE_APP_HIDE_MANAGER_ORG_UNITS='[string]'
+
+# List of org_unit_levels to hide in the tree-view
+VUE_APP_HIDE_ORG_UNIT_LEVELS='[UUID]'
 
 # True or False, use autocomplete API (for extended search)
 VUE_APP_USE_AUTOCOMPLETE_API=False
 
-# Sort out "MJBR" and "Forsyningen" (specific for Silkeborg)
-VUE_APP_SORT_SPECIFIC_UNITS_SILKEBORG=False
+# Sort specific org_units to bottom of tree by UUID
+VUE_APP_SORT_SPECIFIC_UNITS_SILKEBORG='[UUID]'
 
 # Show 'extension_2' instead of job_function (Viborg)
 VUE_APP_SHOW_EXTENSION_2_VIBORG=True
@@ -86,8 +89,8 @@ VUE_APP_REMOVE_PERSON_COUNT=True
 # Remove children count
 VUE_APP_REMOVE_CHILDREN_COUNT=True
 
-# Remove specific engagement type by UUID
-VUE_APP_REMOVE_ENGAGEMENT_TYPE_UUID=SOME_ENGAGEMENT_TYPE_UUID
+# Remove engagements by engagement_type_uuid
+VUE_APP_REMOVE_ENGAGEMENT_TYPE_UUID='[UUID]'
 
 # Remove manager engagements from engagements list (only use this with engagements, will fail with associations)
 VUE_APP_REMOVE_MANAGER_ENGAGEMENT=true

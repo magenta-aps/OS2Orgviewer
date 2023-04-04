@@ -1,6 +1,6 @@
 import Vue from "vue"
 import { postQuery } from "../http/http.js"
-import { convertToArray } from "../../helpers.js"
+import { convertToArray, convertToBoolean } from "../../helpers.js"
 
 const setParentOrgUnitVisibility = function (parent_uuid) {
   let new_parent = state.org_units[parent_uuid]
@@ -36,9 +36,12 @@ const onLoadEndHandler = function (route) {
 
 const state = {
   root_uuid: OC_GLOBAL_CONF.VUE_APP_ROOT_UUID,
-  org_unit_hierarchy_uuids: OC_GLOBAL_CONF.VUE_ORG_UNIT_HIERARCHY_UUIDS,
+  org_unit_hierarchy_uuids: convertToArray(OC_GLOBAL_CONF.VUE_ORG_UNIT_HIERARCHY_UUIDS),
   org_units: {},
   tree_is_loading: false,
+  hide_org_unit_uuids: convertToArray(OC_GLOBAL_CONF.VUE_APP_HIDE_ORG_UNIT_UUIDS),
+  hide_manager_org_units: convertToArray(OC_GLOBAL_CONF.VUE_APP_HIDE_MANAGER_ORG_UNITS),
+  hide_org_unit_levels: convertToArray(OC_GLOBAL_CONF.VUE_APP_HIDE_ORG_UNIT_LEVELS),
 }
 
 const getters = {
@@ -126,12 +129,6 @@ const actions = {
   fetchOrgUnitsInTree: ({ rootState }, uuids) => {
     let by_association = rootState.relation_type === "association" ? true : false
 
-    // Remove any single or double quotes, `[` and `]` and spaces. Now we have a string of UUIDs seperated by comma.
-    // Then split() by comma(,), which gives an array of uuids.
-    let hierarchies_filter = rootState.org_unit_hierarchy_uuids
-      ? convertToArray(rootState.org_unit_hierarchy_uuids)
-      : null
-
     return postQuery({
       query: `
       query GetOrgUnitsInTree($uuids: [UUID!], $hierarchies: [UUID!], $by_association: Boolean!) {
@@ -164,50 +161,32 @@ const actions = {
     `,
       variables: {
         uuids: uuids,
-        hierarchies: hierarchies_filter,
+        hierarchies: rootState.org_unit_hierarchy_uuids,
         by_association: by_association,
       },
     }).then((res) => {
       if (!res) {
         return []
       }
-
-      if (OC_GLOBAL_CONF.VUE_APP_HIDE_ORG_UNIT_UUIDS) {
-        res["org_units"] = res["org_units"].filter((org) => {
-          if (OC_GLOBAL_CONF.VUE_APP_HIDE_ORG_UNIT_UUIDS.includes(org.uuid)) {
-            return false
-          }
-          return true
-        })
+      if (state.hide_org_unit_uuids) {
+        res["org_units"] = res["org_units"].filter(
+          (org) => !state.hide_org_unit_uuids.includes(org.uuid)
+        )
       }
-      // TODO: FIX THIS CODE AFTER WE FIXED ENV VARIABLES
-      // https://redmine.magenta-aps.dk/issues/54117
-      // Remove org_units with names that has `_leder`, `Ø_`, `_adm`, `_COVID` or `_vikar` in it
-      if (OC_GLOBAL_CONF.VUE_APP_HIDE_MANAGER_ORG_UNITS == "true") {
-        // Since VUE can't understand lists from docker-compose, I'm manually removing these
-        let substrings = ["_leder", "Ø_", "_adm", "_COVID", "_vikar"]
-        res["org_units"] = res["org_units"].filter((org) => {
-          for (let i = 0; i < substrings.length; i++) {
-            if (org.objects[0].name.includes(substrings[i])) {
-              return false
-            }
-          }
-          return true
-        })
-      }
-
-      // Remove specific org_unit_levels from orgviewer
-      if (OC_GLOBAL_CONF.VUE_APP_HIDE_ORG_UNIT_LEVELS) {
-        res["org_units"] = res["org_units"].filter((org) => {
-          if (
-            OC_GLOBAL_CONF.VUE_APP_HIDE_ORG_UNIT_LEVELS.includes(
-              org.objects[0].org_unit_level_uuid
+      if (state.hide_manager_org_units) {
+        res["org_units"] = res["org_units"].filter(
+          (org) =>
+            !state.hide_manager_org_units.some((substring) =>
+              org.objects[0].name.includes(substring)
             )
-          ) {
-            return false
-          }
-          return true
-        })
+        )
+      }
+
+      if (state.hide_org_unit_levels) {
+        res["org_units"] = res["org_units"].filter(
+          (org) =>
+            !state.hide_org_unit_levels.includes(org.objects[0].org_unit_level_uuid)
+        )
       }
 
       return res["org_units"].map((org) => {

@@ -25,6 +25,7 @@
 
 <script>
 import PersonLite from "./PersonLite.vue"
+import { convertToArray } from "../../helpers"
 
 export default {
   components: {
@@ -33,7 +34,9 @@ export default {
   data: function () {
     return {
       relation_type: this.$store.state.relation_type,
-      remove_engagement_type_uuid: OC_GLOBAL_CONF.VUE_APP_REMOVE_ENGAGEMENT_TYPE_UUID,
+      remove_engagement_type_uuid: convertToArray(
+        OC_GLOBAL_CONF.VUE_APP_REMOVE_ENGAGEMENT_TYPE_UUID
+      ),
     }
   },
   props: ["people"],
@@ -43,12 +46,10 @@ export default {
     },
     updated_people: function () {
       let self = this
-      let updated_people_list = self.people.filter((person) => {
-        if (person.engagement_type_uuid == self.remove_engagement_type_uuid) {
-          return false
-        }
-        return true
-      })
+      let updated_people_list = self.people.filter(
+        (person) =>
+          !self.remove_engagement_type_uuid.includes(person.engagement_type_uuid)
+      )
       return updated_people_list
     },
   },

@@ -55,6 +55,7 @@
 <script>
 import Vue from "vue"
 import { ajax } from "../http/http.js"
+import { convertToBoolean } from "../../helpers"
 
 export default {
   data: function () {
@@ -64,8 +65,12 @@ export default {
       timeout: null,
       relation_type: this.$store.state.relation_type,
       global_org_uuid: null,
-      use_autocomplete_api: OC_GLOBAL_CONF.VUE_APP_USE_AUTOCOMPLETE_API,
-      remove_root_from_search: OC_GLOBAL_CONF.VUE_APP_REMOVE_SCOPE_FROM_SEARCH,
+      use_autocomplete_api: convertToBoolean(
+        OC_GLOBAL_CONF.VUE_APP_USE_AUTOCOMPLETE_API
+      ),
+      remove_root_from_search: convertToBoolean(
+        OC_GLOBAL_CONF.VUE_APP_REMOVE_SCOPE_FROM_SEARCH
+      ),
     }
   },
   computed: {
@@ -97,6 +102,7 @@ export default {
       let employee_url = ""
       let org_unit_url = ""
       let root = this.remove_root_from_search ? "" : `&root=${this.root_uuid}`
+      console.log(root)
       if (this.relation_type === "association") {
         search_associated = "associated=true"
       } else {
@@ -105,6 +111,7 @@ export default {
       if (!this.use_autocomplete_api) {
         employee_url = `/service/o/${this.global_org_uuid}/e/?query=${this.query}&${search_associated}`
         org_unit_url = `/service/o/${this.global_org_uuid}/ou/?query=${this.query}${root}`
+        console.log(org_unit_url)
       } else {
         employee_url = `/service/e/autocomplete/?query=${this.query}&${search_associated}`
         org_unit_url = `/service/ou/autocomplete/?query=${this.query}&${search_associated}`
