@@ -52,12 +52,16 @@
 </template>
 
 <script>
+import { convertToBoolean } from "../../helpers"
+
 export default {
   props: ["person"],
   data: function () {
     return {
       relation_type: this.$store.state.relation_type,
-      show_extension_2: OC_GLOBAL_CONF.VUE_APP_SHOW_EXTENSION_2_VIBORG,
+      show_extension_2: convertToBoolean(
+        OC_GLOBAL_CONF.VUE_APP_SHOW_EXTENSION_2_VIBORG
+      ),
     }
   },
   computed: {

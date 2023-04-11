@@ -32,7 +32,7 @@ replace_org_unit_hierarchy_uuids() {
     exit 1
   fi
   # NOTE: single quotes are necessary around $(...) since the value may contain JSON
-  sed "s#VUE_ORG_UNIT_HIERARCHY_UUIDS: \".*\"#VUE_ORG_UNIT_HIERARCHY_UUIDS: '${GLOBAL_ORG_UNIT_HIERARCHY_UUIDS}'#g" -i $index_file
+  sed "s#VUE_ORG_UNIT_HIERARCHY_UUIDS: \".*\"#VUE_ORG_UNIT_HIERARCHY_UUIDS: '${VUE_APP_ORG_UNIT_HIERARCHY_UUIDS}'#g" -i $index_file
 }
 
 replace_global_app_title() {

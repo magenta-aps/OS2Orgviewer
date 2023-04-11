@@ -97,6 +97,7 @@ import AddressList from "../address/AddressList.vue"
 import EngagementList from "./Engagements.vue"
 import WorkAddress from "../address/WorkAddress.vue"
 import Store from "../../store.js"
+import { convertToBoolean } from "../../helpers"
 
 export default {
   components: {
@@ -108,7 +109,9 @@ export default {
   data: function () {
     return {
       relation_type: this.$store.state.relation_type,
-      show_extension_2: OC_GLOBAL_CONF.VUE_APP_SHOW_EXTENSION_2_VIBORG,
+      show_extension_2: convertToBoolean(
+        OC_GLOBAL_CONF.VUE_APP_SHOW_EXTENSION_2_VIBORG
+      ),
     }
   },
   computed: {

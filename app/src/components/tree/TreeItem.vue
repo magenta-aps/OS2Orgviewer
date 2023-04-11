@@ -32,6 +32,7 @@
 import OrgLite from "../organisation/OrganisationLite.vue"
 import ExpandToggle from "./ExpandToggle.vue"
 import RootSetToggle from "./RootSetToggle.vue"
+import { convertToArray } from "../../helpers"
 
 export default {
   name: "tree-item",
@@ -41,6 +42,13 @@ export default {
     RootSetToggle,
   },
   props: ["uuid"],
+  data: function () {
+    return {
+      sort_specific_units_silkeborg: convertToArray(
+        OC_GLOBAL_CONF.VUE_APP_SORT_SPECIFIC_UNITS_SILKEBORG
+      ),
+    }
+  },
   computed: {
     org_unit: function () {
       return this.$store.getters.getTreeOrgUnit(this.uuid)
@@ -51,12 +59,12 @@ export default {
       return org_unit.children.sort((x, y) => {
         let a = x.name.toUpperCase(),
           b = y.name.toUpperCase()
-        // Specific sort, which puts 2 units at the bottom
-        if (OC_GLOBAL_CONF.VUE_APP_SORT_SPECIFIC_UNITS_SILKEBORG) {
-          if (a == "MIDTJYSK BRAND & REDNING" || a == "FORSYNINGSAFDELINGEN") {
+        // Sort specific org_units to end of list
+        if (this.sort_specific_units_silkeborg) {
+          if (this.sort_specific_units_silkeborg.includes(x.uuid)) {
             return 1
           }
-          if (b == "MIDTJYSK BRAND & REDNING" || b == "FORSYNINGSAFDELINGEN") {
+          if (this.sort_specific_units_silkeborg.includes(y.uuid)) {
             return -1
           }
         }

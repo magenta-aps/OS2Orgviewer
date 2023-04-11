@@ -4,6 +4,7 @@ import Vuex from "vuex"
 import person from "./components/person/person-store.js"
 import organisation from "./components/organisation/organisation-store.js"
 import tree from "./components/tree/tree-store.js"
+import { convertToArray } from "./helpers.js"
 
 Vue.use(Vuex)
 
@@ -24,7 +25,9 @@ export default new Vuex.Store({
     global_root_uuid: OC_GLOBAL_CONF.VUE_APP_ROOT_UUID
       ? OC_GLOBAL_CONF.VUE_APP_ROOT_UUID
       : false,
-    org_unit_hierarchy_uuids: OC_GLOBAL_CONF.VUE_ORG_UNIT_HIERARCHY_UUIDS,
+    org_unit_hierarchy_uuids: convertToArray(
+      OC_GLOBAL_CONF.VUE_APP_ORG_UNIT_HIERARCHY_UUIDS
+    ),
   },
   getters: {
     isLoading: (state) => {

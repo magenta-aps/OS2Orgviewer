@@ -18,6 +18,7 @@
 
 <script>
 import Vue from "vue"
+import { convertToArray, convertToBoolean } from "../../helpers"
 
 export default {
   props: ["orgUnit"],
@@ -28,8 +29,10 @@ export default {
   },
   data: function () {
     return {
-      hide_person_count: OC_GLOBAL_CONF.VUE_APP_REMOVE_PERSON_COUNT,
-      remove_engagement_type_uuid: OC_GLOBAL_CONF.VUE_APP_REMOVE_ENGAGEMENT_TYPE_UUID,
+      hide_person_count: convertToBoolean(OC_GLOBAL_CONF.VUE_APP_REMOVE_PERSON_COUNT),
+      remove_engagement_type_uuid: convertToArray(
+        OC_GLOBAL_CONF.VUE_APP_REMOVE_ENGAGEMENT_TYPE_UUID
+      ),
     }
   },
   watch: {
@@ -56,12 +59,12 @@ export default {
       } else if (org_unit.engagements) {
         let eng = org_unit.engagements
         if (this.remove_engagement_type_uuid) {
-          eng = eng.filter((engagement) => {
-            if (engagement.engagement_type_uuid == this.remove_engagement_type_uuid) {
-              return false
-            }
-            return true
-          })
+          eng = eng.filter(
+            (engagement) =>
+              !this.remove_engagement_type_uuid.includes(
+                engagement.engagement_type_uuid
+              )
+          )
         }
         str += eng.length
         if (Number(str) === 1) {

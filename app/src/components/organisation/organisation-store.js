@@ -1,6 +1,6 @@
 import Vue from "vue"
 import { postQuery, ajax } from "../http/http.js"
-import { convertToArray } from "../../helpers.js"
+import { convertToArray, convertToBoolean } from "../../helpers.js"
 
 const sortAssociations = function (people) {
   let unsorted_persons = []
@@ -70,20 +70,22 @@ const sortByName = function (people) {
 
 const state = {
   org_unit: null,
+  remove_manager_engagement: convertToBoolean(
+    OC_GLOBAL_CONF.VUE_APP_REMOVE_MANAGER_ENGAGEMENT
+  ),
 }
 
 const getters = {
   getOrgUnitData: (state) => {
     if (
-      OC_GLOBAL_CONF.VUE_APP_REMOVE_MANAGER_ENGAGEMENT &&
+      state.remove_manager_engagement &&
       state.org_unit &&
       state.org_unit.managers.length
     ) {
-      state.org_unit.engagements = state.org_unit.engagements.filter((engagement) => {
-        return !(
-          engagement.employee[0].uuid == state.org_unit.managers[0].employee[0].uuid
-        )
-      })
+      state.org_unit.engagements = state.org_unit.engagements.filter(
+        (engagement) =>
+          !(engagement.employee[0].uuid === state.org_unit.managers[0].employee[0].uuid)
+      )
     }
     return state.org_unit
   },
@@ -111,12 +113,6 @@ const actions = {
   },
   fetchOrgUnitData: ({ commit, rootState }, org_unit_uuid) => {
     let by_association = rootState.relation_type === "association" ? true : false
-
-    // Remove any single or double quotes, `[` and `]` and spaces. Now we have a string of UUIDs seperated by comma.
-    // Then split() by comma(,), which gives an array of uuids.
-    let hierarchies_filter = rootState.org_unit_hierarchy_uuids
-      ? convertToArray(rootState.org_unit_hierarchy_uuids)
-      : null
 
     postQuery({
       query: `
@@ -190,7 +186,7 @@ const actions = {
     `,
       variables: {
         uuid: org_unit_uuid,
-        hierarchies: hierarchies_filter,
+        hierarchies: rootState.org_unit_hierarchy_uuids,
         by_association: by_association,
       },
     }).then((res) => {

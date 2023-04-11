@@ -68,6 +68,7 @@
 
 <script>
 import DawaAddress from "./Address.vue"
+import { convertToBoolean } from "../../helpers"
 
 export default {
   components: {
@@ -76,7 +77,9 @@ export default {
   props: ["addresses"],
   data: function () {
     return {
-      remove_org_unit_email: OC_GLOBAL_CONF.VUE_APP_REMOVE_ORG_UNIT_EMAIL,
+      remove_org_unit_email: convertToBoolean(
+        OC_GLOBAL_CONF.VUE_APP_REMOVE_ORG_UNIT_EMAIL
+      ),
     }
   },
 }
