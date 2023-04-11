@@ -66,7 +66,7 @@ VUE_APP_FAVICON_PATH=path-to-favicon/favicon.ico
 VUE_APP_HIDE_ORG_UNIT_UUIDS='[UUID]'
 
 # List of strings that will remove org_units with the string in it's name
-VUE_APP_HIDE_MANAGER_ORG_UNITS='[string]'
+VUE_APP_HIDE_ORG_UNITS_BY_NAME='[string]'
 
 # List of org_unit_levels to hide in the tree-view
 VUE_APP_HIDE_ORG_UNIT_LEVELS='[UUID]'
@@ -75,7 +75,7 @@ VUE_APP_HIDE_ORG_UNIT_LEVELS='[UUID]'
 VUE_APP_USE_AUTOCOMPLETE_API=False
 
 # Sort specific org_units to bottom of tree by UUID
-VUE_APP_SORT_SPECIFIC_UNITS_SILKEBORG='[UUID]'
+VUE_APP_SORT_SPECIFIC_UNITS_TO_BOTTOM='[UUID]'
 
 # Show 'extension_2' instead of job_function (Viborg)
 VUE_APP_SHOW_EXTENSION_2_VIBORG=True

@@ -36,11 +36,13 @@ const onLoadEndHandler = function (route) {
 
 const state = {
   root_uuid: OC_GLOBAL_CONF.VUE_APP_ROOT_UUID,
-  org_unit_hierarchy_uuids: convertToArray(OC_GLOBAL_CONF.VUE_ORG_UNIT_HIERARCHY_UUIDS),
+  org_unit_hierarchy_uuids: convertToArray(
+    OC_GLOBAL_CONF.VUE_APP_ORG_UNIT_HIERARCHY_UUIDS
+  ),
   org_units: {},
   tree_is_loading: false,
   hide_org_unit_uuids: convertToArray(OC_GLOBAL_CONF.VUE_APP_HIDE_ORG_UNIT_UUIDS),
-  hide_manager_org_units: convertToArray(OC_GLOBAL_CONF.VUE_APP_HIDE_MANAGER_ORG_UNITS),
+  hide_org_units_by_name: convertToArray(OC_GLOBAL_CONF.VUE_APP_HIDE_ORG_UNITS_BY_NAME),
   hide_org_unit_levels: convertToArray(OC_GLOBAL_CONF.VUE_APP_HIDE_ORG_UNIT_LEVELS),
 }
 
@@ -173,10 +175,10 @@ const actions = {
           (org) => !state.hide_org_unit_uuids.includes(org.uuid)
         )
       }
-      if (state.hide_manager_org_units) {
+      if (state.hide_org_units_by_name) {
         res["org_units"] = res["org_units"].filter(
           (org) =>
-            !state.hide_manager_org_units.some((substring) =>
+            !state.hide_org_units_by_name.some((substring) =>
               org.objects[0].name.includes(substring)
             )
         )
