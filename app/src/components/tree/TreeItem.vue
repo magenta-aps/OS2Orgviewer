@@ -44,8 +44,8 @@ export default {
   props: ["uuid"],
   data: function () {
     return {
-      sort_specific_units_silkeborg: convertToArray(
-        OC_GLOBAL_CONF.VUE_APP_SORT_SPECIFIC_UNITS_SILKEBORG
+      sort_specific_units_to_bottom: convertToArray(
+        OC_GLOBAL_CONF.VUE_APP_SORT_SPECIFIC_UNITS_TO_BOTTOM
       ),
     }
   },
@@ -60,11 +60,11 @@ export default {
         let a = x.name.toUpperCase(),
           b = y.name.toUpperCase()
         // Sort specific org_units to end of list
-        if (this.sort_specific_units_silkeborg) {
-          if (this.sort_specific_units_silkeborg.includes(x.uuid)) {
+        if (this.sort_specific_units_to_bottom) {
+          if (this.sort_specific_units_to_bottom.includes(x.uuid)) {
             return 1
           }
-          if (this.sort_specific_units_silkeborg.includes(y.uuid)) {
+          if (this.sort_specific_units_to_bottom.includes(y.uuid)) {
             return -1
           }
         }
