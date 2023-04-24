@@ -96,7 +96,6 @@ export default {
   margin: 0;
   text-overflow: ellipsis;
   overflow: hidden;
-  white-space: wrap;
 }
 
 .oc-org-link-count {

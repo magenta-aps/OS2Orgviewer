@@ -10,23 +10,23 @@
     ----------------
 
     ----------------
-    Secondary color (lys blå)
-    #00838f
-    RGB 0 131 143
+    Secondary color (lys grå)
+    #DDDDDE
+    RGB 221 221 222
     ----------------
 
     ----------------
     Accent color (rød)
     #bb304a
-    RGB 187 48 75
+    RGB 187 48 74
     -----------------
 */
 
 :root {
   /* Holstebro colors defined above */
   --primary-color-holstebro: rgb(0, 88, 125);
-  --secondary-color-holstebro: rgb(0, 131, 143);
-  --accent-color-holstebro: rgb(187, 48, 75);
+  --secondary-color-holstebro: rgb(221, 221, 222);
+  --accent-color-holstebro: rgb(187, 48, 74);
 
   /* Org-viewer variables */
   --primary-color: var(
@@ -64,4 +64,18 @@
 
 .oc-org-link-count {
   opacity: 1 !important;
+}
+
+button.inverse:active,
+button.inverse:focus {
+  background-color: var(--primary-color) !important;
+}
+
+button.inverse:hover {
+  background-color: var(--accent-color) !important;
+}
+
+.oc-org-link-title {
+  min-height: 5.6rem;
+  word-break: break-word;
 }
