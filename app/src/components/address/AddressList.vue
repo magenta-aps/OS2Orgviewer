@@ -11,13 +11,13 @@
                 -->
         <template
           v-if="
-            address.address_type.name === 'Dokumentaddresse' &&
+            address.address_type.name === 'Dokumentadresse' &&
             address.address_type.scope === 'WWW'
           "
         >
           <dt>Dokumenter</dt>
           <dd>
-            <a :href="address.value" target="_blank">Vis enhedens dokumenter</a>
+            <a :href="address.value" target="_blank">Udvalgets dokumenter</a>
           </dd>
         </template>
 
