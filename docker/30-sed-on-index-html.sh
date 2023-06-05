@@ -220,7 +220,7 @@ replace_favicon_path() {
     echo >&3 "$ME: ERROR: $index_file does not exist"
     exit 1
   fi
-  sed "s#<link href=\".*\" rel=\"icon\" >#<link href='${VUE_APP_FAVICON_PATH}' rel=\"icon\" >#g" -i $index_file
+  sed "s#VUE_APP_FAVICON_PATH: \".*\"#VUE_APP_FAVICON_PATH: '${VUE_APP_FAVICON_PATH}'#g" -i $index_file
 }
 
 replace_css_path() {

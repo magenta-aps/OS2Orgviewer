@@ -11,8 +11,6 @@
 
     <title><%= process.env.VUE_APP_TITLE %></title>
 
-    <link href="<%= process.env.VUE_APP_FAVICON_PATH %>" rel="icon" />
-
     <link
       id="oc-custom-style"
       href="<%= process.env.VUE_APP_THEME_CSS %>"
@@ -24,6 +22,7 @@
       var OC_GLOBAL_CONF = {
         VUE_APP_TITLE: "<%= process.env.VUE_APP_TITLE %>",
         VUE_APP_API_BASEURL: "<%= process.env.VUE_APP_API_BASEURL %>",
+        VUE_APP_FAVICON_PATH: "<%= process.env.VUE_APP_FAVICON_PATH %>",
         VUE_APP_ORG_PERSON_RELATION: "<%= process.env.VUE_APP_ORG_PERSON_RELATION %>",
         VUE_APP_LOGO_PATH: "<%= process.env.VUE_APP_LOGO_PATH %>",
         VUE_APP_TREE_LAYOUT: "<%= process.env.VUE_APP_TREE_LAYOUT %>",

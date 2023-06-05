@@ -90,6 +90,11 @@
 import OcHeader from "./components/layout/Header.vue"
 import LoadScreen from "./components/spinner/Loadscreen.vue"
 
+import Vue from "vue"
+import VueHead from "vue-head"
+
+Vue.use(VueHead)
+
 export default {
   name: "App",
   components: {
@@ -140,6 +145,13 @@ export default {
   mounted: function () {
     this.checkRootOrgUuid(this.global_root_uuid)
     this.checkFirstLoad()
+  },
+
+  // TODO: Maybe we should make more use of vuehead, rather than using index.html
+  head: {
+    link: function () {
+      return [{ rel: "icon", href: OC_GLOBAL_CONF.VUE_APP_FAVICON_PATH, undo: false }]
+    },
   },
 }
 </script>
