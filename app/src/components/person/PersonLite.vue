@@ -4,9 +4,9 @@
       <template v-if="relation_type === 'association'">
         <dt>{{ person.association_type.name }}</dt>
       </template>
-      <!-- Show `extension_2` instead of job_function for Viborg -->
-      <template v-else-if="show_extension_2">
-        <dt>{{ person.extension_2 }}</dt>
+      <!-- Show `extension_3` instead of job_function for Viborg -->
+      <template v-else-if="show_extension_3">
+        <dt>{{ person.extension_3 }}</dt>
       </template>
       <template v-else>
         <dt>{{ person.job_function.name }}</dt>
@@ -59,8 +59,8 @@ export default {
   data: function () {
     return {
       relation_type: this.$store.state.relation_type,
-      show_extension_2: convertToBoolean(
-        OC_GLOBAL_CONF.VUE_APP_SHOW_EXTENSION_2_VIBORG
+      show_extension_3: convertToBoolean(
+        OC_GLOBAL_CONF.VUE_APP_SHOW_EXTENSION_3_VIBORG
       ),
     }
   },

@@ -66,7 +66,7 @@ const actions = {
           job_function {
             name
           }
-          extension_2
+          extension_3
         }
       }
     `,
