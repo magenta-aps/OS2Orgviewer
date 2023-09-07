@@ -18,6 +18,7 @@ export default new Vuex.Store({
     loading: false,
     access_token: undefined,
     global_api_url: OC_GLOBAL_CONF.VUE_APP_API_BASEURL,
+    keycloak_client_id: OC_GLOBAL_CONF.KEYCLOAK_CLIENT_ID,
     keycloak_client_secret: OC_GLOBAL_CONF.KEYCLOAK_CLIENT_SECRET,
     relation_type: OC_GLOBAL_CONF.VUE_APP_ORG_PERSON_RELATION
       ? OC_GLOBAL_CONF.VUE_APP_ORG_PERSON_RELATION

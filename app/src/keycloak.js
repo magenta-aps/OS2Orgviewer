@@ -1,11 +1,11 @@
 import store from "./store.js"
 
-const clientId = "orgviewer"
 const realm = "mo"
 
 export async function initKeycloak() {
   async function refreshToken() {
     const url = `${store.state.global_api_url}/auth`
+    const clientId = store.state.keycloak_client_id
     const clientSecret = store.state.keycloak_client_secret
 
     const keycloak_url = `${url}/realms/${realm}/protocol/openid-connect/token`
