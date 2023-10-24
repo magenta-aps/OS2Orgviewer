@@ -3,11 +3,37 @@
 
 version: '3.4'
 services:
+  integrationbuilder:
+    image: magentaaps/os2mo-keycloak-integration-builder:4.4.1
+    environment:
+      # Postgres state connection
+      POSTGRES_CONNECTION_STRING: "postgres://keycloak:keycloak@keycloak-db/keycloak?sslmode=disable"
+      POSTGRES_SCHEMA_NAME: terraform_remote_state_orgviewer
+
+      # Keycloak REST connection
+      TF_VAR_admin_password: admin
+      TF_VAR_url: "http://keycloak:8080"
+
+      # Configuration of the client
+      TF_VAR_client_name: "orgviewer_med"
+      TF_VAR_client_secret: "30303030-3030-3030-3030-303030303030"
+      TF_VAR_client_uuid: "04c71e70-baad-c0de-6F72-677669657761"
+
+      TF_VAR_client_roles: '["reader"]'
+      TF_VAR_client_standard_flow_enabled: 'true'
+      TF_VAR_client_valid_redirect_urls: '["*"]'
+      TF_VAR_client_web_origins: '["*"]'
+    networks:
+      - os2mo_default
+
   orgviewer:
     build:
       context: .
       dockerfile: docker/Dockerfile
     environment:
+      KEYCLOAK_CLIENT_ID: "orgviewer_med"
+      KEYCLOAK_CLIENT_SECRET: "30303030-3030-3030-3030-303030303030"
+
       GLOBAL_API_URL: http://localhost:5000
       GLOBAL_API_ROOT_UUID: "f06ee470-9f17-566f-acbe-e938112d46d9"
       # Loenorganisation
@@ -31,10 +57,16 @@ services:
       # VUE_APP_REMOVE_ENGAGEMENT_TYPE_UUID: '["8acc5743-044b-4c82-9bb9-4e572d82b524"]'
       # VUE_APP_REMOVE_MANAGER_ENGAGEMENT: "true"
       # VUE_APP_REMOVE_SCOPE_FROM_SEARCH: "true"
-      KEYCLOAK_CLIENT_ID: "orgviewer_med"
-      KEYCLOAK_CLIENT_SECRET: "30303030-3030-3030-3030-303030303030"
       # VUE_APP_FAVICON_PATH: "https://www.frederikshavn.dk/Resources/images/favicon.ico"
       # VUE_APP_THEME_CSS: "frederikshavn.custom.css"
-
     ports:
       - "8083:80"
+    depends_on:
+      integrationbuilder:
+        condition: service_completed_successfully
+    networks:
+      - os2mo_default
+
+networks:
+  os2mo_default:
+    external: true
