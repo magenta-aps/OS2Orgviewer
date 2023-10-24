@@ -74,6 +74,9 @@ VUE_APP_HIDE_ORG_UNIT_LEVELS='[UUID]'
 # True or False, use autocomplete API (for extended search)
 VUE_APP_USE_AUTOCOMPLETE_API=False
 
+# True or False, use GraphQL-based searching (for extended search)
+VUE_APP_USE_GRAPHQL_SEARCH=False
+
 # Sort specific org_units to bottom of tree by UUID
 VUE_APP_SORT_SPECIFIC_UNITS_TO_BOTTOM='[UUID]'
 
