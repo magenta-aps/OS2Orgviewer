@@ -113,8 +113,8 @@ export default {
         org_unit_url = `/service/o/${this.global_org_uuid}/ou/?query=${this.query}${root}`
         console.log(org_unit_url)
       } else {
-        employee_url = `/service/e/autocomplete/?query=${this.query}&${search_associated}`
-        org_unit_url = `/service/ou/autocomplete/?query=${this.query}&${search_associated}`
+        employee_url = `/service/e/autocomplete/?query=${this.query}`
+        org_unit_url = `/service/ou/autocomplete/?query=${this.query}`
       }
       ajax(employee_url).then((person_res) => {
         ajax(org_unit_url).then((org_res) => {
