@@ -98,4 +98,9 @@ VUE_APP_REMOVE_MANAGER_ENGAGEMENT=true
 # Remove "scope" from org_unit search
 VUE_APP_REMOVE_SCOPE_FROM_SEARCH=true
 
+# The keycloak client ID
+VUE_APP_KEYCLOAK_CLIENT_ID="orgviewer_med"
+
+# The keycloak client secret
+VUE_APP_KEYCLOAK_CLIENT_ID="30303030-3030-3030-3030-303030303030"
 ```

@@ -4,6 +4,9 @@ set -e
 
 ME=$(basename $0)
 
+VUE_APP_KEYCLOAK_CLIENT_ID=${KEYCLOAK_CLIENT_ID:-${VUE_APP_KEYCLOAK_CLIENT_ID}}
+VUE_APP_KEYCLOAK_CLIENT_SECRET=${KEYCLOAK_CLIENT_SECRET:-${VUE_APP_KEYCLOAK_CLIENT_SECRET}}
+
 replace_global_url() {
   local index_file="/usr/share/nginx/html/index.html"
 
@@ -210,7 +213,7 @@ replace_keycloak_client_id() {
     echo >&3 "$ME: ERROR: $index_file does not exist"
     exit 1
   fi
-  sed "s#KEYCLOAK_CLIENT_ID: \".*\"#KEYCLOAK_CLIENT_ID: '${KEYCLOAK_CLIENT_ID}'#g" -i $index_file
+  sed "s#VUE_APP_KEYCLOAK_CLIENT_ID: \".*\"#VUE_APP_KEYCLOAK_CLIENT_ID: '${VUE_APP_KEYCLOAK_CLIENT_ID}'#g" -i $index_file
 }
 
 replace_keycloak_client_secret() {
@@ -220,7 +223,7 @@ replace_keycloak_client_secret() {
     echo >&3 "$ME: ERROR: $index_file does not exist"
     exit 1
   fi
-  sed "s#KEYCLOAK_CLIENT_SECRET: \".*\"#KEYCLOAK_CLIENT_SECRET: '${KEYCLOAK_CLIENT_SECRET}'#g" -i $index_file
+  sed "s#VUE_APP_KEYCLOAK_CLIENT_SECRET: \".*\"#VUE_APP_KEYCLOAK_CLIENT_SECRET: '${VUE_APP_KEYCLOAK_CLIENT_SECRET}'#g" -i $index_file
 }
 
 replace_favicon_path() {
