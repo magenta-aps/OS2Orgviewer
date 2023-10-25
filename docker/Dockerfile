@@ -6,7 +6,7 @@
 # Labs as required approval to your MR if you have any changes.                #
 ################################################################################
 
-FROM node:14 AS builder
+FROM node:14 AS development
 
 WORKDIR /code/frontend
 
@@ -17,9 +17,9 @@ RUN npm ci
 
 # Copy in and build source
 COPY app ./
-
 RUN npm run build
 
+CMD ["npm", "run", "serve"]
 
 FROM nginx:1-alpine AS dist
 LABEL org.opencontainers.image.title="OS2OrgViewer" \
@@ -34,4 +34,4 @@ RUN chmod 775 /docker-entrypoint.d/25-symlink-html.sh
 COPY ./docker/30-sed-on-index-html.sh /docker-entrypoint.d/30-sed-on-index-html.sh
 RUN chmod 775 /docker-entrypoint.d/30-sed-on-index-html.sh
 
-COPY --from=builder ./code/dist /code/dist
+COPY --from=development ./code/dist /code/dist
