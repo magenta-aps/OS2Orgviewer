@@ -96,10 +96,10 @@ function getExternal(url) {
     })
 }
 
-function postQuery(query) {
+function postQuery(query, version = 3) {
   startSpin()
 
-  return authFetch(`${api_url}/graphql/v3`, {
+  return authFetch(`${api_url}/graphql/v${version}`, {
     method: "POST",
     mode: "cors",
     credentials: "same-origin",
