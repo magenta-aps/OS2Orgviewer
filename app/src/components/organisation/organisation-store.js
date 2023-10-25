@@ -106,11 +106,6 @@ const mutations = {
 }
 
 const actions = {
-  fetchOrgUnitAddresses: ({}, uuid) => {
-    return ajax(`/service/ou/${uuid}/details/address`).then((addresses) => {
-      return addresses
-    })
-  },
   fetchOrgUnitData: ({ commit, rootState }, org_unit_uuid) => {
     let by_association = rootState.relation_type === "association" ? true : false
 
