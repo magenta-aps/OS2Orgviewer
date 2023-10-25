@@ -7,6 +7,12 @@ ME=$(basename $0)
 VUE_APP_KEYCLOAK_CLIENT_ID=${KEYCLOAK_CLIENT_ID:-${VUE_APP_KEYCLOAK_CLIENT_ID}}
 VUE_APP_KEYCLOAK_CLIENT_SECRET=${KEYCLOAK_CLIENT_SECRET:-${VUE_APP_KEYCLOAK_CLIENT_SECRET}}
 
+VUE_APP_API_BASEURL=${GLOBAL_API_URL:-${VUE_APP_API_BASEURL}}
+VUE_APP_ROOT_UUID=${GLOBAL_API_ROOT_UUID:-${VUE_APP_ROOT_UUID}}
+VUE_APP_ORG_PERSON_RELATION=${GLOBAL_ORG_PERSON_RELATION:-${VUE_APP_ORG_PERSON_RELATION}}
+VUE_APP_TITLE=${GLOBAL_APP_TITLE:-${VUE_APP_TITLE}}
+
+
 replace_global_url() {
   local index_file="/usr/share/nginx/html/index.html"
 
@@ -14,7 +20,7 @@ replace_global_url() {
     echo >&3 "$ME: ERROR: $index_file does not exist"
     exit 1
   fi
-  sed "s#VUE_APP_API_BASEURL: \".*\"#VUE_APP_API_BASEURL: '${GLOBAL_API_URL}'#g" -i $index_file
+  sed "s#VUE_APP_API_BASEURL: \".*\"#VUE_APP_API_BASEURL: '${VUE_APP_API_BASEURL}'#g" -i $index_file
 }
 
 replace_global_root_uuid() {
@@ -24,7 +30,7 @@ replace_global_root_uuid() {
     echo >&3 "$ME: ERROR: $index_file does not exist"
     exit 1
   fi
-  sed "s#VUE_APP_ROOT_UUID: \".*\"#VUE_APP_ROOT_UUID: '${GLOBAL_API_ROOT_UUID}'#g" -i $index_file
+  sed "s#VUE_APP_ROOT_UUID: \".*\"#VUE_APP_ROOT_UUID: '${VUE_APP_ROOT_UUID}'#g" -i $index_file
 }
 
 replace_org_unit_hierarchy_uuids() {
@@ -46,9 +52,9 @@ replace_global_app_title() {
     exit 1
   fi
   # Check if variable is set, regardless of empty or not
-  if [ ! -z "${GLOBAL_APP_TITLE+x}" ]; then
-    sed "s#VUE_APP_TITLE: \".*\"#VUE_APP_TITLE: '${GLOBAL_APP_TITLE}'#g" -i $index_file
-    sed "s#<title>.*</title>#<title>${GLOBAL_APP_TITLE}</title>#g" -i $index_file
+  if [ ! -z "${VUE_APP_TITLE+x}" ]; then
+    sed "s#VUE_APP_TITLE: \".*\"#VUE_APP_TITLE: '${VUE_APP_TITLE}'#g" -i $index_file
+    sed "s#<title>.*</title>#<title>${VUE_APP_TITLE}</title>#g" -i $index_file
   fi
 
 }
@@ -60,7 +66,7 @@ replace_global_replace_org_person_relation() {
     echo >&3 "$ME: ERROR: $index_file does not exist"
     exit 1
   fi
-  sed "s#VUE_APP_ORG_PERSON_RELATION: \".*\"#VUE_APP_ORG_PERSON_RELATION: '${GLOBAL_ORG_PERSON_RELATION}'#g" -i $index_file
+  sed "s#VUE_APP_ORG_PERSON_RELATION: \".*\"#VUE_APP_ORG_PERSON_RELATION: '${VUE_APP_ORG_PERSON_RELATION}'#g" -i $index_file
 }
 
 replace_tree_layout() {

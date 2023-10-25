@@ -30,19 +30,21 @@ services:
     build:
       context: .
       dockerfile: docker/Dockerfile
+      # target: development build the dynamically reloading
+      target: development
     environment:
       VUE_APP_KEYCLOAK_CLIENT_ID: "orgviewer_med"
       VUE_APP_KEYCLOAK_CLIENT_SECRET: "30303030-3030-3030-3030-303030303030"
 
-      GLOBAL_API_URL: http://localhost:5000
-      GLOBAL_API_ROOT_UUID: "f06ee470-9f17-566f-acbe-e938112d46d9"
+      VUE_APP_API_BASEURL: http://localhost:5000
+      VUE_APP_ROOT_UUID: "f06ee470-9f17-566f-acbe-e938112d46d9"
       # Loenorganisation
-      # GLOBAL_API_ROOT_UUID: "fb2d158f-114e-5f67-8365-2c520cf10b58"
-      # GLOBAL_ORG_PERSON_RELATION: "association"
+      # VUE_APP_ROOT_UUID: "fb2d158f-114e-5f67-8365-2c520cf10b58"
+      # VUE_APP_ORG_PERSON_RELATION: "association"
 
       # VUE_APP_ORG_UNIT_HIERARCHY_UUIDS: '["abbbefb2-85a6-4a5d-ad94-98a363adfee6", "418b313a-979f-4a26-807e-ba8dd3114d74"]'
-      # GLOBAL_APP_TITLE: "Andeby Kommune"
-      # GLOBAL_ORG_PERSON_RELATION: "engagement"
+      # VUE_APP_TITLE: "Andeby Kommune"
+      # VUE_APP_ORG_PERSON_RELATION: "engagement"
       # VUE_APP_TREE_LAYOUT: "hybrid"
       # VUE_APP_LOGO_PATH: "https://frederikshavn.dk/Resources/images/frk_logo_blue.svg"
       # VUE_APP_HIDE_ORG_UNIT_UUIDS: '["b6c11152-0645-4712-a207-ba2c53b391ab", "7a8e45f7-4de0-44c8-990f-43c0565ee505"]'
@@ -59,8 +61,15 @@ services:
       # VUE_APP_REMOVE_SCOPE_FROM_SEARCH: "true"
       # VUE_APP_FAVICON_PATH: "https://www.frederikshavn.dk/Resources/images/favicon.ico"
       # VUE_APP_THEME_CSS: "frederikshavn.custom.css"
+    volumes:
+      # To reload on file changes, we mount the current folder into `/code`.
+      # However we do not want node_modules on the host machine, so we create
+      # an additional volume for it.
+      - ./app:/code/frontend
+      - /code/frontend/node_modules
     ports:
-      - "8083:80"
+      - "8083:8652"
+      # - "8083:80"  # for dist target
     depends_on:
       integrationbuilder:
         condition: service_completed_successfully
