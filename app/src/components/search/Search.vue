@@ -17,35 +17,37 @@
         {{ results.length }} søgeresultater
       </h3>
       <ul class="oc-search-list">
-        <li v-if="!use_autocomplete_api" v-for="res in results" :key="res.uuid">
-          <router-link v-if="res.givenname" :to="`/person/${res.uuid}`">
-            <span class="label">Person</span><br />
-            {{ res.name }}
-          </router-link>
-          <router-link v-else :to="`/orgunit/${res.uuid}`">
-            <span class="label">Enhed</span><br />
-            {{ res.name }}
-          </router-link>
-        </li>
-        <li v-if="use_autocomplete_api" v-for="res in results" :key="res.uuid">
-          <router-link v-if="res.path" :to="`/orgunit/${res.uuid}`">
-            <span class="label">Enhed</span>
-            <br />
-            {{ res.name }}
-            <br />
-            <span v-for="attr in res.attrs" v-if="attr.title == 'Telefon'">
-              {{ attr.value }}
-            </span>
-          </router-link>
-          <router-link v-else :to="`/person/${res.uuid}`">
-            <span class="label">Person</span>
-            <br />
-            <span>{{ res.name }}</span>
-            <br />
-            <span v-for="attr in res.attrs" v-if="attr.title == 'Telefon'">
-              {{ attr.value }}
-            </span>
-          </router-link>
+        <li v-for="res in results" :key="res.uuid">
+          <div v-if="use_autocomplete_api">
+            <router-link v-if="res.path" :to="`/orgunit/${res.uuid}`">
+              <span class="label">Enhed</span>
+              <br />
+              {{ res.name }}
+              <br />
+              <span v-for="attr in res.attrs" v-if="attr.title == 'Telefon'">
+                {{ attr.value }}
+              </span>
+            </router-link>
+            <router-link v-else :to="`/person/${res.uuid}`">
+              <span class="label">Person</span>
+              <br />
+              <span>{{ res.name }}</span>
+              <br />
+              <span v-for="attr in res.attrs" v-if="attr.title == 'Telefon'">
+                {{ attr.value }}
+              </span>
+            </router-link>
+          </div>
+          <div v-else>
+            <router-link v-if="res.givenname" :to="`/person/${res.uuid}`">
+              <span class="label">Person</span><br />
+              {{ res.name }}
+            </router-link>
+            <router-link v-else :to="`/orgunit/${res.uuid}`">
+              <span class="label">Enhed</span><br />
+              {{ res.name }}
+            </router-link>
+          </div>
         </li>
       </ul>
     </div>
@@ -97,28 +99,22 @@ export default {
       }
     },
     search: function () {
-      let search_res = []
-      let search_associated = ""
-      let employee_url = ""
-      let org_unit_url = ""
-      let root = this.remove_root_from_search ? "" : `&root=${this.root_uuid}`
-      console.log(root)
+      let search_associated = "associated=false"
       if (this.relation_type === "association") {
         search_associated = "associated=true"
-      } else {
-        search_associated = "associated=false"
       }
+
+      let employee_url = `/service/e/autocomplete/?query=${this.query}&${search_associated}`
+      let org_unit_url = `/service/ou/autocomplete/?query=${this.query}&${search_associated}`
       if (!this.use_autocomplete_api) {
+        let root = this.remove_root_from_search ? "" : `&root=${this.root_uuid}`
         employee_url = `/service/o/${this.global_org_uuid}/e/?query=${this.query}&${search_associated}`
         org_unit_url = `/service/o/${this.global_org_uuid}/ou/?query=${this.query}${root}`
-        console.log(org_unit_url)
-      } else {
-        employee_url = `/service/e/autocomplete/?query=${this.query}`
-        org_unit_url = `/service/ou/autocomplete/?query=${this.query}`
       }
+
       ajax(employee_url).then((person_res) => {
         ajax(org_unit_url).then((org_res) => {
-          search_res = person_res.items.concat(org_res.items)
+          let search_res = person_res.items.concat(org_res.items)
           this.results = search_res.sort(function (a, b) {
             return a.name > b.name
           })
