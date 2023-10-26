@@ -132,6 +132,16 @@ replace_use_autocomplete_api() {
   sed "s#VUE_APP_USE_AUTOCOMPLETE_API: \".*\"#VUE_APP_USE_AUTOCOMPLETE_API: '${VUE_APP_USE_AUTOCOMPLETE_API}'#g" -i $index_file
 }
 
+replace_use_graphql_search() {
+  local index_file="/usr/share/nginx/html/index.html"
+
+  if [ ! -f $index_file ]; then
+    echo >&3 "$ME: ERROR: $index_file does not exist"
+    exit 1
+  fi
+  sed "s#VUE_APP_USE_GRAPHQL_SEARCH: \".*\"#VUE_APP_USE_GRAPHQL_SEARCH: '${VUE_APP_USE_GRAPHQL_SEARCH}'#g" -i $index_file
+}
+
 replace_sort_specific_units_to_bottom() {
   local index_file="/usr/share/nginx/html/index.html"
 
@@ -263,6 +273,7 @@ replace_hide_org_unit_uuids
 replace_hide_org_units_by_name
 replace_hide_org_unit_levels
 replace_use_autocomplete_api
+replace_use_graphql_search
 replace_sort_specific_units_to_bottom
 replace_show_extension_3_viborg
 replace_remove_org_unit_email

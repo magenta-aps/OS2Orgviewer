@@ -17,35 +17,37 @@
         {{ results.length }} søgeresultater
       </h3>
       <ul class="oc-search-list">
-        <li v-if="!use_autocomplete_api" v-for="res in results" :key="res.uuid">
-          <router-link v-if="res.givenname" :to="`/person/${res.uuid}`">
-            <span class="label">Person</span><br />
-            {{ res.name }}
-          </router-link>
-          <router-link v-else :to="`/orgunit/${res.uuid}`">
-            <span class="label">Enhed</span><br />
-            {{ res.name }}
-          </router-link>
-        </li>
-        <li v-if="use_autocomplete_api" v-for="res in results" :key="res.uuid">
-          <router-link v-if="res.path" :to="`/orgunit/${res.uuid}`">
-            <span class="label">Enhed</span>
-            <br />
-            {{ res.name }}
-            <br />
-            <span v-for="attr in res.attrs" v-if="attr.title == 'Telefon'">
-              {{ attr.value }}
-            </span>
-          </router-link>
-          <router-link v-else :to="`/person/${res.uuid}`">
-            <span class="label">Person</span>
-            <br />
-            <span>{{ res.name }}</span>
-            <br />
-            <span v-for="attr in res.attrs" v-if="attr.title == 'Telefon'">
-              {{ attr.value }}
-            </span>
-          </router-link>
+        <li v-for="res in results" :key="res.uuid">
+          <div v-if="use_autocomplete_api || use_graphql_search">
+            <router-link v-if="res.path" :to="`/orgunit/${res.uuid}`">
+              <span class="label">Enhed</span>
+              <br />
+              {{ res.name }}
+              <br />
+              <span v-for="attr in res.attrs" v-if="attr.title == 'Telefon'">
+                {{ attr.value }}
+              </span>
+            </router-link>
+            <router-link v-else :to="`/person/${res.uuid}`">
+              <span class="label">Person</span>
+              <br />
+              <span>{{ res.name }}</span>
+              <br />
+              <span v-for="attr in res.attrs" v-if="attr.title == 'Telefon'">
+                {{ attr.value }}
+              </span>
+            </router-link>
+          </div>
+          <div v-else>
+            <router-link v-if="res.givenname" :to="`/person/${res.uuid}`">
+              <span class="label">Person</span><br />
+              {{ res.name }}
+            </router-link>
+            <router-link v-else :to="`/orgunit/${res.uuid}`">
+              <span class="label">Enhed</span><br />
+              {{ res.name }}
+            </router-link>
+          </div>
         </li>
       </ul>
     </div>
@@ -55,6 +57,7 @@
 <script>
 import Vue from "vue"
 import { ajax } from "../http/http.js"
+import { postQuery } from "../http/http.js"
 import { convertToBoolean } from "../../helpers"
 
 export default {
@@ -65,6 +68,7 @@ export default {
       timeout: null,
       relation_type: this.$store.state.relation_type,
       global_org_uuid: null,
+      use_graphql_search: convertToBoolean(OC_GLOBAL_CONF.VUE_APP_USE_GRAPHQL_SEARCH),
       use_autocomplete_api: convertToBoolean(
         OC_GLOBAL_CONF.VUE_APP_USE_AUTOCOMPLETE_API
       ),
@@ -96,29 +100,126 @@ export default {
         this.debounce(this.search, 300)()
       }
     },
+    graphql_search: function () {
+      let employee_search_query = `
+      query EmployeesSearch($filter: EmployeeFilter) {
+        employees(filter: $filter) {
+          objects {
+            current {
+              uuid
+              name
+
+              addresses {
+                value
+                address_type {
+                  scope
+                }
+                visibility {
+                  scope
+                }
+              }
+            }
+          }
+        }
+      }`
+      let orgunit_search_query = `
+      query OrgUnitsSearch($filter: OrganisationUnitFilter) {
+        org_units(filter: $filter) {
+          objects {
+            current {
+              uuid
+              name
+
+              addresses {
+                value
+                address_type {
+                  scope
+                }
+                visibility {
+                  scope
+                }
+              }
+            }
+          }
+        }
+      }`
+      function gen_attrs(addresses) {
+        // Filter non-phone number addresses, and private addresses
+        // TODO: These filters should be done in GraphQL
+        let phone_numbers = addresses.filter(
+          (address) => address.address_type.scope == "PHONE"
+        )
+        let public_phone_numbers = phone_numbers.filter(
+          (phone) =>
+            phone.visibility.scope == "INTERNAL" || phone.visibility.scope == "PUBLIC"
+        )
+        // Generate a fake structure for the template
+        // TODO: Remove this by adjusting template once only GraphQL search is deployed
+        return public_phone_numbers.map((phone) => ({
+          title: "Telefon",
+          value: phone.value,
+        }))
+      }
+      return postQuery(
+        { query: employee_search_query, variables: { filter: { query: this.query } } },
+        19
+      ).then((person_res) => {
+        return postQuery(
+          { query: orgunit_search_query, variables: { filter: { query: this.query } } },
+          19
+        ).then((org_res) => {
+          // Extract current value
+          let people = person_res.employees.objects.map((value) => value.current)
+          // Adds phone numbers
+          people = people.map(({ addresses, ...rest }) => ({
+            ...rest,
+            attrs: gen_attrs(addresses),
+          }))
+
+          // Extract current value
+          let orgs = org_res.org_units.objects.map((value) => value.current)
+          // Add a fake path to inform template that this is an org-unit
+          // TODO: Remove this by adjusting template once only GraphQL search is deployed
+          orgs = orgs.map((value) => ({ ...value, path: true }))
+          // Adds phone numbers
+          orgs = orgs.map(({ addresses, ...rest }) => ({
+            ...rest,
+            attrs: gen_attrs(addresses),
+          }))
+
+          let search_res = people.concat(orgs)
+          this.results = search_res.sort(function (a, b) {
+            return a.name > b.name
+          })
+          Vue.nextTick(() => {
+            if (search_res.length > 0) {
+              document.querySelector(".oc-search-results-header").focus()
+            }
+          })
+        })
+      })
+    },
     search: function () {
-      let search_res = []
-      let search_associated = ""
-      let employee_url = ""
-      let org_unit_url = ""
-      let root = this.remove_root_from_search ? "" : `&root=${this.root_uuid}`
-      console.log(root)
+      if (this.use_graphql_search) {
+        return this.graphql_search()
+      }
+
+      let search_associated = "associated=false"
       if (this.relation_type === "association") {
         search_associated = "associated=true"
-      } else {
-        search_associated = "associated=false"
       }
+
+      let employee_url = `/service/e/autocomplete/?query=${this.query}&${search_associated}`
+      let org_unit_url = `/service/ou/autocomplete/?query=${this.query}&${search_associated}`
       if (!this.use_autocomplete_api) {
+        let root = this.remove_root_from_search ? "" : `&root=${this.root_uuid}`
         employee_url = `/service/o/${this.global_org_uuid}/e/?query=${this.query}&${search_associated}`
         org_unit_url = `/service/o/${this.global_org_uuid}/ou/?query=${this.query}${root}`
-        console.log(org_unit_url)
-      } else {
-        employee_url = `/service/e/autocomplete/?query=${this.query}`
-        org_unit_url = `/service/ou/autocomplete/?query=${this.query}`
       }
+
       ajax(employee_url).then((person_res) => {
         ajax(org_unit_url).then((org_res) => {
-          search_res = person_res.items.concat(org_res.items)
+          let search_res = person_res.items.concat(org_res.items)
           this.results = search_res.sort(function (a, b) {
             return a.name > b.name
           })
@@ -131,9 +232,11 @@ export default {
       })
     },
     getGlobalOrg: function () {
-      ajax("/service/o/").then((org) => {
-        this.global_org_uuid = org[0].uuid
-      })
+      if (!this.use_graphql_search) {
+        ajax("/service/o/").then((org) => {
+          this.global_org_uuid = org[0].uuid
+        })
+      }
     },
     navigateToPerson: function (person_uuid) {
       this.$store.dispatch("fetchPerson", person_uuid)
