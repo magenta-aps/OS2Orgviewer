@@ -1,18 +1,22 @@
 # SPDX-FileCopyrightText: 2019-2020 Magenta ApS
 # SPDX-License-Identifier: MPL-2.0
+default:
+  # All jobs are interruptible by default
+  interruptible: true
+
+variables:
+  IMAGE_SHA: ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHA}
+  RELEASE_REGISTRY_IMAGE: index.docker.io/magentaaps/os2orgviewer
+
+  PRODUCT: os2mo
+  COMPONENT: orgviewer
 
 stages:
+  - sync
   - lint
   - build
   - release
   - deploy
-
-variables:
-  RELEASE_REGISTRY: docker.io
-  RELEASE_REGISTRY_IMAGE: index.docker.io/magentaaps/os2orgviewer
-  IMAGE_SHA: ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHA}
-  DOCKERFILE: ${CI_PROJECT_DIR}/docker/Dockerfile
-
 
 # Conditions
 #############
@@ -40,111 +44,29 @@ workflow:
 
 include:
   - project: 'labs/salt-automation'
-    ref: 'master'
-    file: '/gitlab-ci-templates/common/autopub.v1.yml'
-  - project: 'labs/salt-automation'
-    ref: 'master'
-    file: '/gitlab-ci-templates/common/docker-build.v1.yml'
-  - project: 'labs/salt-automation'
-    ref: 'master'
-    file: '/gitlab-ci-templates/common/docker-release.v1.yml'
-  - project: 'labs/salt-automation'
-    ref: 'master'
-    file: '/gitlab-ci-templates/common/config-updater-meta.v1.yml'
-  - project: 'labs/salt-automation'
-    ref: 'master'
-    file: 'gitlab-ci-templates/common/pre-commit.v1.yml'
+    file:
+      - gitlab-ci-templates/common/no-interrupt.v1.yml
+      - gitlab-ci-templates/common/conventional-commits.v1.yml
+      - gitlab-ci-templates/common/docker-build-meta.v2.yml
+      - gitlab-ci-templates/common/docker-release.v1.yml
+      - gitlab-ci-templates/common/config-updater-salt.v1.yml
+      - gitlab-ci-templates/common/config-updater-flux.v1.yml
+  - project: labs/salt-automation
+    file: gitlab-ci-templates/common/pre-commit.v1.yml
     rules:
       - <<: *if-merge-request
 
 
-# Lint
-#######
-.lint-base:
-  stage: lint
-  needs: []
-  image: python:3.11
-  rules:
-    - <<: *if-merge-request
-
-Lint Dockerfiles:
-  extends: .lint-base
-  image: hadolint/hadolint:latest-debian
-  before_script:
-    - apt-get -y update
-    - apt-get -y install --no-install-recommends git
-  script:
-    - git ls-files --exclude='Dockerfile*' --ignored | xargs --max-lines=1 hadolint
-
-
 # Build
-########
-.build-base:
-  stage: build
-  needs: []
-  image:
-    name: gcr.io/kaniko-project/executor:${KANIKO_VERSION}
-    entrypoint: [""]
-
-.build:release-image:
+#######
+Build:
   extends:
-    - .build-base
+    - .build-docker
+  variables:
+    DOCKERFILE: ${CI_PROJECT_DIR}/docker/Dockerfile
+    CI_IMAGE: ${IMAGE_SHA}
+    BUILD_DOCKER_EXTRA_FLAGS: --build-arg=COMMIT_SHA=${CI_COMMIT_SHA} --build-arg=COMMIT_TAG=${CI_COMMIT_TAG}
   rules:
     - <<: *if-schedule
       when: never
     - when: on_success
-
-Build:
-  extends: .build:release-image
-  # TODO: Use gitlab-ci-templates/common/docker-build-meta.v1.yml instead
-  script:
-    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
-    - /kaniko/executor
-      --cache
-      --context=$CI_PROJECT_DIR
-      --dockerfile=$CI_PROJECT_DIR/docker/Dockerfile
-      --destination=${IMAGE_SHA}
-      --build-arg=COMMIT_TAG=${CI_COMMIT_TAG}
-
-
-# Deploy
-#########
-# Flux
-Deploy to Flux Dev:
-  extends: .release-to-dev
-  needs:
-    - Release version
-  variables:
-    ENDPOINT: os2mo/flux/orgviewer/update-dev
-
-Deploy to Flux Test:
-  extends: .release-to-test
-  needs: []
-  variables:
-    ENDPOINT: os2mo/flux/orgviewer/update-test
-
-Deploy to Flux Prod:
-  extends: .release-to-prod
-  needs: []
-  variables:
-    ENDPOINT: os2mo/flux/orgviewer/update-prod
-
-# Salt
-Deploy to Salt Dev:
-  extends: .release-to-dev
-  needs:
-    - Release version
-  variables:
-    ENDPOINT: os2mo/salt/orgviewer/update-dev
-
-Deploy to Salt Test:
-  extends: .release-to-test
-  needs: []
-  variables:
-    ENDPOINT: os2mo/salt/orgviewer/update-test
-
-Deploy to Salt Prod:
-  extends: .release-to-prod
-  needs: []
-  variables:
-    ENDPOINT: os2mo/salt/orgviewer/update-prod
