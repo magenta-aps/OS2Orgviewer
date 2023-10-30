@@ -122,26 +122,6 @@ replace_hide_org_unit_levels() {
   sed "s#VUE_APP_HIDE_ORG_UNIT_LEVELS: \".*\"#VUE_APP_HIDE_ORG_UNIT_LEVELS: '${VUE_APP_HIDE_ORG_UNIT_LEVELS}'#g" -i $index_file
 }
 
-replace_use_autocomplete_api() {
-  local index_file="/usr/share/nginx/html/index.html"
-
-  if [ ! -f $index_file ]; then
-    echo >&3 "$ME: ERROR: $index_file does not exist"
-    exit 1
-  fi
-  sed "s#VUE_APP_USE_AUTOCOMPLETE_API: \".*\"#VUE_APP_USE_AUTOCOMPLETE_API: '${VUE_APP_USE_AUTOCOMPLETE_API}'#g" -i $index_file
-}
-
-replace_use_graphql_search() {
-  local index_file="/usr/share/nginx/html/index.html"
-
-  if [ ! -f $index_file ]; then
-    echo >&3 "$ME: ERROR: $index_file does not exist"
-    exit 1
-  fi
-  sed "s#VUE_APP_USE_GRAPHQL_SEARCH: \".*\"#VUE_APP_USE_GRAPHQL_SEARCH: '${VUE_APP_USE_GRAPHQL_SEARCH}'#g" -i $index_file
-}
-
 replace_sort_specific_units_to_bottom() {
   local index_file="/usr/share/nginx/html/index.html"
 
@@ -212,16 +192,6 @@ replace_remove_manager_engagement() {
   sed "s#VUE_APP_REMOVE_MANAGER_ENGAGEMENT: \".*\"#VUE_APP_REMOVE_MANAGER_ENGAGEMENT: '${VUE_APP_REMOVE_MANAGER_ENGAGEMENT}'#g" -i $index_file
 }
 
-replace_remove_scope_from_search() {
-  local index_file="/usr/share/nginx/html/index.html"
-
-  if [ ! -f $index_file ]; then
-    echo >&3 "$ME: ERROR: $index_file does not exist"
-    exit 1
-  fi
-  sed "s#VUE_APP_REMOVE_SCOPE_FROM_SEARCH: \".*\"#VUE_APP_REMOVE_SCOPE_FROM_SEARCH: '${VUE_APP_REMOVE_SCOPE_FROM_SEARCH}'#g" -i $index_file
-}
-
 replace_keycloak_client_id() {
   local index_file="/usr/share/nginx/html/index.html"
 
@@ -272,8 +242,6 @@ replace_logo_path
 replace_hide_org_unit_uuids
 replace_hide_org_units_by_name
 replace_hide_org_unit_levels
-replace_use_autocomplete_api
-replace_use_graphql_search
 replace_sort_specific_units_to_bottom
 replace_show_extension_3_viborg
 replace_remove_org_unit_email
@@ -281,7 +249,6 @@ replace_remove_person_count
 replace_remove_children_count
 replace_remove_engagement_type_uuid
 replace_remove_manager_engagement
-replace_remove_scope_from_search
 replace_keycloak_client_id
 replace_keycloak_client_secret
 replace_favicon_path

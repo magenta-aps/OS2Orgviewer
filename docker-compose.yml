@@ -50,8 +50,6 @@ services:
       # VUE_APP_HIDE_ORG_UNIT_UUIDS: '["b6c11152-0645-4712-a207-ba2c53b391ab", "7a8e45f7-4de0-44c8-990f-43c0565ee505"]'
       # VUE_APP_HIDE_ORG_UNITS_BY_NAME: '["_leder", "Ø_", "_adm", "_COVID", "_vikar"]'
       # VUE_APP_HIDE_ORG_UNIT_LEVELS: '["abbbefb2-85a6-4a5d-ad94-98a363adfee6", "418b313a-979f-4a26-807e-ba8dd3114d74"]'
-      # VUE_APP_USE_AUTOCOMPLETE_API: "true"
-      VUE_APP_USE_GRAPHQL_SEARCH: "true"
       # VUE_APP_SORT_SPECIFIC_UNITS_TO_BOTTOM: '["b6c11152-0645-4712-a207-ba2c53b391ab", "7a8e45f7-4de0-44c8-990f-43c0565ee505"]'
       # VUE_APP_SHOW_EXTENSION_3_VIBORG: "true"
       # VUE_APP_REMOVE_ORG_UNIT_EMAIL: "true"
@@ -59,7 +57,6 @@ services:
       # VUE_APP_REMOVE_CHILDREN_COUNT: "true"
       # VUE_APP_REMOVE_ENGAGEMENT_TYPE_UUID: '["8acc5743-044b-4c82-9bb9-4e572d82b524"]'
       # VUE_APP_REMOVE_MANAGER_ENGAGEMENT: "true"
-      # VUE_APP_REMOVE_SCOPE_FROM_SEARCH: "true"
       # VUE_APP_FAVICON_PATH: "https://www.frederikshavn.dk/Resources/images/favicon.ico"
       # VUE_APP_THEME_CSS: "frederikshavn.custom.css"
     volumes:

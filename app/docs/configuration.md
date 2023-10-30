@@ -71,12 +71,6 @@ VUE_APP_HIDE_ORG_UNITS_BY_NAME='[string]'
 # List of org_unit_levels to hide in the tree-view
 VUE_APP_HIDE_ORG_UNIT_LEVELS='[UUID]'
 
-# True or False, use autocomplete API (for extended search)
-VUE_APP_USE_AUTOCOMPLETE_API=False
-
-# True or False, use GraphQL-based searching (for extended search)
-VUE_APP_USE_GRAPHQL_SEARCH=False
-
 # Sort specific org_units to bottom of tree by UUID
 VUE_APP_SORT_SPECIFIC_UNITS_TO_BOTTOM='[UUID]'
 
@@ -97,9 +91,6 @@ VUE_APP_REMOVE_ENGAGEMENT_TYPE_UUID='[UUID]'
 
 # Remove manager engagements from engagements list (only use this with engagements, will fail with associations)
 VUE_APP_REMOVE_MANAGER_ENGAGEMENT=true
-
-# Remove "scope" from org_unit search
-VUE_APP_REMOVE_SCOPE_FROM_SEARCH=true
 
 # The keycloak client ID
 VUE_APP_KEYCLOAK_CLIENT_ID="orgviewer_med"
