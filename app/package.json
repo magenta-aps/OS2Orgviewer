@@ -7,7 +7,8 @@
     "serve": "vue-cli-service serve --port 8652",
     "build": "vue-cli-service build --dest ../dist/",
     "test": "testcafe chrome tests/*.js --baseurl http://localhost:8652",
-    "headlesstest": "testcafe chrome:headless tests/*.js --baseurl http://localhost:8652"
+    "headlesstest": "testcafe chrome:headless tests/*.js --baseurl http://localhost:8652",
+    "test-ci": "testcafe chromium:headless tests/*.js --baseurl http://orgviewer:8652"
   },
   "dependencies": {
     "core-js": "^3.21.1",

@@ -5,6 +5,7 @@ default:
   interruptible: true
 
 variables:
+  DEV_IMAGE_SHA: ${CI_REGISTRY_IMAGE}/dev:${CI_COMMIT_SHA}
   IMAGE_SHA: ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHA}
   RELEASE_REGISTRY_IMAGE: index.docker.io/magentaaps/os2orgviewer
 
@@ -15,6 +16,7 @@ stages:
   - sync
   - lint
   - build
+  - test
   - release
   - deploy
 
@@ -70,3 +72,34 @@ Build:
     - <<: *if-schedule
       when: never
     - when: on_success
+
+Build Development:
+  extends:
+    - .build-docker
+  variables:
+    DOCKERFILE: ${CI_PROJECT_DIR}/docker/Dockerfile
+    CI_IMAGE: ${DEV_IMAGE_SHA}
+    TARGET: development
+  rules:
+    - <<: *if-merge-request
+
+
+# Test
+######
+Test:
+  stage: test
+  image: ${DEV_IMAGE_SHA}
+  before_script:
+    - apt-get update
+    - apt-get install -y chromium
+  script:
+    - cd app
+    - npm install
+    - npm run test-ci
+  services:
+    - name: ${IMAGE_SHA}
+      alias: orgviewer
+      variables:
+        VUE_APP_USE_GRAPHQL_SEARCH: "true"
+  rules:
+    - <<: *if-merge-request
