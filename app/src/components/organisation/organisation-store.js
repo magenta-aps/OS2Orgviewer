@@ -1,6 +1,6 @@
 import Vue from "vue"
-import { postQuery, ajax } from "../http/http.js"
-import { convertToArray, convertToBoolean } from "../../helpers.js"
+import { postQuery } from "../http/http.js"
+import { convertToBoolean } from "../../helpers.js"
 
 const sortAssociations = function (people) {
   let unsorted_persons = []

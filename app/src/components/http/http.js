@@ -10,12 +10,6 @@ const api_url = OC_GLOBAL_CONF.VUE_APP_API_BASEURL
   ? OC_GLOBAL_CONF.VUE_APP_API_BASEURL
   : "https://moratest.magenta.dk"
 
-const ajax_init = {
-  method: "GET",
-  credentials: "same-origin",
-  mode: "cors",
-}
-
 function authFetch(url, args) {
   function addAuthHeader(args) {
     if (args.headers === undefined) {
@@ -51,32 +45,6 @@ function stopSpin() {
     spinner.spinOff()
     store.commit("setLoading", false)
   }
-}
-
-function ajax(request, options) {
-  if (!options) {
-    options = {}
-  }
-  if (!options.silent) {
-    startSpin()
-  }
-  return authFetch(api_url + request, ajax_init)
-    .then((response) => {
-      return response.json()
-    })
-    .then((res) => {
-      if (!options.silent) {
-        stopSpin()
-      }
-      return res
-    })
-    .catch((err) => {
-      if (!options.silent) {
-        stopSpin()
-      }
-      console.error(err)
-      router.push("/error")
-    })
 }
 
 function getExternal(url) {
@@ -122,4 +90,4 @@ function postQuery(query, version = 3) {
     })
 }
 
-export { ajax, postQuery, getExternal }
+export { postQuery, getExternal }
