@@ -92,6 +92,9 @@ VUE_APP_REMOVE_ENGAGEMENT_TYPE_UUID='[UUID]'
 # Remove manager engagements from engagements list (only use this with engagements, will fail with associations)
 VUE_APP_REMOVE_MANAGER_ENGAGEMENT=true
 
+# Show all phone numbers, regardless of visibility
+VUE_APP_SHOW_PHONE_NUMBER_REGARDLESS_OF_VISIBILITY=true
+
 # The keycloak client ID
 VUE_APP_KEYCLOAK_CLIENT_ID="orgviewer_med"
 

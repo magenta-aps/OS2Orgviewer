@@ -59,6 +59,7 @@ services:
       # VUE_APP_REMOVE_MANAGER_ENGAGEMENT: "true"
       # VUE_APP_FAVICON_PATH: "https://www.frederikshavn.dk/Resources/images/favicon.ico"
       # VUE_APP_THEME_CSS: "frederikshavn.custom.css"
+      VUE_APP_SHOW_PHONE_NUMBER_REGARDLESS_OF_VISIBILITY: "true"
     volumes:
       # To reload on file changes, we mount the current folder into `/code`.
       # However we do not want node_modules on the host machine, so we create

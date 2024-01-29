@@ -48,6 +48,7 @@
 <script>
 import Vue from "vue"
 import { postQuery } from "../http/http.js"
+import { convertToBoolean } from "../../helpers"
 
 export default {
   data: function () {
@@ -56,6 +57,9 @@ export default {
       results: null,
       timeout: null,
       relation_type: this.$store.state.relation_type,
+      show_phone_number_regardless: convertToBoolean(
+        OC_GLOBAL_CONF.VUE_APP_SHOW_PHONE_NUMBER_REGARDLESS_OF_VISIBILITY
+      ),
     }
   },
   computed: {
@@ -161,11 +165,14 @@ export default {
       let phone_numbers = addresses.filter(
         (address) => address.address_type.scope == "PHONE"
       )
+      if (this.show_phone_number_regardless) {
+        return phone_numbers.map((phone) => phone.value)
+      }
       let public_phone_numbers = phone_numbers.filter(
         (phone) =>
           phone.visibility.scope == "INTERNAL" || phone.visibility.scope == "PUBLIC"
       )
-      // Exact the phone numbers themselves
+      // Extract the phone numbers themselves
       return public_phone_numbers.map((phone) => phone.value)
     },
     navigateToPerson: function (person_uuid) {
