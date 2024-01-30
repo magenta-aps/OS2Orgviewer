@@ -163,7 +163,10 @@ export default {
       )
       let public_phone_numbers = phone_numbers.filter(
         (phone) =>
-          phone.visibility.scope == "INTERNAL" || phone.visibility.scope == "PUBLIC"
+          // first check can be removed when: https://redmine.magenta.dk/issues/59440
+          phone.visibility == null ||
+          phone.visibility.scope == "INTERNAL" ||
+          phone.visibility.scope == "PUBLIC"
       )
       // Exact the phone numbers themselves
       return public_phone_numbers.map((phone) => phone.value)
