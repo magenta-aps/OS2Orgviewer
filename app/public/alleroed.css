@@ -1,0 +1,44 @@
+/*
+    =====================================================
+    Custom CSS variables and styles for Allerød kommune
+    =====================================================
+    --primary-color-alleroed: rgb(79, 79, 68)
+    --background-color-alleroed: rgb(0, 85, 102)
+
+*/
+
+:root {
+  /* This is used to calculate shades, this color is usually the background color */
+  --color: 190, 100%; /*the base color*/
+  --l: 20%; /*the initial lightness*/
+
+  --primary-color: rgb(
+    79,
+    79,
+    68
+  ) !important; /* Primary branding color for high visibility elements */
+  --secondary-color: #fff !important; /* Used for higlights and accents */
+
+  --background-color: hsl(
+    var(--color),
+    var(--l)
+  ) !important; /* Light color for dark backgrounds */
+
+  --shade-lighter: hsl(var(--color), calc(var(--l) + 10%)) !important;
+  --shade-light: hsl(var(--color), var(--l)) !important;
+  --shade-dark: hsl(var(--color), calc(var(--l) - 10%)) !important;
+  --shade-darker: hsl(var(--color), calc(var(--l) - 30%)) !important;
+
+  --shade-lighter: hsl(var(--color), calc(var(--l) + 10%)) !important;
+  --shade-light: hsl(var(--color), var(--l)) !important;
+  --shade-dark: hsl(var(--color), calc(var(--l) - 10%)) !important;
+  --shade-darker: hsl(var(--color), calc(var(--l) - 30%)) !important;
+
+  --font: 1em/1.4 Arial, sans-serif !important;
+}
+
+.oc-header-preaction img {
+  height: 2rem !important;
+  width: auto !important;
+  margin-left: 0.5rem;
+}
