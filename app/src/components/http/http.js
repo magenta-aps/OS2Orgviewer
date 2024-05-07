@@ -64,7 +64,7 @@ function getExternal(url) {
     })
 }
 
-function postQuery(query, version = 3) {
+function postQuery(query, version = 22) {
   startSpin()
 
   return authFetch(`${api_url}/graphql/v${version}`, {

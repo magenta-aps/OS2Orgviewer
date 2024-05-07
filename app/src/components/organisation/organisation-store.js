@@ -112,24 +112,26 @@ const actions = {
     postQuery({
       query: `
       query GetOrgUnit($uuid: [UUID!], $hierarchies: [UUID!], $by_association: Boolean!) {
-        org_units(uuids: $uuid, hierarchies: $hierarchies) {
-          uuid
+        org_units(filter: {uuids: $uuid, subtree: {hierarchy: {uuids: $hierarchies}}}) {
           objects {
-            name
-            addresses {
-              uuid
-              value
-              visibility {
-                name
-              }
-              address_type {
+            uuid
+            current {
+              name
+              addresses {
                 uuid
-                name
-                user_key
-                scope
+                value
+                visibility {
+                  name
+                }
+                address_type {
+                  uuid
+                  name
+                  user_key
+                  scope
+                }
               }
+              ...association_or_engagement
             }
-            ...association_or_engagement
           }
         }
       }
@@ -185,8 +187,8 @@ const actions = {
         by_association: by_association,
       },
     }).then((res) => {
-      let org_unit = res["org_units"][0].objects[0]
-      org_unit.uuid = res["org_units"][0].uuid
+      let org_unit = res["org_units"].objects[0].current
+      org_unit.uuid = res["org_units"].objects[0].uuid
       if (by_association) {
         org_unit.associations = sortAssociations(org_unit.associations)
       }
