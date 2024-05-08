@@ -155,21 +155,18 @@ export default {
           }
         }
       }`
-      return postQuery(
-        {
-          query: employee_search_query,
-          variables: {
-            engagement: engagement,
-            engagementFilter: filter,
-            associationFilter: filter,
-          },
+      return postQuery({
+        query: employee_search_query,
+        variables: {
+          engagement: engagement,
+          engagementFilter: filter,
+          associationFilter: filter,
         },
-        20
-      ).then((personRes) => {
-        return postQuery(
-          { query: orgunit_search_query, variables: { filter: { query: this.query } } },
-          20
-        ).then((orgRes) => {
+      }).then((personRes) => {
+        return postQuery({
+          query: orgunit_search_query,
+          variables: { filter: { query: this.query } },
+        }).then((orgRes) => {
           let people = personRes.engagements
             ? personRes.engagements.objects.flatMap((value) =>
                 value.current.person.map((person) => ({

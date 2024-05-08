@@ -20,23 +20,25 @@ const actions = {
     return postQuery({
       query: `
       query GetPerson($uuid: [UUID!], $by_association: Boolean!) {
-        employees(uuids: $uuid) {
-          uuid
+        employees(filter: {uuids: $uuid}) {
           objects {
-            name
-            addresses {
-              uuid
-              value
-              visibility {
-                name
-              }
-              address_type {
+            uuid
+            current {
+              name
+              addresses {
                 uuid
-                name
-                scope
+                value
+                visibility {
+                  name
+                }
+                address_type {
+                  uuid
+                  name
+                  scope
+                }
               }
+              ...association_or_engagement
             }
-            ...association_or_engagement
           }
         }
       }
@@ -75,8 +77,8 @@ const actions = {
         by_association: by_association,
       },
     }).then((res) => {
-      let person = res.employees[0].objects[0]
-      person.uuid = res.employees[0].uuid
+      let person = res.employees.objects[0].current
+      person.uuid = res.employees.objects[0].uuid
 
       commit("setPerson", person)
       return person
@@ -86,14 +88,16 @@ const actions = {
     return postQuery({
       query: `
       query getOrgUnitAddress($uuid: [UUID!]) {
-        employees(uuids: $uuid) {
+        employees(filter: {uuids: $uuid}) {
           objects {
-            engagements {
-              org_unit {
-                addresses {
-                  value
-                  address_type {
-                    name
+            current {
+              engagements {
+                org_unit {
+                  addresses {
+                    value
+                    address_type {
+                      name
+                    }
                   }
                 }
               }
@@ -104,7 +108,7 @@ const actions = {
     `,
       variables: { uuid: uuid },
     }).then((res) => {
-      return res.employees[0].objects[0].engagements[0].org_unit[0].addresses
+      return res.employees.objects[0].current.engagements[0].org_unit[0].addresses
     })
   },
 }

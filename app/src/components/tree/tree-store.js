@@ -130,23 +130,31 @@ const actions = {
   },
   fetchOrgUnitsInTree: ({ rootState }, uuids) => {
     let by_association = rootState.relation_type === "association" ? true : false
-
-    return postQuery({
-      query: `
+    // This whole if/else is needed, since having `subtree` in the query, will not work correctly, when `hierarchies` are not provided
+    let variables
+    let query
+    if (rootState.org_unit_hierarchy_uuids) {
+      query = `
       query GetOrgUnitsInTree($uuids: [UUID!], $hierarchies: [UUID!], $by_association: Boolean!) {
-        org_units(uuids: $uuids, hierarchies: $hierarchies) {
-          uuid
+        org_units(
+          filter: {uuids: $uuids, subtree: {hierarchy: {uuids: $hierarchies}}}
+        ) {
           objects {
-            parent {
-              uuid
-            }
-            children(hierarchies: $hierarchies) {
+            uuid
+            current {
+              parent {
+                uuid
+              }
+              children(filter: {subtree: {hierarchy: {uuids: $hierarchies}}}) {
+                name
+                uuid
+              }
               name
-              uuid
+              org_unit_level {
+                uuid
+              }
+              ...association_or_engagement
             }
-            name
-            org_unit_level_uuid
-            ...association_or_engagement
           }
         }
       }
@@ -160,39 +168,83 @@ const actions = {
           engagement_type_uuid
         }
       }
-    `,
-      variables: {
+    `
+      variables = {
         uuids: uuids,
         hierarchies: rootState.org_unit_hierarchy_uuids,
         by_association: by_association,
-      },
+      }
+    } else {
+      query = `
+      query GetOrgUnitsInTree($uuids: [UUID!], $by_association: Boolean!) {
+        org_units(
+          filter: {uuids: $uuids}
+        ) {
+          objects {
+            uuid
+            current {
+              parent {
+                uuid
+              }
+              children {
+                name
+                uuid
+              }
+              name
+              org_unit_level {
+                uuid
+              }
+              ...association_or_engagement
+            }
+          }
+        }
+      }
+
+      fragment association_or_engagement on OrganisationUnit {
+        associations @include(if: $by_association) {
+          uuid
+        }
+        engagements @skip(if: $by_association) {
+          uuid
+          engagement_type_uuid
+        }
+      }
+    `
+      variables = {
+        uuids: uuids,
+        by_association: by_association,
+      }
+    }
+
+    return postQuery({
+      query: query,
+      variables: variables,
     }).then((res) => {
       if (!res) {
         return []
       }
       if (state.hide_org_unit_uuids) {
-        res["org_units"] = res["org_units"].filter(
-          (org) => !state.hide_org_unit_uuids.includes(org.uuid)
+        res["org_units"]["objects"] = res["org_units"]["objects"].filter(
+          (org) => !state.hide_org_unit_uuids.includes(org.current.uuid)
         )
       }
       if (state.hide_org_units_by_name) {
-        res["org_units"] = res["org_units"].filter(
+        res["org_units"]["objects"] = res["org_units"]["objects"].filter(
           (org) =>
             !state.hide_org_units_by_name.some((substring) =>
-              org.objects[0].name.includes(substring)
+              org.current.name.includes(substring)
             )
         )
       }
 
       if (state.hide_org_unit_levels) {
-        res["org_units"] = res["org_units"].filter(
-          (org) =>
-            !state.hide_org_unit_levels.includes(org.objects[0].org_unit_level_uuid)
+        res["org_units"]["objects"] = res["org_units"]["objects"].filter(
+          (org) => !state.hide_org_unit_levels.includes(org.current.org_unit_level.uuid)
         )
       }
 
-      return res["org_units"].map((org) => {
-        let obj = org.objects[0]
+      return res["org_units"]["objects"].map((org) => {
+        let obj = org.current
         obj.uuid = org.uuid
         return obj
       })
