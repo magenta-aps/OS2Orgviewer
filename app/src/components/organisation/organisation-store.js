@@ -111,8 +111,8 @@ const actions = {
 
     postQuery({
       query: `
-      query GetOrgUnit($uuid: [UUID!], $hierarchies: [UUID!], $by_association: Boolean!) {
-        org_units(filter: {uuids: $uuid, subtree: {hierarchy: {uuids: $hierarchies}}}) {
+      query GetOrgUnit($uuid: [UUID!], $by_association: Boolean!) {
+        org_units(filter: {uuids: $uuid}) {
           objects {
             uuid
             current {
@@ -135,7 +135,6 @@ const actions = {
           }
         }
       }
-
       fragment association_or_engagement on OrganisationUnit {
         associations @include(if: $by_association) {
           substitute {
@@ -180,10 +179,9 @@ const actions = {
           extension_3
         }
       }
-    `,
+      `,
       variables: {
         uuid: org_unit_uuid,
-        hierarchies: rootState.org_unit_hierarchy_uuids,
         by_association: by_association,
       },
     }).then((res) => {

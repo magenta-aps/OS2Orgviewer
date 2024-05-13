@@ -132,92 +132,60 @@ const actions = {
     let by_association = rootState.relation_type === "association" ? true : false
     // This whole if/else is needed, since having `subtree` in the query, will not work correctly, when `hierarchies` are not provided
     let variables
-    let query
     if (rootState.org_unit_hierarchy_uuids) {
-      query = `
-      query GetOrgUnitsInTree($uuids: [UUID!], $hierarchies: [UUID!], $by_association: Boolean!) {
-        org_units(
-          filter: {uuids: $uuids, subtree: {hierarchy: {uuids: $hierarchies}}}
-        ) {
-          objects {
-            uuid
-            current {
-              parent {
-                uuid
-              }
-              children(filter: {subtree: {hierarchy: {uuids: $hierarchies}}}) {
-                name
-                uuid
-              }
-              name
-              org_unit_level {
-                uuid
-              }
-              ...association_or_engagement
-            }
-          }
-        }
-      }
-
-      fragment association_or_engagement on OrganisationUnit {
-        associations @include(if: $by_association) {
-          uuid
-        }
-        engagements @skip(if: $by_association) {
-          uuid
-          engagement_type_uuid
-        }
-      }
-    `
       variables = {
-        uuids: uuids,
-        hierarchies: rootState.org_unit_hierarchy_uuids,
+        filter: {
+          uuids: uuids,
+          subtree: { hierarchy: { uuids: rootState.org_unit_hierarchy_uuids } },
+        },
+        childFilter: {
+          subtree: { hierarchy: { uuids: rootState.org_unit_hierarchy_uuids } },
+        },
         by_association: by_association,
       }
     } else {
-      query = `
-      query GetOrgUnitsInTree($uuids: [UUID!], $by_association: Boolean!) {
-        org_units(
-          filter: {uuids: $uuids}
-        ) {
-          objects {
-            uuid
-            current {
-              parent {
-                uuid
-              }
-              children {
-                name
-                uuid
-              }
-              name
-              org_unit_level {
-                uuid
-              }
-              ...association_or_engagement
-            }
-          }
-        }
-      }
-
-      fragment association_or_engagement on OrganisationUnit {
-        associations @include(if: $by_association) {
-          uuid
-        }
-        engagements @skip(if: $by_association) {
-          uuid
-          engagement_type_uuid
-        }
-      }
-    `
       variables = {
-        uuids: uuids,
+        filter: {
+          uuids: uuids,
+        },
         by_association: by_association,
       }
     }
 
     return postQuery({
-      query: query,
+      query: `
+      query GetOrgUnitsInTree($filter: OrganisationUnitFilter!, $childFilter: ParentsBoundOrganisationUnitFilter, $by_association: Boolean!) {
+        org_units(filter: $filter) {
+          objects {
+            uuid
+            current {
+              parent {
+                uuid
+              }
+              children(filter: $childFilter) {
+                name
+                uuid
+              }
+              name
+              org_unit_level {
+                uuid
+              }
+              ...association_or_engagement
+            }
+          }
+        }
+      }
+
+      fragment association_or_engagement on OrganisationUnit {
+        associations @include(if: $by_association) {
+          uuid
+        }
+        engagements @skip(if: $by_association) {
+          uuid
+          engagement_type_uuid
+        }
+      }
+      `,
       variables: variables,
     }).then((res) => {
       if (!res) {
