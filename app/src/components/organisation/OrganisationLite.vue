@@ -10,6 +10,11 @@
       <span class="sr-only">Vis detaljer for </span>
       {{ orgUnit.name }}
     </p>
+    <template v-for="manager in orgUnit.managers">
+      <p class="oc-org-link-manager">
+        {{ manager.person[0].name }}
+      </p>
+    </template>
     <p class="oc-org-link-count" v-if="!hide_person_count">
       {{ displayPersonCount(orgUnit) }}
     </p>
@@ -48,6 +53,7 @@ export default {
   },
   methods: {
     displayPersonCount: function (org_unit) {
+      console.log(org_unit)
       let str = ""
       if (org_unit.associations) {
         str += org_unit.associations.length
@@ -92,6 +98,14 @@ export default {
 }
 
 .oc-org-link-title {
+  padding: 0;
+  margin: 0;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.oc-org-link-manager {
+  font-size: 0.8rem;
   padding: 0;
   margin: 0;
   text-overflow: ellipsis;

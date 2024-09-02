@@ -170,6 +170,11 @@ const actions = {
               org_unit_level {
                 uuid
               }
+              managers(inherit: true) {
+                person {
+                  name
+                }
+              }
               ...association_or_engagement
             }
           }
