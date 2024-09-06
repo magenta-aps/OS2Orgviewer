@@ -193,7 +193,7 @@ const actions = {
       }
       if (state.hide_org_unit_uuids) {
         res["org_units"]["objects"] = res["org_units"]["objects"].filter(
-          (org) => !state.hide_org_unit_uuids.includes(org.current.uuid)
+          (org) => !state.hide_org_unit_uuids.includes(org.uuid)
         )
       }
       if (state.hide_org_units_by_name) {
