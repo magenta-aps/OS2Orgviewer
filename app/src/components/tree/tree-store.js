@@ -207,7 +207,9 @@ const actions = {
 
       if (state.hide_org_unit_levels) {
         res["org_units"]["objects"] = res["org_units"]["objects"].filter(
-          (org) => !state.hide_org_unit_levels.includes(org.current.org_unit_level.uuid)
+          (org) =>
+            !org.current.org_unit_level?.uuid ||
+            !state.hide_org_unit_levels.includes(org.current.org_unit_level.uuid)
         )
       }
 
