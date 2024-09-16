@@ -9,9 +9,6 @@
     Hover override: rgb(110, 129, 136) !important;
 */
 
-/* Import google font(s) */
-@import url("https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;700&display=swap");
-
 :root {
   /* This is used to calculate shades, this color is usually the background color */
   --color: 200, 39.4%; /*the base color*/
@@ -36,8 +33,6 @@
   --shade-light: hsl(var(--color), var(--l)) !important;
   --shade-dark: hsl(var(--color), calc(var(--l) - 10%)) !important;
   --shade-darker: hsl(var(--color), calc(var(--l) - 30%)) !important;
-
-  --font: 1em/1.4 "Gothic A1", sans-serif !important;
 }
 
 /* Custom overrides according to #53521 */
