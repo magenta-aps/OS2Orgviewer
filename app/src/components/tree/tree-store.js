@@ -130,16 +130,16 @@ const actions = {
   },
   fetchOrgUnitsInTree: ({ rootState }, uuids) => {
     let by_association = rootState.relation_type === "association" ? true : false
-    // This whole if/else is needed, since having `subtree` in the query, will not work correctly, when `hierarchies` are not provided
+    // This whole if/else is needed, since having `descendant` in the query, will not work correctly, when `hierarchies` are not provided
     let variables
     if (rootState.org_unit_hierarchy_uuids) {
       variables = {
         filter: {
           uuids: uuids,
-          subtree: { hierarchy: { uuids: rootState.org_unit_hierarchy_uuids } },
+          descendant: { hierarchy: { uuids: rootState.org_unit_hierarchy_uuids } },
         },
         childFilter: {
-          subtree: { hierarchy: { uuids: rootState.org_unit_hierarchy_uuids } },
+          descendant: { hierarchy: { uuids: rootState.org_unit_hierarchy_uuids } },
         },
         by_association: by_association,
       }
