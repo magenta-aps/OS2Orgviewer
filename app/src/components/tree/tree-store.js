@@ -31,7 +31,7 @@ const setOrgUnitVisibility = function (route) {
 const onLoadEndHandler = function (route) {
   // This is the last thing we do when building Tree
   setOrgUnitVisibility(route)
-  mutations.setTreeLoadSTatus(state, false)
+  mutations.setTreeLoadStatus(state, false)
 }
 
 const state = {
@@ -84,21 +84,28 @@ const mutations = {
       state.org_units = new_orgs
     }
   },
-  setTreeLoadSTatus: (state, status_bool) => {
+  setTreeLoadStatus: (state, status_bool) => {
     state.tree_is_loading = status_bool
+  },
+  setChildrenForOrgUnit(state, { parentUuid, children }) {
+    const parentOrgUnit = state.org_units[parentUuid]
+    if (parentOrgUnit) {
+      Vue.set(parentOrgUnit, "children", children) // This ensures reactivity
+      parentOrgUnit.hasFetchedChildren = true
+    }
   },
 }
 const actions = {
   buildTree: ({ commit, state, dispatch }, { uuids, route }) => {
+    console.log("buildTree")
+
     // Assumes `uuids` is an array
+    commit("setTreeLoadStatus", true)
 
-    commit("setTreeLoadSTatus", true)
-
-    const uuid_set = new Set(uuids) // Creating a Set removes duplicate uuids
+    const uuid_set = new Set(uuids)
     let uuid_array = []
     uuid_set.forEach(function (uuid) {
       if (!state.org_units[uuid]) {
-        // Only add uuid to query if data does not exist in state
         uuid_array.push(uuid)
       }
     })
@@ -106,26 +113,23 @@ const actions = {
       dispatch("fetchOrgUnitsInTree", uuid_array).then((orgs) => {
         commit("setOrgUnits", orgs)
 
-        // Check if orgs have parents we need to fetch
         let additional_uuids = orgs
           .filter(function (org) {
-            return org.parent !== null
+            return org.parent !== null // Ensure the org has a parent
           })
           .map(function (org) {
-            return org.parent.uuid
+            return org.parent.uuid // Collect parent UUIDs for further fetching
           })
 
-        // Rerun if additional uuids are wanted
         if (additional_uuids.length > 0) {
           dispatch("buildTree", { uuids: additional_uuids, route: route })
         } else {
-          // This is the next to last thing we do when building Tree
-          dispatch("fetchVisibleOrgUnitChildren", route)
+          dispatch("fetchAndStoreVisibleOrgUnitChildren", route)
         }
       })
     } else {
-      // This is the next to last thing we do when building Tree
-      dispatch("fetchVisibleOrgUnitChildren", route)
+      // If no new org units to fetch, directly fetch visible children if necessary
+      dispatch("fetchAndStoreVisibleOrgUnitChildren", route)
     }
   },
   fetchOrgUnitsInTree: ({ rootState }, uuids) => {
@@ -138,9 +142,9 @@ const actions = {
           uuids: uuids,
           descendant: { hierarchy: { uuids: rootState.org_unit_hierarchy_uuids } },
         },
-        childFilter: {
-          descendant: { hierarchy: { uuids: rootState.org_unit_hierarchy_uuids } },
-        },
+        // childFilter: {
+        //   descendant: { hierarchy: { uuids: rootState.org_unit_hierarchy_uuids } },
+        // },
         by_association: by_association,
       }
     } else {
@@ -154,7 +158,7 @@ const actions = {
 
     return postQuery({
       query: `
-      query GetOrgUnitsInTree($filter: OrganisationUnitFilter!, $childFilter: ParentsBoundOrganisationUnitFilter, $by_association: Boolean!) {
+      query GetOrgUnitsInTree($filter: OrganisationUnitFilter!, $by_association: Boolean!) {
         org_units(filter: $filter) {
           objects {
             uuid
@@ -162,10 +166,7 @@ const actions = {
               parent {
                 uuid
               }
-              children(filter: $childFilter) {
-                name
-                uuid
-              }
+              child_count
               name
               org_unit_level {
                 uuid
@@ -220,53 +221,132 @@ const actions = {
       })
     })
   },
-  fetchVisibleOrgUnitChildren: ({ commit, state, dispatch }, route) => {
-    let additional_child_uuids = new Set()
-
-    const cycle_parents = function (child_uuids, org_unit) {
-      const org_unit_from_state = state.org_units[org_unit.uuid]
-      org_unit_from_state.children.forEach(function (child) {
-        child_uuids.add(child.uuid)
-      })
-      // Checking that org unit uuid is not null and not identitical to its parent's
-      if (
-        org_unit_from_state.parent !== null &&
-        org_unit_from_state.parent.uuid !== org_unit_from_state.uuid
-      ) {
-        cycle_parents(child_uuids, org_unit_from_state.parent)
+  fetchChildrenForOrgUnit: ({ rootState, commit }, parentUuid) => {
+    let by_association = rootState.relation_type === "association" ? true : false
+    // This whole if/else is needed, since having `descendant` in the query, will not work correctly, when `hierarchies` are not provided
+    let variables
+    if (rootState.org_unit_hierarchy_uuids) {
+      variables = {
+        filter: {
+          parent: { uuids: parentUuid },
+          descendant: { hierarchy: { uuids: rootState.org_unit_hierarchy_uuids } },
+        },
+        // childFilter: {
+        //   descendant: { hierarchy: { uuids: rootState.org_unit_hierarchy_uuids } },
+        // },
+        by_association: by_association,
+      }
+    } else {
+      variables = {
+        filter: {
+          parent: { uuids: parentUuid },
+        },
+        by_association: by_association,
       }
     }
+
+    return postQuery({
+      query: `
+        query GetChildrenForOrgUnit($filter: OrganisationUnitFilter!, $by_association: Boolean!) {
+          org_units(filter: $filter) {
+            objects {
+              uuid
+              current {
+                parent {
+                  uuid
+                }
+                child_count
+                name
+                org_unit_level {
+                  uuid
+                }
+                ...association_or_engagement
+              }
+            }
+          }
+        }
+        fragment association_or_engagement on OrganisationUnit {
+          associations @include(if: $by_association) {
+            uuid
+          }
+          engagements @skip(if: $by_association) {
+            uuid
+            engagement_type_uuid
+          }
+        }
+      `,
+      variables,
+    }).then((res) => {
+      if (!res || !res.org_units || !res.org_units.objects) {
+        return []
+      }
+
+      // Create an array of child objects without setting hasFetchedChildren
+      const childObjects = res.org_units.objects.map((org) => ({
+        ...org.current,
+        uuid: org.uuid,
+      }))
+
+      // Commit the mutation to update the store with the fetched children
+      commit("setChildrenForOrgUnit", { parentUuid, children: childObjects })
+
+      return childObjects // Optional
+    })
+  },
+  fetchAndStoreVisibleOrgUnitChildren: async ({ commit, state, dispatch }, route) => {
+    let additionalChildUuids = new Set()
+
+    const cycleParents = (childUuids, orgUnit) => {
+      const orgUnitFromState = state.org_units[orgUnit.uuid]
+
+      if (orgUnitFromState.children) {
+        // Check if children exists
+        orgUnitFromState.children.forEach((child) => {
+          childUuids.add(child.uuid)
+        })
+      }
+
+      if (
+        orgUnitFromState.parent !== null &&
+        orgUnitFromState.parent.uuid !== orgUnitFromState.uuid
+      ) {
+        cycleParents(childUuids, orgUnitFromState.parent)
+      }
+    }
+
+    let parentUuid
 
     if (route && route.params.orgUnitId) {
-      const org_unit = state.org_units[route.params.orgUnitId]
-      org_unit.children.forEach(function (child) {
-        additional_child_uuids.add(child.uuid)
-      })
-      if (org_unit.parent !== null) {
-        cycle_parents(additional_child_uuids, org_unit.parent)
-      }
+      const orgUnit = state.org_units[route.params.orgUnitId]
+      parentUuid = orgUnit.uuid // Store the current org unit ID
     } else {
-      state.org_units[state.root_uuid].children.forEach(function (child) {
-        additional_child_uuids.add(child.uuid)
-      })
+      parentUuid = state.root_uuid // Default to the root UUID
     }
 
-    // When we have a list of uuids, fetch them
-    let uuid_array = []
-    additional_child_uuids.forEach(function (uuid) {
-      if (!state.org_units[uuid]) {
-        // Only add uuid to query if data does not exist in state
-        uuid_array.push(uuid)
-      }
+    // Fetch children from the GraphQL API
+    const children = await dispatch("fetchChildrenForOrgUnit", parentUuid)
+    children.forEach((child) => {
+      additionalChildUuids.add(child.uuid)
     })
-    if (uuid_array.length > 0) {
-      dispatch("fetchOrgUnitsInTree", uuid_array).then((orgs) => {
-        commit("setOrgUnits", orgs)
-        onLoadEndHandler(route)
-      })
-    } else {
-      onLoadEndHandler(route)
+
+    if (route && route.params.orgUnitId) {
+      const orgUnit = state.org_units[route.params.orgUnitId]
+      if (orgUnit.parent !== null) {
+        cycleParents(additionalChildUuids, orgUnit.parent)
+      }
     }
+
+    const uuidArray = Array.from(additionalChildUuids).filter(
+      (uuid) => !state.org_units[uuid]
+    )
+
+    if (uuidArray.length > 0) {
+      const orgs = await dispatch("fetchOrgUnitsInTree", uuidArray)
+      commit("setOrgUnits", orgs)
+    }
+
+    // Call your onLoadEndHandler or any other logic here
+    onLoadEndHandler(route)
   },
 }
 
