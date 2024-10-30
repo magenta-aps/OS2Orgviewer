@@ -156,7 +156,7 @@ const actions = {
 
     return postQuery({
       query: `
-      query GetOrgUnitsInTree($filter: OrganisationUnitFilter!, $by_association: Boolean!) {
+      query GetOrgUnitsInTree($filter: OrganisationUnitFilter!, $childFilter: ParentsBoundOrganisationUnitFilter, $by_association: Boolean!) {
         org_units(filter: $filter) {
           objects {
             uuid
@@ -164,7 +164,7 @@ const actions = {
               parent {
                 uuid
               }
-              child_count
+              child_count(filter: $childFilter)
               name
               org_unit_level {
                 uuid
@@ -229,9 +229,9 @@ const actions = {
           parent: { uuids: parentUuid },
           descendant: { hierarchy: { uuids: rootState.org_unit_hierarchy_uuids } },
         },
-        // childFilter: {
-        //   descendant: { hierarchy: { uuids: rootState.org_unit_hierarchy_uuids } },
-        // },
+        childFilter: {
+          descendant: { hierarchy: { uuids: rootState.org_unit_hierarchy_uuids } },
+        },
         by_association: by_association,
       }
     } else {
@@ -245,7 +245,7 @@ const actions = {
 
     return postQuery({
       query: `
-        query GetChildrenForOrgUnit($filter: OrganisationUnitFilter!, $by_association: Boolean!) {
+        query GetChildrenForOrgUnit($filter: OrganisationUnitFilter!, $childFilter: ParentsBoundOrganisationUnitFilter, $by_association: Boolean!) {
           org_units(filter: $filter) {
             objects {
               uuid
@@ -253,7 +253,7 @@ const actions = {
                 parent {
                   uuid
                 }
-                child_count
+                child_count(filter: $childFilter)
                 name
                 org_unit_level {
                   uuid
@@ -292,58 +292,51 @@ const actions = {
     })
   },
   fetchAndStoreVisibleOrgUnitChildren: async ({ commit, state, dispatch }, route) => {
-    let additionalChildUuids = new Set()
+    const { rootOrgUnitId, orgUnitId } = route.params
+    const additionalChildUuids = new Set()
 
-    const cycleParents = (childUuids, orgUnit) => {
-      const orgUnitFromState = state.org_units[orgUnit.uuid]
+    // Fetch and add children for the root organization unit
+    if (rootOrgUnitId && !state.org_units[rootOrgUnitId]?.children) {
+      const rootChildren = await dispatch("fetchChildrenForOrgUnit", rootOrgUnitId)
 
-      if (orgUnitFromState.children) {
-        // Check if children exists
-        orgUnitFromState.children.forEach((child) => {
-          childUuids.add(child.uuid)
-        })
+      if (rootChildren.length > 0) {
+        rootChildren.forEach((child) => additionalChildUuids.add(child.uuid))
       }
 
-      if (
-        orgUnitFromState.parent !== null &&
-        orgUnitFromState.parent.uuid !== orgUnitFromState.uuid
-      ) {
-        cycleParents(childUuids, orgUnitFromState.parent)
+      // Ensure the root org unit itself is in state.org_units
+      if (!state.org_units[rootOrgUnitId]) {
+        const rootOrgUnit = await dispatch("fetchOrgUnitById", rootOrgUnitId)
+        commit("setOrgUnits", { [rootOrgUnitId]: rootOrgUnit })
       }
     }
 
-    let parentUuid
+    // Fetch and add children for the specified org unit in the route's first parameter
+    if (orgUnitId && !state.org_units[orgUnitId]?.children) {
+      const orgUnitChildren = await dispatch("fetchChildrenForOrgUnit", orgUnitId)
 
-    if (route && route.params.orgUnitId) {
-      const orgUnit = state.org_units[route.params.orgUnitId]
-      parentUuid = orgUnit.uuid // Store the current org unit ID
-    } else {
-      parentUuid = state.root_uuid // Default to the root UUID
-    }
+      if (orgUnitChildren.length > 0) {
+        orgUnitChildren.forEach((child) => additionalChildUuids.add(child.uuid))
+      }
 
-    // Fetch children from the GraphQL API
-    const children = await dispatch("fetchChildrenForOrgUnit", parentUuid)
-    children.forEach((child) => {
-      additionalChildUuids.add(child.uuid)
-    })
-
-    if (route && route.params.orgUnitId) {
-      const orgUnit = state.org_units[route.params.orgUnitId]
-      if (orgUnit.parent !== null) {
-        cycleParents(additionalChildUuids, orgUnit.parent)
+      // Ensure the org unit itself is in state.org_units
+      if (!state.org_units[orgUnitId]) {
+        const orgUnit = await dispatch("fetchOrgUnitById", orgUnitId)
+        commit("setOrgUnits", { [orgUnitId]: orgUnit })
       }
     }
 
+    // Convert set to array and filter out any already-loaded children
     const uuidArray = Array.from(additionalChildUuids).filter(
       (uuid) => !state.org_units[uuid]
     )
 
+    // Fetch and commit additional org units if necessary
     if (uuidArray.length > 0) {
-      const orgs = await dispatch("fetchOrgUnitsInTree", uuidArray)
-      commit("setOrgUnits", orgs)
+      const orgUnits = await dispatch("fetchOrgUnitsInTree", uuidArray)
+      commit("setOrgUnits", orgUnits)
     }
 
-    // Call your onLoadEndHandler or any other logic here
+    // Final callback after loading
     onLoadEndHandler(route)
   },
 }
