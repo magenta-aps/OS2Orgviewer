@@ -66,6 +66,12 @@ export default {
       // Toggle the showchildren state
       this.orgUnit.showchildren = !this.orgUnit.showchildren
 
+      this.$router.push(
+        `/tree/${this.orgUnit.uuid}/${this.root_uuid}?showchildren=${
+          this.orgUnit.showchildren ? "true" : "false"
+        }`
+      )
+
       // Fetch children if they're being shown and haven't been fetched yet
       if (this.orgUnit.showchildren && !this.orgUnit.hasFetchedChildren) {
         this.$store.dispatch("fetchChildrenForOrgUnit", this.orgUnit.uuid).then(() => {

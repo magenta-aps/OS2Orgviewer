@@ -140,9 +140,9 @@ const actions = {
           uuids: uuids,
           descendant: { hierarchy: { uuids: rootState.org_unit_hierarchy_uuids } },
         },
-        // childFilter: {
-        //   descendant: { hierarchy: { uuids: rootState.org_unit_hierarchy_uuids } },
-        // },
+        childFilter: {
+          descendant: { hierarchy: { uuids: rootState.org_unit_hierarchy_uuids } },
+        },
         by_association: by_association,
       }
     } else {
