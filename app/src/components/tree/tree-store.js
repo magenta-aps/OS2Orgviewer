@@ -97,8 +97,6 @@ const mutations = {
 }
 const actions = {
   buildTree: ({ commit, state, dispatch }, { uuids, route }) => {
-    console.log("buildTree")
-
     // Assumes `uuids` is an array
     commit("setTreeLoadStatus", true)
 
@@ -289,7 +287,7 @@ const actions = {
 
       // Commit the mutation to update the store with the fetched children
       commit("setChildrenForOrgUnit", { parentUuid, children: childObjects })
-
+      commit("setOrgUnits", childObjects)
       return childObjects // Optional
     })
   },

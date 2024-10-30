@@ -54,8 +54,6 @@ export default {
       return this.$store.getters.getTreeOrgUnit(this.uuid)
     },
     sorted_org_unit_children: function () {
-      console.log("called")
-
       let org_unit = this.$store.getters.getTreeOrgUnit(this.uuid)
 
       // Check if org_unit and org_unit.children are defined and are an array

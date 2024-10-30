@@ -28,8 +28,6 @@
         {{ count }} <span class="sr-only">underenheder</span>
       </template>
     </button>
-
-    <p>{{ orgUnit.showchildren }}</p>
   </div>
 </template>
 
@@ -62,8 +60,6 @@ export default {
     toggleBranch() {
       // Initialize showchildren if it's undefined
       if (this.orgUnit.showchildren === undefined) {
-        console.log(123)
-
         this.orgUnit.showchildren = false // Set default if undefined
       }
 
@@ -75,7 +71,6 @@ export default {
         this.$store.dispatch("fetchChildrenForOrgUnit", this.orgUnit.uuid).then(() => {
           this.$set(this.orgUnit, "hasFetchedChildren", true)
         })
-        console.log(123)
       }
     },
     setShowChildren(value) {
