@@ -1,34 +1,30 @@
 <template>
-  <div>
-    <button
-      v-if="orgUnit && count > 0"
-      class="oc-node-expand-btn inverse"
-      :class="orgUnit.showchildren ? 'close' : 'open'"
-      :aria-expanded="orgUnit.showchildren ? 'true' : 'false'"
-      :title="
-        orgUnit.showchildren
-          ? `Skjul ${count} underenheder`
-          : `Vis ${count} underenheder`
-      "
-      type="button"
-      @click="toggleBranch"
+  <button
+    v-if="orgUnit && count > 0"
+    class="oc-node-expand-btn inverse"
+    :class="orgUnit.showchildren ? 'close' : 'open'"
+    :aria-expanded="orgUnit.showchildren ? 'true' : 'false'"
+    :title="
+      orgUnit.showchildren ? `Skjul ${count} underenheder` : `Vis ${count} underenheder`
+    "
+    type="button"
+    @click="toggleBranch"
+  >
+    <svg
+      class="svg-toggle"
+      xmlns="http://www.w3.org/2000/svg"
+      height="24"
+      viewBox="0 0 24 24"
+      width="24"
     >
-      <svg
-        class="svg-toggle"
-        xmlns="http://www.w3.org/2000/svg"
-        height="24"
-        viewBox="0 0 24 24"
-        width="24"
-      >
-        <path d="M0 0h24v24H0z" fill="none" />
-        <path class="svg-path" d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z" />
-      </svg>
-      <span class="sr-only">{{ orgUnit.showchildren ? "Skjul" : "Vis" }}</span>
-      <template v-if="!hide_children_count">
-        {{ count }} <span class="sr-only">underenheder</span>
-      </template>
-    </button>
-  </div>
+      <path d="M0 0h24v24H0z" fill="none" />
+      <path class="svg-path" d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z" />
+    </svg>
+    <span class="sr-only">{{ orgUnit.showchildren ? "Skjul" : "Vis" }}</span>
+    <template v-if="!hide_children_count">
+      {{ count }} <span class="sr-only">underenheder</span>
+    </template>
+  </button>
 </template>
 
 <script>

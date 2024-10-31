@@ -291,52 +291,54 @@ const actions = {
       return childObjects // Optional
     })
   },
+  fetchChildrenRecursive: async (
+    { dispatch, commit, state },
+    { orgUnitId, rootOrgUnitId, additionalChildUuids }
+  ) => {
+    // Fetch and add children for the current org unit if not already loaded
+    if (!state.org_units[orgUnitId]?.children) {
+      const children = await dispatch("fetchChildrenForOrgUnit", orgUnitId)
+
+      if (children.length > 0) {
+        children.forEach((child) => additionalChildUuids.add(child.uuid))
+      }
+    }
+
+    // Recursively fetch the parent org unit’s children until the root is reached
+    const parentOrgUnitUuid = state.org_units[orgUnitId]?.parent?.uuid
+
+    // If org_unit has a parent, we contiune, otherwise we know we've reached the actual root
+    // NOTE: We might overfetch if focused org (rootOrgUnitId) isn't the actual root, we do this
+    // To avoid
+    if (parentOrgUnitUuid && orgUnitId !== rootOrgUnitId) {
+      await dispatch("fetchChildrenRecursive", {
+        orgUnitId: parentOrgUnitUuid,
+        rootOrgUnitId,
+        additionalChildUuids,
+      })
+    }
+  },
   fetchAndStoreVisibleOrgUnitChildren: async ({ commit, state, dispatch }, route) => {
     const { rootOrgUnitId, orgUnitId } = route.params
     const additionalChildUuids = new Set()
 
-    // Fetch and add children for the root organization unit
-    if (rootOrgUnitId && !state.org_units[rootOrgUnitId]?.children) {
-      const rootChildren = await dispatch("fetchChildrenForOrgUnit", rootOrgUnitId)
+    // Start recursive fetching of children
+    await dispatch("fetchChildrenRecursive", {
+      orgUnitId,
+      rootOrgUnitId,
+      additionalChildUuids,
+    })
 
-      if (rootChildren.length > 0) {
-        rootChildren.forEach((child) => additionalChildUuids.add(child.uuid))
-      }
-
-      // Ensure the root org unit itself is in state.org_units
-      if (!state.org_units[rootOrgUnitId]) {
-        const rootOrgUnit = await dispatch("fetchOrgUnitById", rootOrgUnitId)
-        commit("setOrgUnits", { [rootOrgUnitId]: rootOrgUnit })
-      }
-    }
-
-    // Fetch and add children for the specified org unit in the route's first parameter
-    if (orgUnitId && !state.org_units[orgUnitId]?.children) {
-      const orgUnitChildren = await dispatch("fetchChildrenForOrgUnit", orgUnitId)
-
-      if (orgUnitChildren.length > 0) {
-        orgUnitChildren.forEach((child) => additionalChildUuids.add(child.uuid))
-      }
-
-      // Ensure the org unit itself is in state.org_units
-      if (!state.org_units[orgUnitId]) {
-        const orgUnit = await dispatch("fetchOrgUnitById", orgUnitId)
-        commit("setOrgUnits", { [orgUnitId]: orgUnit })
-      }
-    }
-
-    // Convert set to array and filter out any already-loaded children
+    // Convert Set to Array and filter out any org units that are already in state.
     const uuidArray = Array.from(additionalChildUuids).filter(
       (uuid) => !state.org_units[uuid]
     )
 
-    // Fetch and commit additional org units if necessary
     if (uuidArray.length > 0) {
+      // Fetch and commit the org units for all additional children
       const orgUnits = await dispatch("fetchOrgUnitsInTree", uuidArray)
       commit("setOrgUnits", orgUnits)
     }
-
-    // Final callback after loading
     onLoadEndHandler(route)
   },
 }

@@ -83,16 +83,7 @@ export default {
         to.params.rootOrgUnitId &&
         to.params.rootOrgUnitId !== from.params.rootOrgUnitId
       ) {
-        this.$store.commit("setRootUuid", to.params.rootOrgUnitId)
-        this.$store
-          .dispatch("buildTree", {
-            uuids: [to.params.rootOrgUnitId, to.params.orgUnitId], // Pass both IDs
-            route: to,
-          })
-          .then(() => {
-            // After building the tree, scroll to the organization unit
-            this.scrollToOrgUnit()
-          })
+        this.initializeTreeView(to)
       }
     },
   },
