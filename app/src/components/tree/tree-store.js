@@ -131,6 +131,7 @@ const actions = {
     }
   },
   fetchOrgUnitsInTree: ({ rootState }, uuids) => {
+    // TODO: Ideally, both variables and filtering would be functions instead of repeating in both fetches
     let by_association = rootState.relation_type === "association" ? true : false
     // This whole if/else is needed, since having `descendant` in the query, will not work correctly, when `hierarchies` are not provided
     let variables
@@ -220,6 +221,7 @@ const actions = {
     })
   },
   fetchChildrenForOrgUnit: ({ rootState, commit }, parentUuid) => {
+    // TODO: Ideally, both variables and filtering would be functions instead of repeating in both fetches
     let by_association = rootState.relation_type === "association" ? true : false
     // This whole if/else is needed, since having `descendant` in the query, will not work correctly, when `hierarchies` are not provided
     let variables
@@ -277,6 +279,28 @@ const actions = {
     }).then((res) => {
       if (!res || !res.org_units || !res.org_units.objects) {
         return []
+      }
+
+      if (state.hide_org_unit_uuids) {
+        res["org_units"]["objects"] = res["org_units"]["objects"].filter(
+          (org) => !state.hide_org_unit_uuids.includes(org.uuid)
+        )
+      }
+      if (state.hide_org_units_by_name) {
+        res["org_units"]["objects"] = res["org_units"]["objects"].filter(
+          (org) =>
+            !state.hide_org_units_by_name.some((substring) =>
+              org.current.name.includes(substring)
+            )
+        )
+      }
+
+      if (state.hide_org_unit_levels) {
+        res["org_units"]["objects"] = res["org_units"]["objects"].filter(
+          (org) =>
+            !org.current.org_unit_level?.uuid ||
+            !state.hide_org_unit_levels.includes(org.current.org_unit_level.uuid)
+        )
       }
 
       // Create an array of child objects without setting hasFetchedChildren
