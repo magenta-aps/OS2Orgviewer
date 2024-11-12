@@ -54,8 +54,13 @@ export default {
       return this.$store.getters.getTreeOrgUnit(this.uuid)
     },
     sorted_org_unit_children: function () {
-      // sort org unit children alphabetically
       let org_unit = this.$store.getters.getTreeOrgUnit(this.uuid)
+
+      // Check if org_unit and org_unit.children are defined and are an array
+      if (!org_unit || !Array.isArray(org_unit.children)) {
+        return [] // Return an empty array if children is undefined or not an array
+      }
+
       return org_unit.children.sort((x, y) => {
         let a = x.name.toUpperCase(),
           b = y.name.toUpperCase()
@@ -68,7 +73,7 @@ export default {
             return -1
           }
         }
-        return a == b ? 0 : a > b ? 1 : -1
+        return a === b ? 0 : a > b ? 1 : -1
       })
     },
   },
