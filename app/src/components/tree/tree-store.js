@@ -34,6 +34,35 @@ const onLoadEndHandler = function (route) {
   mutations.setTreeLoadStatus(state, false)
 }
 
+const filterOrgUnits = function (orgUnits) {
+  // Function that filters according to featureflags and returns objects
+  if (state.hide_org_unit_uuids) {
+    orgUnits = orgUnits.filter((org) => !state.hide_org_unit_uuids.includes(org.uuid))
+  }
+
+  if (state.hide_org_units_by_name) {
+    orgUnits = orgUnits.filter(
+      (org) =>
+        !state.hide_org_units_by_name.some((substring) =>
+          org.current.name.includes(substring)
+        )
+    )
+  }
+
+  if (state.hide_org_unit_levels) {
+    orgUnits = orgUnits.filter(
+      (org) =>
+        !org.current.org_unit_level?.uuid ||
+        !state.hide_org_unit_levels.includes(org.current.org_unit_level.uuid)
+    )
+  }
+
+  return orgUnits.map((org) => ({
+    ...org.current,
+    uuid: org.uuid,
+  }))
+}
+
 const state = {
   root_uuid: OC_GLOBAL_CONF.VUE_APP_ROOT_UUID,
   org_unit_hierarchy_uuids: convertToArray(
@@ -191,33 +220,9 @@ const actions = {
       if (!res) {
         return []
       }
-      if (state.hide_org_unit_uuids) {
-        res["org_units"]["objects"] = res["org_units"]["objects"].filter(
-          (org) => !state.hide_org_unit_uuids.includes(org.uuid)
-        )
-      }
-      if (state.hide_org_units_by_name) {
-        res["org_units"]["objects"] = res["org_units"]["objects"].filter(
-          (org) =>
-            !state.hide_org_units_by_name.some((substring) =>
-              org.current.name.includes(substring)
-            )
-        )
-      }
+      let orgUnits = res["org_units"]["objects"]
 
-      if (state.hide_org_unit_levels) {
-        res["org_units"]["objects"] = res["org_units"]["objects"].filter(
-          (org) =>
-            !org.current.org_unit_level?.uuid ||
-            !state.hide_org_unit_levels.includes(org.current.org_unit_level.uuid)
-        )
-      }
-
-      return res["org_units"]["objects"].map((org) => {
-        let obj = org.current
-        obj.uuid = org.uuid
-        return obj
-      })
+      return filterOrgUnits(orgUnits)
     })
   },
   fetchChildrenForOrgUnit: ({ rootState, commit }, parentUuid) => {
@@ -281,33 +286,10 @@ const actions = {
         return []
       }
 
-      if (state.hide_org_unit_uuids) {
-        res["org_units"]["objects"] = res["org_units"]["objects"].filter(
-          (org) => !state.hide_org_unit_uuids.includes(org.uuid)
-        )
-      }
-      if (state.hide_org_units_by_name) {
-        res["org_units"]["objects"] = res["org_units"]["objects"].filter(
-          (org) =>
-            !state.hide_org_units_by_name.some((substring) =>
-              org.current.name.includes(substring)
-            )
-        )
-      }
-
-      if (state.hide_org_unit_levels) {
-        res["org_units"]["objects"] = res["org_units"]["objects"].filter(
-          (org) =>
-            !org.current.org_unit_level?.uuid ||
-            !state.hide_org_unit_levels.includes(org.current.org_unit_level.uuid)
-        )
-      }
+      let orgUnits = res["org_units"]["objects"]
 
       // Create an array of child objects without setting hasFetchedChildren
-      const childObjects = res.org_units.objects.map((org) => ({
-        ...org.current,
-        uuid: org.uuid,
-      }))
+      const childObjects = filterOrgUnits(orgUnits)
 
       // Commit the mutation to update the store with the fetched children
       commit("setChildrenForOrgUnit", { parentUuid, children: childObjects })
@@ -333,7 +315,7 @@ const actions = {
 
     // If org_unit has a parent, we contiune, otherwise we know we've reached the actual root
     // NOTE: We might overfetch if focused org (rootOrgUnitId) isn't the actual root, we do this
-    // To avoid
+    // to avoid errors when using the `Niveau op` button.
     if (parentOrgUnitUuid && orgUnitId !== rootOrgUnitId) {
       await dispatch("fetchChildrenRecursive", {
         orgUnitId: parentOrgUnitUuid,
