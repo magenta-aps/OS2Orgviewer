@@ -83,30 +83,41 @@ export default {
         to.params.rootOrgUnitId &&
         to.params.rootOrgUnitId !== from.params.rootOrgUnitId
       ) {
-        this.$store.commit("setRootUuid", to.params.rootOrgUnitId)
-        this.$store.dispatch("buildTree", {
-          uuids: [to.params.rootOrgUnitId, to.params.orgUnitId],
-          route: to,
-        })
+        this.initializeTreeView(to)
       }
     },
-    tree_is_loading: function (new_val, old_val) {
-      if (old_val && !new_val) {
-        // Went from `true` to `false`
+  },
+  methods: {
+    initializeTreeView(route) {
+      if (route.params.rootOrgUnitId) {
+        this.$store.commit("setRootUuid", route.params.rootOrgUnitId)
+      }
 
-        // Tree has presumably finished loading
-        // and we can do some extra manipulations
-
-        // Center viewport on the currently selected org unit
-        Vue.nextTick(() => {
-          document
-            .querySelector(`#node-${this.$route.params.orgUnitId} > .oc-tt-node`)
-            .scrollIntoView({
-              behavior: "smooth",
-              block: "nearest",
-              inline: "center",
+      if (route.params.orgUnitId) {
+        // Build tree with both the root and the current org unit
+        this.$store
+          .dispatch("buildTree", {
+            uuids: [this.root_uuid, route.params.orgUnitId],
+            route: route,
+          })
+          .then(() => {
+            // After building the tree, scroll to the desired org unit
+            this.$nextTick(() => {
+              const orgUnitElement = document.querySelector(
+                `#node-${route.params.orgUnitId} > .oc-tt-node`
+              )
+              if (orgUnitElement) {
+                orgUnitElement.scrollIntoView({
+                  behavior: "smooth",
+                  block: "nearest",
+                  inline: "center",
+                })
+              }
             })
-        })
+          })
+      } else {
+        // If no specific org unit is provided, just build the tree from the root
+        this.$store.dispatch("buildTree", { uuids: [this.root_uuid], route: route })
       }
     },
   },

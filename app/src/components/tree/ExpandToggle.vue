@@ -33,56 +33,60 @@ import { convertToBoolean } from "../../helpers"
 export default {
   props: ["orgUnit"],
   computed: {
-    root_uuid: function () {
+    root_uuid() {
       return this.$store.getters.getRootUuid
     },
-    count: function () {
-      if (this.orgUnit.children) {
-        return this.orgUnit.children.length
-      } else {
-        return false
-      }
+    count() {
+      return this.orgUnit.child_count || 0 // Return 0 if child_count is undefined
     },
   },
   watch: {
-    route: function (new_route, old_route) {
+    route(new_route) {
       this.updateShowChildren(new_route)
     },
   },
   methods: {
-    updateShowChildren: function (route) {
-      if (route.params.orgUnitId === this.orgUnit.uuid && route.query.showchildren) {
-        if (route.query.showchildren === "false") {
-          this.orgUnit.showchildren = false
-        } else {
-          this.orgUnit.showchildren = true
-        }
+    updateShowChildren(route) {
+      // Initialize showchildren based on route query
+      if (route.params.orgUnitId === this.orgUnit.uuid) {
+        const showChildrenValue = route.query.showchildren === "false" ? false : true
+        this.setShowChildren(showChildrenValue)
       }
     },
-    toggleBranch: function () {
-      if (!this.orgUnit.showchildren) {
-        this.orgUnit.showchildren = true
-      } else {
-        this.orgUnit.showchildren = false
+    toggleBranch() {
+      // Initialize showchildren if it's undefined
+      if (this.orgUnit.showchildren === undefined) {
+        this.orgUnit.showchildren = false // Set default if undefined
       }
+
+      // Toggle the showchildren state
+      this.orgUnit.showchildren = !this.orgUnit.showchildren
+
       this.$router.push(
         `/tree/${this.orgUnit.uuid}/${this.root_uuid}?showchildren=${
           this.orgUnit.showchildren ? "true" : "false"
         }`
       )
-      this.$store.commit("setOrgUnit", this.orgUnit)
-      if (this.orgUnit.showchildren) {
-        const children_uuids = this.orgUnit.children.map(function (child) {
-          return child.uuid
+
+      // Fetch children if they're being shown and haven't been fetched yet
+      if (this.orgUnit.showchildren && !this.orgUnit.hasFetchedChildren) {
+        this.$store.dispatch("fetchChildrenForOrgUnit", this.orgUnit.uuid).then(() => {
+          this.$set(this.orgUnit, "hasFetchedChildren", true)
         })
-        this.$store.dispatch("buildTree", { uuids: children_uuids })
       }
     },
+    setShowChildren(value) {
+      this.$set(this.orgUnit, "showchildren", value)
+    },
   },
-  created: function () {
+  created() {
+    // Ensure showchildren has a default value
+    if (this.orgUnit.showchildren === undefined) {
+      this.setShowChildren(false) // Initialize to false if undefined
+    }
     this.updateShowChildren(this.$route)
   },
-  data: function () {
+  data() {
     return {
       hide_children_count: convertToBoolean(
         OC_GLOBAL_CONF.VUE_APP_REMOVE_CHILDREN_COUNT
