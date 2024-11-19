@@ -2,11 +2,20 @@
   <section class="oc-search">
     <h2 class="oc-search-title">Søg efter afdeling eller person</h2>
     <form @submit.prevent="search" class="oc-search-form">
+      <div class="search-toggle">
+        <label>
+          <input type="radio" value="org_unit" v-model="searchType" />
+          Organisation
+        </label>
+        <label>
+          <input type="radio" value="employee" v-model="searchType" />
+          Person
+        </label>
+      </div>
       <label for="search-input" class="sr-only">Søg</label>
       <input
         type="search"
         v-model="query"
-        @input="considerSearching"
         id="search-input"
         placeholder="Indtast afdeling eller person"
       />
@@ -49,6 +58,76 @@
 import Vue from "vue"
 import { postQuery } from "../http/http.js"
 
+const orgUnitSearchQuery = `
+  query OrgUnitsSearch($filter: OrganisationUnitFilter) {
+    org_units(filter: $filter) {
+      objects {
+        current {
+          __typename
+          uuid
+          name
+          addresses {
+            value
+            address_type {
+              scope
+            }
+            visibility {
+              scope
+            }
+          }
+        }
+      }
+    }
+  }`
+
+const employeeSearchQuery = `
+  query EmployeesSearch($engagement: Boolean!, $engagementFilter: EngagementFilter, $associationFilter: AssociationFilter) {
+    ...engagementOrAssociation
+  }
+
+  fragment engagementOrAssociation on Query {
+    engagements(filter: $engagementFilter) @include(if: $engagement) {
+      objects {
+        current {
+          person {
+            __typename
+            uuid
+            name
+            addresses {
+              value
+              address_type {
+                scope
+              }
+              visibility {
+                scope
+              }
+            }
+          }
+        }
+      }
+    }
+    associations(filter: $associationFilter) @skip(if: $engagement) {
+      objects {
+        current {
+          person {
+            __typename
+            uuid
+            name
+            addresses {
+              value
+              address_type {
+                scope
+              }
+              visibility {
+                scope
+              }
+            }
+          }
+        }
+      }
+    }
+  }`
+
 export default {
   data: function () {
     return {
@@ -56,6 +135,7 @@ export default {
       results: null,
       timeout: null,
       relation_type: this.$store.state.relation_type,
+      searchType: "org_unit",
     }
   },
   computed: {
@@ -64,150 +144,63 @@ export default {
     },
   },
   methods: {
-    debounce: function (func, wait) {
-      return () => {
-        const context = this,
-          args = arguments,
-          later = () => {
-            this.timeout = null
-            func.apply(context, args)
-          }
-        clearTimeout(this.timeout)
-        this.timeout = setTimeout(later, wait)
+    processOrgUnitResults(orgUnits) {
+      return orgUnits.map((unit) => ({
+        __typename: unit.current.__typename || "",
+        uuid: unit.current.uuid || "",
+        name: unit.current.name || "",
+        addresses: unit.current.addresses || [],
+      }))
+    },
+    processEmployeeResults(personRes) {
+      const people = personRes.engagements
+        ? personRes.engagements.objects.flatMap((value) =>
+            value.current.person.map((person) => this.formatPerson(person))
+          )
+        : personRes.associations.objects.flatMap((value) =>
+            value.current.person.map((person) => this.formatPerson(person))
+          )
+      // Deduplicate results
+      return [
+        ...new Map(people.map((obj) => [`${obj.uuid}:${obj.name}`, obj])).values(),
+      ]
+    },
+    formatPerson(person) {
+      return {
+        __typename: person.__typename || "",
+        uuid: person.uuid || "",
+        name: person.name || "",
+        addresses: person.addresses || [],
       }
     },
-    considerSearching: function () {
-      if (this.query.length > 2) {
-        this.debounce(this.search, 300)()
-      }
-    },
-    search: function () {
-      let engagement = this.relation_type == "engagement"
-      let filter = { employee: { query: this.query } }
-      let employee_search_query = `
-      query EmployeesSearch($engagement: Boolean!, $engagementFilter: EngagementFilter, $associationFilter: AssociationFilter) {
-        ...engagementOrAssociation
-      }
-
-      fragment engagementOrAssociation on Query {
-        engagements(filter: $engagementFilter) @include(if: $engagement) {
-          objects {
-            current {
-              person {
-                __typename
-                uuid
-                name
-                addresses {
-                  value
-                  address_type {
-                    scope
-                  }
-                  visibility {
-                    scope
-                  }
-                }
-              }
-            }
+    search: async function () {
+      const isOrgUnit = this.searchType === "org_unit"
+      const query = isOrgUnit ? orgUnitSearchQuery : employeeSearchQuery
+      const variables = isOrgUnit
+        ? { filter: { query: this.query } }
+        : {
+            engagement: this.relation_type === "engagement",
+            engagementFilter: { employee: { query: this.query } },
+            associationFilter: { employee: { query: this.query } },
           }
-        }
-        associations(filter: $associationFilter) @skip(if: $engagement) {
-          objects {
-            current {
-              person {
-                __typename
-                uuid
-                name
-                addresses {
-                  value
-                  address_type {
-                    scope
-                  }
-                  visibility {
-                    scope
-                  }
-                }
-              }
-            }
+
+      try {
+        const response = await postQuery({ query, variables })
+        const results = isOrgUnit
+          ? this.processOrgUnitResults(response.org_units.objects)
+          : this.processEmployeeResults(response)
+
+        this.results = results.sort((a, b) => a.name.localeCompare(b.name))
+
+        Vue.nextTick(() => {
+          if (this.results.length > 0) {
+            document.querySelector(".oc-search-results-header").focus()
           }
-        }
-      }
-      `
-      let orgunit_search_query = `
-      query OrgUnitsSearch($filter: OrganisationUnitFilter) {
-        org_units(filter: $filter) {
-          objects {
-            current {
-              __typename
-
-              uuid
-              name
-
-              addresses {
-                value
-                address_type {
-                  scope
-                }
-                visibility {
-                  scope
-                }
-              }
-            }
-          }
-        }
-      }`
-      return postQuery({
-        query: employee_search_query,
-        variables: {
-          engagement: engagement,
-          engagementFilter: filter,
-          associationFilter: filter,
-        },
-      }).then((personRes) => {
-        return postQuery({
-          query: orgunit_search_query,
-          variables: { filter: { query: this.query } },
-        }).then((orgRes) => {
-          let people = personRes.engagements
-            ? personRes.engagements.objects.flatMap((value) =>
-                value.current.person.map((person) => ({
-                  __typename: person.__typename || "",
-                  uuid: person.uuid || "",
-                  name: person.name || "",
-                  addresses: person.addresses || [],
-                }))
-              )
-            : personRes.associations.objects.flatMap((value) =>
-                value.current.person.map((person) => ({
-                  __typename: person.__typename || "",
-                  uuid: person.uuid || "",
-                  name: person.name || "",
-                  addresses: person.addresses || [],
-                }))
-              )
-
-          let orgs = orgRes.org_units.objects.map((value) => ({
-            __typename: value.current.__typename || "",
-            uuid: value.current.uuid || "",
-            name: value.current.name || "",
-            addresses: value.current.addresses || [],
-          }))
-
-          let allData = people.concat(orgs)
-
-          // Make sure people are unique
-          let uniqueData = [
-            ...new Map(allData.map((obj) => [`${obj.uuid}:${obj.name}`, obj])).values(),
-          ]
-
-          this.results = uniqueData.sort((a, b) => a.name.localeCompare(b.name))
-
-          Vue.nextTick(() => {
-            if (this.results.length > 0) {
-              document.querySelector(".oc-search-results-header").focus()
-            }
-          })
         })
-      })
+      } catch (error) {
+        console.error("Error during search:", error)
+        this.results = []
+      }
     },
     result2phonenumbers: function (res) {
       let addresses = res.addresses
@@ -281,6 +274,13 @@ export default {
   justify-content: center;
   align-self: center;
   padding: 0 1rem 1rem;
+}
+
+.search-toggle {
+  padding: 0.5rem 0.75rem;
+  flex: 1 0 auto;
+  max-width: 20rem;
+  transition: all 0.3s ease-in-out;
 }
 
 #search-input {
