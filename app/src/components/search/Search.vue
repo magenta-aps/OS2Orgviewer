@@ -36,7 +36,7 @@
             {{ res.name }}
             <br />
             <span v-for="value in result2phonenumbers(res)">
-              {{ value }}
+              <div>{{ value }}</div>
             </span>
           </router-link>
           <router-link v-else :to="`/person/${res.uuid}`">
@@ -45,7 +45,7 @@
             <span>{{ res.name }}</span>
             <br />
             <span v-for="value in result2phonenumbers(res)">
-              {{ value }}
+              <div>{{ value }}</div>
             </span>
           </router-link>
         </li>
@@ -66,7 +66,7 @@ const orgUnitSearchQuery = `
           __typename
           uuid
           name
-          addresses {
+          addresses(filter: {address_type: {scope:"PHONE"}}) {
             value
             address_type {
               scope
@@ -93,7 +93,7 @@ const employeeSearchQuery = `
             __typename
             uuid
             name
-            addresses {
+            addresses(filter: {address_type: {scope:"PHONE"}}) {
               value
               address_type {
                 scope
@@ -113,7 +113,7 @@ const employeeSearchQuery = `
             __typename
             uuid
             name
-            addresses {
+            addresses(filter: {address_type: {scope:"PHONE"}}) {
               value
               address_type {
                 scope
@@ -203,21 +203,15 @@ export default {
       }
     },
     result2phonenumbers: function (res) {
-      let addresses = res.addresses
-      // Filter non-phone number addresses, and private addresses
-      // TODO: These filters should be done in GraphQL
-      let phone_numbers = addresses.filter(
-        (address) => address.address_type.scope == "PHONE"
-      )
-      let public_phone_numbers = phone_numbers.filter(
-        (phone) =>
-          // first check can be removed when: https://redmine.magenta.dk/issues/59440
-          phone.visibility == null ||
-          phone.visibility.scope == "INTERNAL" ||
-          phone.visibility.scope == "PUBLIC"
-      )
-      // Exact the phone numbers themselves
-      return public_phone_numbers.map((phone) => phone.value)
+      return res.addresses
+        .filter((phone) => {
+          return (
+            phone.visibility == null ||
+            phone.visibility.scope == "INTERNAL" ||
+            phone.visibility.scope == "PUBLIC"
+          )
+        })
+        .map((phone) => phone.value)
     },
     navigateToPerson: function (person_uuid) {
       this.$store.dispatch("fetchPerson", person_uuid)
