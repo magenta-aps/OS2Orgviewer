@@ -1,6 +1,6 @@
 <template>
   <section class="oc-search">
-    <h2 class="oc-search-title">Søg efter afdeling eller person</h2>
+    <h2 class="oc-search-title">Søg efter organisation eller person</h2>
     <form @submit.prevent="search" class="oc-search-form">
       <div class="search-toggle">
         <label>
@@ -17,7 +17,7 @@
         type="search"
         v-model="query"
         id="search-input"
-        placeholder="Indtast afdeling eller person"
+        :placeholder="searchPlaceHolder"
       />
       <input type="submit" value="Søg" class="inverse oc-search-submit" />
     </form>
@@ -141,6 +141,9 @@ export default {
   computed: {
     root_uuid: function () {
       return this.$store.getters.getRootUuid
+    },
+    searchPlaceHolder() {
+      return `Indtast ${this.searchType === "org_unit" ? "organisation" : "person"}`
     },
   },
   methods: {
